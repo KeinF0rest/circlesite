@@ -1,0 +1,152 @@
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    background-color: #4CAF50;
+    position: relative;
+}
+
+.site-title {
+    font-size: 18px;
+    color: #333;
+}
+#navArea {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.header-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #4CAE4F;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+.header-buttons button {
+    font-size: 14px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+nav {
+    display: block;
+    width: 200px;
+    position: fixed;
+    background-color: #ffffff;
+    top: 0;
+    left: -300px;
+    bottom: 0;
+    transition: all 0.5s;
+    z-index: 3;
+    opacity: 0;
+}
+
+.open nav {
+    left: 0;
+    opacity: 1;
+}
+
+nav .inner {
+    padding: 25px; 
+}
+
+nav .inner ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav .inner ul li{
+    margin: 0;
+    border-bottom: 1px solid #333;
+}
+
+nav .inner ul li a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    padding: 16px;
+    transition-duration: 0.2s;
+}
+
+nav .inner ul li a:hover {
+    background-color: #e4e4e4;
+}
+
+.toggle {
+    display: block;
+    position: relative;
+    top: 0px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    z-index: 3;
+    cursor: pointer;
+}
+
+.toggle span {
+    position: absolute;
+    display: block;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background-color: #333;
+    transition: all 0.5s;
+    border-radius: 4px;   
+}
+
+.toggle span:nth-child(1) {
+    top: 4px;
+}
+
+.toggle span:nth-child(2) {
+    top: 14px;
+}
+
+.toggle span:nth-child(3) {
+    bottom: 4px;
+}
+
+.open .toggle span{
+    background-color: #fff;
+}
+
+.open .toggle span:nth-child(1) {
+    transform: translateY(10px) rotate(-315deg);
+}
+
+.open .toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.open .toggle span:nth-child(3) {
+    transform: translateY(-10px) rotate(315deg);
+}
+
+#mask {
+    display: none;
+    transition: all 0.5s;
+}
+
+.open #mask {
+    display: block;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    opacity: 0.8;
+    cursor: pointer;
+}
