@@ -167,7 +167,7 @@ if($id){
             </ul>
         </div>
 
-        <form action="update-complete.php" method="post" enctype="multipart/form-data">
+        <form action="mypage-update-complete.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
             
             
