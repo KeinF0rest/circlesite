@@ -1,0 +1,218 @@
+<?php
+session_start();
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+
+$user_id = $_SESSION['user_id'] ?? null;
+
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND delete_flag = 0");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+
+if (!$user) {
+    echo "ユーザー情報が見つかりません。";
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+    $stmt = $pdo->prepare("UPDATE users SET delete_flag = 1 WHERE id = ?");
+    $stmt->execute([$user_id]);
+
+    header('Location: account-delete-complete.php');
+    exit;
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>アカウント削除</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="menu.js" defer></script>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+            
+            .header-bar {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .header-bar h1 {
+                font-size: 24px;
+                margin: 0;
+                text-align: center;
+            }
+            
+            h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .back-button {
+                position: absolute;
+                right: 20px;
+                font-size: 16px;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            .profile-image-wrapper {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                overflow: hidden;
+                background-color: transparent;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto;
+                border: 2px dashed #aaa; 
+            }
+            .profile-image-wrapper img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+            
+            .profile-image-wrapper.no-image {
+                background-color: #ccc;
+            }
+            
+            .profile-image-wrapper.no-image img {
+                display: none;
+            }
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 16px;
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 12px;
+                background-color: #f9f9f9;
+            }
+
+            .form-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 16px;
+
+            }
+
+            .form-row label {
+                font-weight: bold;
+                color: #333;    
+                width: 150px;
+                text-align: left;
+            }
+            
+            .form-row div {
+                text-align: center;
+            }
+            
+            .submit-area {
+                display: flex;
+                justify-content: flex-end;
+                max-width: 600px;
+                margin: 20px auto;
+            }
+            
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <?php include 'header.php'; ?>
+        
+        <div class="header-bar">
+            <h1>アカウントを削除しますか？</h1>
+            <a href="mypage.php?id=<?= htmlspecialchars($user['id']) ?>" class="back-button">戻る</a>
+        </div>
+        
+        <h2>削除すると復元することはできません。</h2>
+        
+        
+        <div class="form-grid">
+                <label for="profile_image" class="profile-image-wrapper <?= empty($user['profile_image']) ? 'no-image' : '' ?>">
+                    <?php if (!empty($user['profile_image'])): ?>
+                    <img src="<?= htmlspecialchars($user['profile_image'], ENT_QUOTES, 'UTF-8') ?>" alt="プロフィール画像">
+                    <?php endif; ?>
+                </label>
+            
+            <div class="form-row">
+                <label>ニックネーム</label>
+                <div><?= htmlspecialchars($user['nickname']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>名前（姓）</label>
+                <div><?= htmlspecialchars($user['family_name']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>名前（名）</label>
+                <div><?= htmlspecialchars($user['last_name']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>メールアドレス</label>
+                <div><?= htmlspecialchars($user['mail']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>パスワード</label>
+                <div>表示されません</div>
+            </div>
+            
+            <div class="form-row">
+                <label>性別</label>
+                <div><?= $user['gender'] == 0 ? '男性' : '女性' ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>郵便番号</label>
+                <div><?= htmlspecialchars($user['postal_code']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>都道府県</label>
+                <div><?= htmlspecialchars($user['prefecture']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>住所（市区町村）</label>
+                <div><?= htmlspecialchars($user['address1']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>住所（番地）</label>
+                <div><?= htmlspecialchars($user['address2']) ?></div>
+            </div>
+            
+            <div class="form-row">
+                <label>アカウント権限</label>
+                <div><?= $user['authority'] == 0 ? '一般' : '管理者' ?></div>
+            </div>
+        </div>
+        
+        <div class="submit-area">
+            <form method="post">
+                <button type="submit" class="submit-button">削除</button>
+            </form>
+        </div>
+    </body>
+</html>
