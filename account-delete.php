@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         
         <div class="submit-area">
             <form method="post">
-                <button type="submit" class="submit-button">削除</button>
+                <button type="submit" name="delete" class="submit-button">削除</button>
             </form>
         </div>
     </body>
