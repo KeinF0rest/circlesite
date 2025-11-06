@@ -178,11 +178,17 @@ session_start();
                 <label>写真</label>
                 <label class="image-slot">
                     <span class="plus">＋</span>
-                    <input type="file" name="image_path[]" accept="image/*" multiple id="imageInput" value="<?= htmlspecialchars($_SESSION['event']['image_path'] ?? '') ?>">
+                    <input type="file" name="image_path[]" accept="image/*" multiple id="imageInput">
                 </label>
             </div>
             
-            <div id="previewArea"></div>
+            <?php if (!empty($_SESSION['event']['image_paths'])): ?>
+                <div id="previewArea">
+                    <?php foreach ($_SESSION['event']['image_paths'] as $path): ?>
+                        <img src="<?= htmlspecialchars($path) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;">
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             
             <div class="submit-area">
                 <button type="submit">確認する</button>
