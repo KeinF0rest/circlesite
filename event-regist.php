@@ -3,7 +3,7 @@ session_start();
 
 ?>
 
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="ja">
     <head>
         <meta charset="UTF-8"> 
@@ -156,7 +156,7 @@ session_start();
         <form id="event-form" action="event-regist-confirm.php" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
+                <input type="text" name="title" maxlength="30" pattern=".{1,30}" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
             </div>
             
             <div class="form-row">
