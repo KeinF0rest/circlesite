@@ -81,12 +81,12 @@ session_start();
         <form action="blog-regist-confirm.php" method="post">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" required>
+                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required>
             </div>
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" required></textarea> 
+                <textarea name="content" maxlength="500" required><?= htmlspecialchars($_POST['content'] ?? '') ?></textarea> 
             </div>
             
             <div class="submit-area">
