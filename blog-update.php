@@ -1,0 +1,110 @@
+<?php
+session_start();
+$id = $_GET['id'] ?? null;
+
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
+$stmt->execute([$id]);
+$blog = $stmt->fetch();
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>ブログ更新</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="menu.js" defer></script>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+            
+            .header-bar {
+                display: flex;
+                justify-content: space-between;
+                padding: 20px;
+                align-items: center;
+            }
+            
+            .header-bar h1 {
+                font-size: 24px;
+            }
+            
+            .back-button {
+                font-size: 16px;
+                color: #4CAF50;
+                text-decoration: none;
+            }
+            
+            form {
+                padding: 0 20px;
+            }
+            .form-row{
+                margin-bottom: 20px;
+            }
+            label{
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            input[type="text"], textarea{
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+            textarea{
+                height: 200px;
+                resize: vertical;
+            }
+            
+            .submit-area {
+                display: flex;
+                justify-content: flex-end;
+                margin: 20px;
+            }
+            
+            .submit-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <?php include 'header.php'; ?>
+        
+        <div class="header-bar">
+            <h1>ブログ更新</h1>
+            <a href="blog-info.php?id=<?= htmlspecialchars($blog['id']) ?>" class="back-button">戻る</a>
+        </div>
+        
+        <form action="blog-update-complete.php" method="post">
+            <input type="hidden" name="id" value="<?= htmlspecialchars($blog['id']) ?>">
+            
+            <div class="form-row">
+                <label>タイトル</label>
+                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" value="<?= htmlspecialchars($blog['title']) ?>" required>
+            </div>
+            
+            <div class="form-row">
+                <label>内容</label>
+                <textarea name="content" maxlength="500" required><?= htmlspecialchars($blog['content']) ?></textarea>
+            </div>
+            
+            <div class="submit-area">
+                <button type="submit" class="submit-button">更新</button>
+            </div>
+        </form>
+    </body>
+</html>
