@@ -1,0 +1,83 @@
+<?php
+session_start();
+$id = $_POST['id'] ?? null;
+$newTitle = $_POST['title'] ?? '';
+$newContent = $_POST['content'] ?? '';
+
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
+$stmt->execute([$id]);
+$blog = $stmt->fetch();
+
+$changes = [];
+if ($newTitle !== $blog['title']) {
+    $changes[] = 'タイトル';
+}
+if ($newContent !== $blog['content']) {
+    $changes[] = '内容';
+}
+
+if (!empty($changes)) {
+    $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ?, updated_at = NOW() WHERE id = ?");
+    $stmt->execute([$newTitle, $newContent, $id]);
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>ブログ更新完了</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="menu.js" defer></script>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+            
+            .header-bar {
+                max-width: 600px;
+                margin: 20px auto;
+                text-align: center;
+            }
+            
+            .change-item {
+                margin-bottom: 20px;
+                font-size: 24px;
+            }
+            
+            .no-change {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+            
+            .back-link {
+                padding: 10px 10px;
+                display: inline-block;
+                font-size: 16px;
+                background-color: #4CAF50;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <?php include 'header.php'; ?>
+        
+        <div class="header-bar">
+            <?php if (!empty($changes)): ?>
+                <p class="change-item"><?= implode('、', $changes) ?>が更新されました。</p>
+            <?php else: ?>
+                <p class="no-change">変更はありませんでした。</p>
+            <?php endif; ?>
+            
+            <a href="blog-info.php?id=<?= htmlspecialchars($id) ?>" class="back-link">ブログへ</a>
+        </div>
+    </body>
+    
+</html>
