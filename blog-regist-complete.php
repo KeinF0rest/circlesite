@@ -4,8 +4,8 @@ try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $title = $_POST['title'] ?? '';
-    $content = $_POST['content'] ?? '';
+    $title = preg_replace('/^[\p{Z}\s]+/u', '', $_POST['title'] ?? '');
+    $content = preg_replace('/^[\p{Z}\s]+/u', '', $_POST['content'] ?? '');
 
     $stmt = $pdo->prepare("INSERT INTO blog (title, content) VALUES (?, ?)");
     $stmt->execute([$title, $content]);
