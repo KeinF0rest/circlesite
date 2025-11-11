@@ -126,7 +126,7 @@ session_start();
             <div class="form-grid">
                 <div class="form-row">
                     <label>タイトル</label>
-                    <input type="text" name="title" id="title" maxlength="30" required>
+                    <input type="text" name="title" id="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" required>
                 </div>
             
                 <div class="form-row">
