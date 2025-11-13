@@ -20,7 +20,7 @@ if ($newContent !== $blog['content']) {
 }
 
 if (!empty($changes)) {
-    $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ?, updated_at = NOW() WHERE id = ?");
+    $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ? WHERE id = ?");
     $stmt->execute([$newTitle, $newContent, $id]);
 }
 
