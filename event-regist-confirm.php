@@ -56,7 +56,6 @@ if(!empty($_FILES['image_path']['name'][0])) {
             }
             
             .confirm-grid {
-                width: 100%;
                 margin: 20px;
                 background-color: #fff;
                 border-radius: 12px;
@@ -105,8 +104,7 @@ if(!empty($_FILES['image_path']['name'][0])) {
             }
 
             .submit-area {
-                width: 100%;
-                margin: 30px auto 0;
+                margin: 20px;
                 display: flex;
                 justify-content: flex-end;
                 gap: 10px;
