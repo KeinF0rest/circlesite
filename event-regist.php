@@ -62,7 +62,7 @@ session_start();
             }
 
             .form-row input, .form-row textarea {
-                width: 100%;
+                width: calc(100% - 20px);
                 padding: 8px;
                 font-size: 16px;
                 border-radius: 6px;
@@ -113,6 +113,7 @@ session_start();
                 opacity: 0;
                 cursor: pointer;
             }
+            
             #previewArea {
                 display: flex;
                 gap: 10px;
@@ -120,6 +121,7 @@ session_start();
                 padding: 20px;
                 scroll-snap-type: x mandatory;
             }
+            
             #previewArea img {
                 width: 100%;
                 object-fit: cover;
@@ -134,6 +136,7 @@ session_start();
                 margin-top: 20px;
                 margin-right: 20px;
             }
+            
             .submit-area button{
                 padding: 10px 20px;
                 font-size: 16px;
@@ -156,7 +159,7 @@ session_start();
         <form id="event-form" action="event-regist-confirm.php" method="POST" enctype="multipart/form-data">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern=".{1,30}" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶーA-Za-z0-9 　\p{Han}]+" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
             </div>
             
             <div class="form-row">
@@ -171,7 +174,7 @@ session_start();
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" required><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
+                <textarea name="content" maxlength="500" rows="6" pattern="[ぁ-んァ-ヶーA-Za-z0-9\s\p{Han}]+" required><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
             </div>
             
             <div class="form-row">
