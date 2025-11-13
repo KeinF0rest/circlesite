@@ -1,0 +1,91 @@
+<?php
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "", );
+$sql = "SELECT id, title, registerd_time FROM event WHERE delete_flag = 0 ORDER BY registerd_time DESC";
+$stmt = $pdo->query($sql);
+$event = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>イベント</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="menu.js" defer></script>
+        <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+            
+            .header-bar {
+                margin: 20px;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .header-bar h1 {
+                font-size: 24px;
+                margin: 0;
+            }
+            
+            .regist-button {
+                right: 0;
+                top: 0;
+                font-size: 24px;
+                padding: 6px 12px;
+                color: #333;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+                line-height: 1;
+            }
+            
+            .event-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            .event-card {
+                background-color: #f9f9f9;
+                border: 1px solid #ccc;
+                border-radius: 12px;
+                padding: 16px;
+                display: block;
+                text-decoration: none;
+                color: inherit;
+                transition: box-shadow 0.2s ease;
+            }
+            .event-title {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                justify-self: start;
+            }
+            .event-date {
+                font-size: 14px;
+                color: #666;
+                justify-self: end;
+            }
+        </style>
+    </head>
+    <body>
+        <?php include 'header.php'; ?>
+        
+        <div class="header-bar">
+            <h1>イベント一覧</h1>
+            <a href="event-regist.php" class="regist-button">＋</a>
+        </div>
+        
+        <div class="event-grid">
+            <?php foreach ($event as $event): ?>
+                <a href="event-info.php?id=<?= htmlspecialchars($event['id']) ?>" class="event-card">
+                    <div class="event-title"><?= htmlspecialchars($event['title']) ?></div>
+                    <div class="event-date">登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registerd_time']))) ?></div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        
+    </body>
+</html>

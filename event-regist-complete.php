@@ -46,7 +46,7 @@ try{
         <style>
             body {
                 font-family: sans-serif;
-                margin: 40px;
+                margin: 0;
             }
             
             .header-bar {
