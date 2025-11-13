@@ -176,7 +176,7 @@ if(!empty($_FILES['image_path']['name'][0])) {
                 <button type="submit">前に戻る</button>
             </form>
         
-            <form action="event-complete.php" method="POST">
+            <form action="event-regist-complete.php" method="POST">
                 <button type="submit">登録する</button>
             </form>
         </div>
