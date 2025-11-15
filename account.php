@@ -27,14 +27,13 @@ $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 display: flex;
                 justify-content: space-between;
             }
+            
             .header-bar h1 {
                 margin: 0;
                 font-size: 24px;
             }
             
             .regist-button {
-                right: 0;
-                top: 0;
                 font-size: 24px;
                 padding: 6px 12px;
                 color: #333;
@@ -43,12 +42,11 @@ $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 line-height: 1;
             }
             
-            .account-grid{
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
+            .account-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
                 gap: 20px;
-                margin: 0 auto;
+                margin: 20px;
             }
             
             .account-card {
@@ -57,22 +55,20 @@ $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 border: 1px solid #ccc;
                 border-radius: 20px;
                 padding: 10px;
-                text-align: center;
                 display: flex;
                 flex-direction: column;
-                height: 100%;
+                align-items: center;
                 justify-content: center;
             }
             
-            .account-card img{
+            .account-card img {
                 width: 100px;
                 height: 100px;
                 object-fit: cover;
                 border-radius: 50%;
-                align-items: center;
             }
             
-            .profile-image-wrapper{
+            .profile-image-wrapper {
                 width: 100px;
                 height: 100px;
                 border-radius: 50%;
@@ -83,27 +79,24 @@ $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 justify-content: center;
             }
             
-            .profile-image-wrapper img{
+            .profile-image-wrapper img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                border-radius: 50%; 
             }
             
-            .profile-image-wrapper.no-image{
+            .profile-image-wrapper.no-image {
                 background-color: #ccc;
             }
             
-            .profile-image-wrapper.no-image img{
+            .profile-image-wrapper.no-image img {
                 display: none;
             }
             
-            .account-card-link{
+            .account-card-link {
                 text-decoration: none;
                 color: inherit;
                 display: block;
-                flex: 1 1 calc(33.333% - 20px);
-                box-sizing: border-box;
                 min-height: 200px;
             }
             
