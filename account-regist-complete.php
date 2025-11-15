@@ -27,7 +27,7 @@ try{
     ]);
 } catch(PDOException $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。</p>";
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。" . $e->getMessage() . "</p>";
     exit;
 }
 
@@ -52,12 +52,12 @@ unset($_SESSION['regist']);
                 flex-direction: column;
                 justify-content: space-between;
                 align-items: center;
-                margin: 20px 0;
+                margin: 20px;
                 text-align: center;
             }
 
             .header-bar h1 {
-                margin: 0;
+                margin-bottom: 20px;
                 font-size: 24px;
             }
             
