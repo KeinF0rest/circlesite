@@ -22,7 +22,7 @@ $data = $_SESSION['regist'] ?? [];
                 justify-content: center;
                 align-items: center;
                 position: relative;
-                margin: 20px 0;
+                margin: 20px;
             }
 
             .header-bar h1 {
@@ -92,6 +92,7 @@ $data = $_SESSION['regist'] ?? [];
     </head>
     <body>
         <?php include 'header.php'; ?>
+        
         <div class="header-bar">
             <h1>アカウント新規登録</h1>
             <a href="account.php" class="back-button">戻る</a>
