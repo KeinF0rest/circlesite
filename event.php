@@ -1,5 +1,5 @@
 <?php
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "", );
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $sql = "SELECT id, title, registerd_time FROM event WHERE delete_flag = 0 ORDER BY registerd_time DESC";
 $stmt = $pdo->query($sql);
 $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -26,13 +26,11 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             
             .header-bar h1 {
-                font-size: 24px;
                 margin: 0;
+                font-size: 24px;
             }
             
             .regist-button {
-                right: 0;
-                top: 0;
                 font-size: 24px;
                 padding: 6px 12px;
                 color: #333;
@@ -47,6 +45,7 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 gap: 20px;
                 padding: 20px;
             }
+            
             .event-card {
                 background-color: #f9f9f9;
                 border: 1px solid #ccc;
@@ -57,12 +56,19 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 color: inherit;
                 transition: box-shadow 0.2s ease;
             }
+            
+            .event-card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: scale(1.02);
+                transition: 0.2s ease;
+            }
+            
             .event-title {
                 font-size: 18px;
                 font-weight: bold;
                 margin-bottom: 10px;
-                justify-self: start;
             }
+            
             .event-date {
                 font-size: 14px;
                 color: #666;
