@@ -9,7 +9,8 @@
                     <li><a href="event.php">イベント</a></li>
                     <li><a href="blog.php">ブログ</a></li>
                     <li><a href="album.php">アルバム</a></li>
-                    <li><a href="account.php">アカウント一覧</a></li>
+                    <li><a href="account.php">アカウント</a></li>
+                    <li><a href="logout.php">ログアウト</a></li>
                 </ul>
             </div>
         </nav>
