@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $_SESSION['regist'] = [
     'family_name' => $_POST['family_name'],
     'last_name' => $_POST['last_name'],

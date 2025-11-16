@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $id = $_GET['id'] ?? null;
 
