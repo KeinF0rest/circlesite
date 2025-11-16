@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $title = $_POST['title'] ?? '';
 $content = $_POST['content'] ?? '';
 ?>
