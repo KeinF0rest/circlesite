@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $image_paths = $_SESSION['event']['image_paths'] ?? [];
 
 $_SESSION['event'] = [
