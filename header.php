@@ -27,6 +27,6 @@
 <div class="header-bottom">
     <div class="header-buttons">
         <button onclick="alert('通知ページへ移動')">🔔 通知</button>
-        <button onclick="alert('マイページへ移動')">👤 マイページ</button>
+        <button onclick="location.href='mypage.php?id=<?= $_SESSION['user']['id'] ?>'">マイページ</button>
     </div>
 </div>
