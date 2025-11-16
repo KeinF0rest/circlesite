@@ -12,11 +12,13 @@
     font-size: 18px;
     color: #333;
 }
+
 #navArea {
     display: flex;
     align-items: center;
     position: relative;
 }
+
 .header-bottom {
     display: flex;
     justify-content: flex-end;
@@ -29,6 +31,7 @@
     display: flex;
     gap: 10px;
 }
+
 .header-buttons button {
     font-size: 14px;
     padding: 8px 12px;
@@ -118,7 +121,7 @@ nav .inner ul li a:hover {
     bottom: 4px;
 }
 
-.open .toggle span{
+.open .toggle span {
     background-color: #fff;
 }
 
@@ -135,8 +138,10 @@ nav .inner ul li a:hover {
 }
 
 #mask {
+    position: fixed;
     display: none;
     transition: all 0.5s;
+    z-index: 999;
 }
 
 .open #mask {
@@ -149,4 +154,5 @@ nav .inner ul li a:hover {
     position: fixed;
     opacity: 0.8;
     cursor: pointer;
+    z-index: 999;
 }
