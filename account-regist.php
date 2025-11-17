@@ -41,7 +41,7 @@ $data = $_SESSION['regist'] ?? [];
                 text-decoration: none;
                 color: #4CAF50;
                 position: absolute;
-                right: 40px;
+                right: 20px;
             }
 
             .form-grid {
@@ -127,7 +127,7 @@ $data = $_SESSION['regist'] ?? [];
             
             <div class="form-row">
                 <label>パスワード</label>
-                <input type="password" name="password" maxlength="100" pattern="[A-Za-z0-9]+" value="<?= htmlspecialchars($data['password'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                <input type="password" name="password" maxlength="10" pattern="[A-Za-z0-9]+" value="<?= htmlspecialchars($data['password'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             
             <div class="form-row">
