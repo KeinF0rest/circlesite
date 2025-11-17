@@ -38,8 +38,7 @@ if (!isset($_SESSION['user'])) {
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
-            }
-            
+            }    
         </style>
     </head>
     <body>

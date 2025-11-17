@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
 
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
-$sql = "SELECT id, nickname, profile_image FROM users";
+$sql = "SELECT id, nickname, profile_image FROM users WHERE delete_flag = 0";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -135,5 +135,4 @@ $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
     </body>
-
 </html>
