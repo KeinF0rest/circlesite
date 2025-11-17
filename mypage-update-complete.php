@@ -7,83 +7,89 @@ if (!isset($_SESSION['user'])) {
 }
 
 $id = $_POST['id'] ?? null;
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
-$sql = "SELECT * FROM users WHERE id = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$id]);
-$before = $stmt->fetch(PDO::FETCH_ASSOC);
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$password = !empty($_POST['password']) ? $_POST['password'] : $before['password'];
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    $before = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$imagePath = $before['profile_image'];
-if (!empty($_FILES['profile_image']['tmp_name'])) {
-    $filename = uniqid() . '_' . basename($_FILES['profile_image']['name']);
-    $targetPath = 'uploads/' . $filename;
-    if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetPath)) {
-        $imagePath = $targetPath;
+    $imagePath = $before['profile_image'];
+    if (!empty($_FILES['profile_image']['tmp_name'])) {
+        $filename = uniqid() . '_' . basename($_FILES['profile_image']['name']);
+        $targetPath = 'uploads/' . $filename;
+        if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetPath)) {
+            $imagePath = $targetPath;
+        }
     }
-}
 
-if (!empty($_POST['password'])) {
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-} else {
-    $password = $before['password'];
-}
-
-$sql = "UPDATE users SET family_name = ?, last_name = ?, nickname = ?, mail = ?, password = ?, gender = ?, postal_code = ?, prefecture = ?, address1 = ?, address2 = ?, authority = ?, profile_image = ? WHERE id = ?";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute([
-    $_POST['family_name'],
-    $_POST['last_name'],
-    $_POST['nickname'],
-    $_POST['mail'],
-    $password,
-    $_POST['gender'],
-    $_POST['postal_code'],
-    $_POST['prefecture'],
-    $_POST['address1'],
-    $_POST['address2'],
-    $_POST['authority'],
-    $imagePath,
-    $id
-]);
-
-$sql = "SELECT * FROM users WHERE id = ?";
-$stmt = $pdo->prepare($sql);
-$stmt->execute([$id]);
-$after = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$changes = [];
-$fields = [
-    'family_name' => '名前（姓）',
-    'last_name' => '名前（名）',
-    'nickname' => 'ニックネーム',
-    'mail' => 'メールアドレス',
-    'password' => 'パスワード',
-    'gender' => '性別',
-    'postal_code' => '郵便番号',
-    'prefecture' => '都道府県',
-    'address1' => '住所（市区町村）',
-    'address2' => '住所（番地）',
-    'authority' => 'アカウント権限',
-];
-
-foreach ($fields as $key => $label) {
-    $beforeValue = $before[$key] ?? '';
-    $afterValue = $_POST[$key] ?? '';
-    if ($key === 'password' && empty($_POST['password'])) {
-        continue;
+    if (!empty($_POST['password'])) {
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    } else {
+        $password = $before['password'];
     }
-    if ($beforeValue != $afterValue) {
-        $changes[] = $label;
+
+    $sql = "UPDATE users SET family_name = ?, last_name = ?, nickname = ?, mail = ?, password = ?, gender = ?, postal_code = ?, prefecture = ?, address1 = ?, address2 = ?, authority = ?, profile_image = ? WHERE id = ?";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        $_POST['family_name'],
+        $_POST['last_name'],
+        $_POST['nickname'],
+        $_POST['mail'],
+        $password,
+        $_POST['gender'],
+        $_POST['postal_code'],
+        $_POST['prefecture'],
+        $_POST['address1'],
+        $_POST['address2'],
+        $_POST['authority'],
+        $imagePath,
+        $id
+    ]);
+
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+    $after = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $changes = [];
+    $fields = [
+        'family_name' => '名前（姓）',
+        'last_name' => '名前（名）',
+        'nickname' => 'ニックネーム',
+        'mail' => 'メールアドレス',
+        'password' => 'パスワード',
+        'gender' => '性別',
+        'postal_code' => '郵便番号',
+        'prefecture' => '都道府県',
+        'address1' => '住所（市区町村）',
+        'address2' => '住所（番地）',
+        'authority' => 'アカウント権限',
+    ];
+
+    foreach ($fields as $key => $label) {
+        $beforeValue = $before[$key] ?? '';
+        $afterValue = $_POST[$key] ?? '';
+        if ($beforeValue != $afterValue) {
+            $changes[] = $label;
+        }
     }
-}
 
+    if (!empty($_POST['password'])) {
+        $changes[] = 'パスワード';
+    }
 
-if (!empty($_FILES['profile_image']['tmp_name'])) {
-    $changes[] = "プロフィール画像が更新されました。";
+    if (!empty($_FILES['profile_image']['tmp_name'])) {
+        $changes[] = "プロフィール画像";
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント更新ができませんでした。</p>";
+    exit;
 }
 ?>
 
@@ -95,9 +101,14 @@ if (!empty($_FILES['profile_image']['tmp_name'])) {
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
         <style>
+            body {
+                font-family: sans-serif;
+                margin: 0;
+            }
+            
             .header-bar {
                 max-width: 600px;
-                margin: 20px auto;
+                margin: 20px;
                 text-align: center;
             }
             
