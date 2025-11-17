@@ -49,33 +49,69 @@ if($id){
                 text-decoration: none;
             }
             
-            .header-actions {
+            .menu-wrapper {
+                position: relative;
                 display: flex;
                 justify-content: flex-end;
-                margin: 10px 10px;
+                margin-right: 10px;
+                margin-bottom: 10px;
             }
             
-            .menu-toggle {
-                background: none;
-                border: none;
-                font-size: 20px;
+            .menu-icon {
+                font-size: 24px;
                 cursor: pointer;
+                padding: 6px 10px;
+                transition: background-color 0.2s ease;
             }
             
-            .menu-list {
-                list-style: none;
+            .menu-popup {
                 display: none;
-                
+                position: absolute;
+                top: 40px;
+                right: 0;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                z-index: 100;
             }
-            
-            .menu-list.active {
+
+            .menu-popup.visible {
                 display: block;
             }
             
-            .menu-list li a {
-                display: block;
-                padding: 10px 15px;
+            .menu-popup ul {
+                list-style: none;
+                margin: 0;
+                padding: 10px;
+            }
+
+            .menu-popup li {
+                margin: 8px 0;
+            }
+            
+            .menu-popup ul {
+                list-style: none;
+                margin: 0;
+                padding: 10px;
+            }
+
+            .menu-popup li {
+                margin: 8px 0;
+            }
+
+            .menu-popup a {
                 text-decoration: none;
+                color: #333;
+                font-size: 14px;
+                padding: 4px 8px;
+                display: block;
+                border-radius: 4px;
+                transition: background-color 0.2s ease;
+            }
+
+            .menu-popup a:hover {
+                background-color: #f0f0f0;
             }
             
             .profile-image-wrapper {
@@ -166,11 +202,13 @@ if($id){
             <a href="index.php" class="back-button">戻る</a>
         </div>
             
-        <div class="header-actions">
-            <button class="menu-toggle">・・・</button>
-            <ul class="menu-list">
-                <li><a href="account-delete.php?id=<?= htmlspecialchars($user['id']) ?>">アカウント削除</a></li>
-            </ul>
+        <div class="menu-wrapper">
+            <div class="menu-icon" onclick="toggleMenu()">⋯</div>
+            <div class="menu-popup" id="menu-popup">
+                <ul>
+                    <li><a href="account-delete.php?id=<?= $user['id'] ?>">削除</a></li>
+                </ul>
+            </div>
         </div>
 
         <form action="mypage-update-complete.php" method="post" enctype="multipart/form-data">
@@ -266,9 +304,10 @@ if($id){
             </div>
         </form>
         <script>
-            document.querySelector('.menu-toggle').addEventListener('click', () => {
-                document.querySelector('.menu-list').classList.toggle('active');
-            });
+            function toggleMenu() {
+                const menu = document.getElementById('menu-popup');
+                menu.classList.toggle('visible');
+            }
         </script>
     </body>
 </html>
