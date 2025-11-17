@@ -25,7 +25,6 @@ if (!isset($_SESSION['user'])) {
                 justify-content: space-between;
                 align-items: center;
                 margin: 20px;
-                
             }
 
             .header-bar h1 {
@@ -39,18 +38,6 @@ if (!isset($_SESSION['user'])) {
                 color: #4CAF50;
                 position: absolute;
                 right: 40px;  
-            }
-
-            .form-grid {
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 20px;
-                max-width: 600px;
-                margin: 0 auto;
-                padding: 20px;
-                border: 1px solid #ccc;
-                border-radius: 12px;
-                background-color: #f9f9f9;
             }
 
             .form-row {
@@ -122,8 +109,8 @@ if (!isset($_SESSION['user'])) {
                 display: flex;
                 gap: 10px;
                 overflow-x: auto;
-                padding: 20px;
                 scroll-snap-type: x mandatory;
+                margin: 20px;
             }
             
             #previewArea img {
@@ -134,14 +121,14 @@ if (!isset($_SESSION['user'])) {
                 flex-shrink: 0;
             }
             
-            .submit-area{
+            .submit-area {
                 display: flex;
                 justify-content: flex-end;
                 margin-top: 20px;
                 margin-right: 20px;
             }
             
-            .submit-area button{
+            .submit-area button {
                 padding: 10px 20px;
                 font-size: 16px;
                 border: none;
@@ -161,9 +148,10 @@ if (!isset($_SESSION['user'])) {
         </div>
         
         <form id="event-form" action="event-regist-confirm.php" method="POST" enctype="multipart/form-data">
+            <div class="form-grid">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶーA-Za-z0-9 　\p{Han}]+" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
             </div>
             
             <div class="form-row">
@@ -178,7 +166,7 @@ if (!isset($_SESSION['user'])) {
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" pattern="[ぁ-んァ-ヶーA-Za-z0-9\s\p{Han}]+" required><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
+                <textarea name="content" maxlength="500" rows="6" required><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
             </div>
             
             <div class="form-row">
@@ -196,6 +184,7 @@ if (!isset($_SESSION['user'])) {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+                </div>
             
             <div class="submit-area">
                 <button type="submit">確認する</button>
@@ -204,7 +193,7 @@ if (!isset($_SESSION['user'])) {
         
         <script>
             document.getElementById('imageInput').addEventListener('change', function(e) {
-                const previewArea = document.getElementById('previewArea');
+                const previewArea = document.getElementById('previewArea') || createPreviewArea();
                 previewArea.innerHTML = '';
 
                 const files = Array.from(e.target.files);
@@ -219,7 +208,8 @@ if (!isset($_SESSION['user'])) {
                     reader.onload = function(event) {
                         const img = document.createElement('img');
                         img.src = event.target.result;
-                        img.style.width = '100%';
+                        img.style.width = '120px';
+                        img.style.height = '120px';
                         img.style.borderRadius = '6px';
                         img.style.objectFit = 'cover';
                         previewArea.appendChild(img);
@@ -227,6 +217,26 @@ if (!isset($_SESSION['user'])) {
                     reader.readAsDataURL(file);
                 });
             });
+            
+            document.getElementById('event-form').addEventListener('submit', function(e) {
+                const start = new Date(document.querySelector('[name="start_date"]').value);
+                const end = new Date(document.querySelector('[name="end_date"]').value);
+                if (end && start && end < start) {
+                    alert("終了日は開始日以降を選択してください");
+                    e.preventDefault();
+                }
+            });
+            
+            function createPreviewArea() {
+                const area = document.createElement('div');
+                area.id = 'previewArea';
+                area.style.display = 'flex';
+                area.style.gap = '10px';
+                area.style.overflowX = 'auto';
+                area.style.scrollSnapType = 'x mandatory';
+                imageInput.closest('.form-grid').appendChild(area);
+                return area;
+            }
         </script>
     </body>
 </html>
