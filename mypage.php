@@ -243,10 +243,12 @@ if($id){
                 
                 <div class="form-row">
                     <label>性別</label>
-                    <select name="gender">
-                        <option value="0" <?= $user['gender'] == 0 ? 'selected' : '' ?>>男性</option>
-                        <option value="1" <?= $user['gender'] == 1 ? 'selected' : '' ?>>女性</option>
-                    </select>
+                    <label>
+                        <input type="radio" name="gender" value="0" <?= $user['gender'] == 0 ? 'checked' : '' ?>>男性
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="1" <?= $user['gender'] == 1 ? 'checked' : '' ?>>女性
+                    </label>
                 </div>
                 
                 <div class="form-row">
