@@ -32,7 +32,7 @@ try{
     ]);
 } catch(PDOException $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。" . $e->getMessage() . "</p>";
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。</p>";
     exit;
 }
 
@@ -79,6 +79,7 @@ unset($_SESSION['regist']);
     </head>
     <body>
         <?php include 'header.php'; ?>
+        
         <div class="header-bar">
             <h1>アカウント登録完了しました。</h1>
             <a href="account.php" class="back-link">アカウント一覧へ</a>
