@@ -6,24 +6,31 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$user_id = $_SESSION['user_id'] ?? null;
+    $user_id = $_SESSION['user_id'] ?? null;
 
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-
-if (!$user) {
-    echo "ユーザー情報が見つかりません。";
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    $stmt = $pdo->prepare("UPDATE users SET delete_flag = 1 WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND delete_flag = 0");
     $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
 
-    header('Location: account-delete-complete.php');
+    if (!$user) {
+        echo "ユーザー情報が見つかりません。";
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+        $stmt = $pdo->prepare("UPDATE users SET delete_flag = 1 WHERE id = ?");
+        $stmt->execute([$user_id]);
+
+        header('Location: account-delete-complete.php');
+        exit;
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント削除ができませんでした。</p>";
     exit;
 }
 
@@ -49,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 justify-content: center;
                 padding: 20px;
             }
+            
             .header-bar h1 {
                 font-size: 24px;
                 margin: 0;
@@ -59,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 text-align: center;
                 margin-bottom: 20px;
             }
+            
             .back-button {
                 position: absolute;
                 right: 20px;
@@ -66,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 color: #4CAF50;
                 text-decoration: none;
             }
+            
             .profile-image-wrapper {
                 width: 120px;
                 height: 120px;
@@ -78,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 margin: 0 auto;
                 border: 2px dashed #aaa; 
             }
+            
             .profile-image-wrapper img {
                 width: 100%;
                 height: 100%;
@@ -92,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             .profile-image-wrapper.no-image img {
                 display: none;
             }
+            
             .form-grid {
                 display: grid;
                 grid-template-columns: 1fr;
@@ -151,13 +163,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         
         <h2>削除すると復元することはできません。</h2>
         
-        
         <div class="form-grid">
-                <label for="profile_image" class="profile-image-wrapper <?= empty($user['profile_image']) ? 'no-image' : '' ?>">
-                    <?php if (!empty($user['profile_image'])): ?>
+            <label for="profile_image" class="profile-image-wrapper <?= empty($user['profile_image']) ? 'no-image' : '' ?>">
+                <?php if (!empty($user['profile_image'])): ?>
                     <img src="<?= htmlspecialchars($user['profile_image'], ENT_QUOTES, 'UTF-8') ?>" alt="プロフィール画像">
-                    <?php endif; ?>
-                </label>
+                <?php endif; ?>
+            </label>
             
             <div class="form-row">
                 <label>ニックネーム</label>
