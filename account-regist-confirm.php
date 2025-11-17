@@ -79,15 +79,14 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-bottom: 16px;
-                text-align: left;
+                margin-bottom: 15px;
             }
 
             .confirm-row label {
                 width: 130px;
                 font-weight: bold;
                 text-align: left;
-                margin-right: 12px;
+                margin-right: 15px;
             }
 
             .confirm-row .value {
@@ -122,22 +121,22 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
         <div class="confirm-grid">
             <div class="confirm-row">
                 <label>名前（姓）</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['family_name']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['family_name'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>名前（名）</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['last_name']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['last_name'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>ニックネーム</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['nickname']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['nickname'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>メールアドレス</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['mail']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['mail'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
@@ -152,22 +151,22 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
             
             <div class="confirm-row">
                 <label>郵便番号</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['postal_code']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['postal_code'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>都道府県</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['prefecture']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['prefecture'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>住所（市区町村）</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['address1']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['address1'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>住所（番地）</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['regist']['address2']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['address2'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
@@ -178,7 +177,6 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
         
         <div class="button-area">
             <form action="account-regist.php" method="POST">
-                <input type="hidden" name="back" value="1">
                 <button type="submit">前に戻る</button>
             </form>
             <form action="account-regist-complete.php" method="POST">
