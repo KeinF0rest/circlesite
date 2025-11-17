@@ -89,16 +89,6 @@ if($id){
             .menu-popup li {
                 margin: 8px 0;
             }
-            
-            .menu-popup ul {
-                list-style: none;
-                margin: 0;
-                padding: 10px;
-            }
-
-            .menu-popup li {
-                margin: 8px 0;
-            }
 
             .menu-popup a {
                 text-decoration: none;
@@ -126,6 +116,12 @@ if($id){
                 margin: 0 auto;
                 cursor: pointer;
                 border: 2px dashed #aaa; 
+            }
+            
+            .profile-image-wrapper img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
             
             .profile-image-wrapper.no-image {
@@ -214,39 +210,35 @@ if($id){
         <form action="mypage-update-complete.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
             
-            
             <div class="form-grid">
-                
                 <label for="profile_image" class="profile-image-wrapper <?= empty($user['profile_image']) ? 'no-image' : '' ?>">
-                    <?php if (!empty($user['profile_image'])): ?>
-                    <img src="<?= htmlspecialchars($user['profile_image'], ENT_QUOTES, 'UTF-8') ?>" alt="プロフィール画像">
-                    <?php endif; ?>
+                    <img id="preview" src="<?= !empty($user['profile_image']) ? htmlspecialchars($user['profile_image'], ENT_QUOTES, 'UTF-8') : '' ?>" alt="プロフィール画像" style="<?= empty($user['profile_image']) ? 'display:none;' : '' ?>">
                 </label>
                 <input type="file" name="profile_image" id="profile_image" accept="image/*" style="display:none">
                 
                 <div class="form-row">
                     <label>名前（姓）</label>
-                    <input type="text" name="family_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['family_name']) ?>">
+                    <input type="text" name="family_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['family_name'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
                     <label>名前（名）</label>
-                    <input type="text" name="last_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['last_name']) ?>">
+                    <input type="text" name="last_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['last_name'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
                     <label>ニックネーム</label>
-                    <input type="text" name="nickname" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($user['nickname']) ?>">
+                    <input type="text" name="nickname" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($user['nickname'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
                     <label>メールアドレス</label>
-                    <input type="email" name="mail" maxlength="100" pattern="^[a-zA-Z0-9@.\-]+$" value="<?= htmlspecialchars($user['mail']) ?>">
+                    <input type="email" name="mail" maxlength="100" pattern="^[a-zA-Z0-9@.\-]+$" value="<?= htmlspecialchars($user['mail'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
                     <label>パスワード(変更する場合のみ入力)</label>
-                    <input type="password" name="password" maxlength="100" pattern="[A-Za-z0-9]+">
+                    <input type="password" name="password" maxlength="10" pattern="[A-Za-z0-9]+">
                 </div>
                 
                 <div class="form-row">
@@ -259,7 +251,7 @@ if($id){
                 
                 <div class="form-row">
                     <label>郵便番号</label>
-                    <input type="text" name="postal_code" maxlength="7" pattern="\d{7}" value="<?= htmlspecialchars($user['postal_code']) ?>">
+                    <input type="text" name="postal_code" maxlength="7" pattern="\d{7}" value="<?= htmlspecialchars($user['postal_code'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
@@ -282,12 +274,12 @@ if($id){
 
                 <div class="form-row">
                     <label>住所（市区町村）</label>
-                    <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address1']) ?>">
+                    <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address1'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
                     <label>住所（番地）</label>
-                    <input type="text" name="address2" maxlength="100" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address2']) ?>">
+                    <input type="text" name="address2" maxlength="100" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address2'], ENT_QUOTES, 'UTF-8') ?>">
                 </div>
                 
                 <div class="form-row">
@@ -308,6 +300,19 @@ if($id){
                 const menu = document.getElementById('menu-popup');
                 menu.classList.toggle('visible');
             }
+            
+            document.getElementById('profile_image').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         </script>
     </body>
 </html>
