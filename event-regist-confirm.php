@@ -24,10 +24,14 @@ if(!empty($_FILES['image_path']['name'][0])) {
         $error = $_FILES['image_path']['error'][$index];
         
         if ($error === UPLOAD_ERR_OK) {
-            $filename = uniqid() . '_' . basename($name);
-            $filepath = 'temp/' . $filename;
-            move_uploaded_file($tmp_name, $filepath);
-            $_SESSION['event']['image_paths'][] = $filepath;
+            $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+            if (in_array(mime_content_type($tmp_name), $allowed_types)) {
+                $filename = uniqid('', true) . '_' . basename($name);
+                $filepath = 'temp/' . $filename;
+            
+                move_uploaded_file($tmp_name, $filepath);
+                $_SESSION['event']['image_paths'][] = $filepath;
+            }  
         }
     }
 } elseif (!empty($_SESSION['event']['image_paths'])) {
@@ -51,8 +55,9 @@ if(!empty($_FILES['image_path']['name'][0])) {
             }
 
             .header-bar {
-                position: relative;
-                height: 40px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 margin: 20px;
             }
 
@@ -187,5 +192,4 @@ if(!empty($_FILES['image_path']['name'][0])) {
             </form>
         </div>
     </body>
-
 </html>
