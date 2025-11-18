@@ -63,6 +63,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 color: inherit;
                 transition: box-shadow 0.2s ease;
             }
+            
             .event-card.ended {
                 background-color: #999;
             }
@@ -119,6 +120,5 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </a>
             <?php endforeach; ?>
         </div>
-        
     </body>
 </html>

@@ -6,10 +6,10 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "", );
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $event_id = $_GET['id'] ?? null;
-$user_id = $_GET['user_id'] ?? null;
+$user_id = $_SESSION['user']['id'];
 
 $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$event_id]);
@@ -81,6 +81,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 box-shadow: 0 2px 6px rgba(0,0,0,0.1);
                 z-index: 100;
             }
+            
             .menu-popup.visible {
                 display: block;
             }
@@ -137,6 +138,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 color: #999;
                 font-size: 16px;
             }
+            
             .event-content {
                 border: 1px solid #ccc;
                 padding-left: 10px;
@@ -144,6 +146,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 background-color: #fff;
                 margin-top: 20px;
             }
+            
             .event-actions {
                 display: flex;
                 justify-content: space-between;
@@ -151,6 +154,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 margin-top: 10px;
                 padding: 10px 0;
             }
+            
             .event-actions button {
                 margin-right: 10px;
                 padding: 6px 12px;
@@ -161,6 +165,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 border-radius: 6px;
                 cursor: pointer;
             }
+            
             .action-buttons button:last-child {
                 background-color: #f44336;
             }
@@ -197,11 +202,15 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 <?php
                 $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
                 $stmt_img->execute([$event['id']]);
-                $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
-                if (!empty($image['image_path'])):
+                $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
+                if (!empty($images)):
+                    foreach ($images as $img):
                 ?>
                     <img src="<?= htmlspecialchars($image['image_path']) ?>" alt="イベント画像">
-                <?php else: ?>
+                <?php
+                endforeach;
+                else:
+                ?>
                     <p>画像は登録されていません。</p>
                 <?php endif; ?>
             </div>
@@ -222,11 +231,11 @@ $already_joined = $stmt_check->fetchColumn() > 0;
             <div class="event-actions">
                 <div class="action-button">
                     <button id="participate-btn" <?= $already_joined ? 'style="display:none;"' : '' ?>>参加</button>
-                    <button id="cansel-btn" <?= $already_joined ? 'style="display:none;"' : '' ?>>不参加</button>
+                    <button id="cancel-btn" <?= $already_joined ? '' : 'style="display:none;"' ?>>不参加</button>
                 </div>
 
                 <div class="event-registered-date">
-                    登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registerd_time']))) ?>
+                    登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registered_time']))) ?>
                 </div>
             </div>
             
@@ -249,7 +258,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
             });
             
             const eventId = <?= json_encode($event['id']) ?>;
-            const userId = <?= json_encode($_SESSION['user_id'] ?? null) ?>;
+            const userId = <?= json_encode($_SESSION['user']['id']) ?>;
 
             function sendParticipation(status) {
                 fetch('event-participation.php', {
