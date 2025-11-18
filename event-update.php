@@ -14,7 +14,7 @@ $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
 $stmt_img->execute([$event['id']]);
-$image = $stmt_img->fetch(PDO::FETCH_ASSOC);
+$images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -113,12 +113,13 @@ $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
                 cursor: pointer;
             }
             
-            .submit-area{
+            .submit-area {
                 display: flex;
                 justify-content: flex-end;
                 margin: 20px;
             }
-            .submit-button{
+            
+            .submit-button {
                 padding: 10px 20px;
                 font-size: 16px;
                 border: none;
@@ -142,7 +143,7 @@ $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
             
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶーA-Za-z0-9 　\p{Han}]+" value="<?= htmlspecialchars($event['title']) ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($event['title']) ?>" required>
             </div>
             
             <div class="form-row">
@@ -157,22 +158,23 @@ $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" pattern="[ぁ-んァ-ヶーA-Za-z0-9\s\p{Han}]+" required><?= htmlspecialchars($event['content']) ?></textarea>
+                <textarea name="content" maxlength="500" rows="6" required><?= htmlspecialchars($event['content']) ?></textarea>
             </div>
             
             <div class="form-row">
                 <label>写真</label>
-                <?php if (!empty($image['image_path'])): ?>
+                <?php if (!empty($images)): ?>
+                <?php foreach ($images as $img): ?>
                     <div class="image-preview">
-                        <img src="<?= htmlspecialchars($image['image_path']) ?>" alt="登録済み画像">
+                        <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="登録済み画像">
                     </div>
-                    <p class="note">※画像を変更する場合は、下で再選択してください。</p>
-                <?php else: ?>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                
                     <label class="image-slot">
                         <span class="plus">＋</span>
                         <input type="file" name="image_path" accept="image/*" id="imageInput">
                     </label>
-                <?php endif; ?>
             </div>
             
             <div class="submit-area">
