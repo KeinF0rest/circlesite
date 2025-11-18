@@ -15,6 +15,10 @@ $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$event_id]);
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
+$stmt_img->execute([$event['id']]);
+$images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
+
 $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ?");
 $stmt_count->execute([$event_id]);
 $participant_count = $stmt_count->fetchColumn();
@@ -105,19 +109,19 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 border-radius: 4px;
             }
             
-            .title-bar{
+            .title-bar {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-top: 20px;
             }
             
-            .event-title{
+            .event-title {
                 font-size: 24px;
                 margin: 0;
             }
             
-            .menu-icon{
+            .menu-icon {
                 font-size: 24px;
                 cursor: pointer;
             }
@@ -134,6 +138,20 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 border-radius: 6px;
                 background-color: #fff;
             }
+            
+            .event-image img {
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 12px;
+            }
+            
+            .event-image.no-border {
+                border: none;
+                padding: 0;
+                background-color: transparent;
+            }
+            
             .event-image p {
                 color: #999;
                 font-size: 16px;
@@ -198,19 +216,15 @@ $already_joined = $stmt_check->fetchColumn() > 0;
         </div>
         
         <div class="event-container">
-            <div class="event-image">
-                <?php
-                $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
-                $stmt_img->execute([$event['id']]);
-                $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
-                if (!empty($images)):
-                    foreach ($images as $img):
+            <div class="event-image <?= !empty($images) ? 'no-border' : '' ?>">
+                <?php if (!empty($images)):
+                    foreach ($images as $img): 
                 ?>
-                    <img src="<?= htmlspecialchars($image['image_path']) ?>" alt="イベント画像">
-                <?php
-                endforeach;
-                else:
-                ?>
+                        <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
+                    <?php 
+                        endforeach;
+                    else: 
+                    ?>
                     <p>画像は登録されていません。</p>
                 <?php endif; ?>
             </div>
