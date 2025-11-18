@@ -7,9 +7,9 @@ if (!isset($_SESSION['user'])) {
 }
 
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$sql = "SELECT id, title, registerd_time FROM event WHERE delete_flag = 0 ORDER BY registerd_time DESC";
+$sql = "SELECT id, title, registered_time, start_date, end_date FROM event WHERE delete_flag = 0 ORDER BY registered_time DESC";
 $stmt = $pdo->query($sql);
-$event = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -63,11 +63,14 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 color: inherit;
                 transition: box-shadow 0.2s ease;
             }
+            .event-card.ended {
+                background-color: #999;
+            }
             
             .event-card:hover {
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 transform: scale(1.02);
-                transition: 0.2s ease;
+                transition: all 0.2s ease;
             }
             
             .event-title {
@@ -92,10 +95,27 @@ $event = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         
         <div class="event-grid">
-            <?php foreach ($event as $event): ?>
-                <a href="event-info.php?id=<?= htmlspecialchars($event['id']) ?>" class="event-card">
+            <?php foreach ($events as $event): ?>
+                <?php
+                $today = date('Y-m-d');
+
+                $start = !empty($event['start_date']) ? date('Y-m-d', strtotime($event['start_date'])) : null;
+                $end = !empty($event['end_date']) ? date('Y-m-d', strtotime($event['end_date'])) : null;
+            
+                $isEnded = $end !== null && $end < $today;
+            
+                $isOngoing = $start !== null && $start <= $today && ($end === null || $end >= $today);
+            
+                if ($start === $today) {
+                    $isOngoing = true;
+                    $isEnded = false;
+                }
+            
+                $cardClass = $isEnded ? "event-card ended" : "event-card";
+                ?>
+                <a href="event-info.php?id=<?= htmlspecialchars($event['id']) ?>" class="<?= $cardClass ?>">
                     <div class="event-title"><?= htmlspecialchars($event['title']) ?></div>
-                    <div class="event-date">登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registerd_time']))) ?></div>
+                    <div class="event-date">登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registered_time']))) ?></div>
                 </a>
             <?php endforeach; ?>
         </div>
