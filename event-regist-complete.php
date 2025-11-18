@@ -9,9 +9,8 @@ if (!isset($_SESSION['user'])) {
 $data = $_SESSION['event'];
 
 try{
-    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "", [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     $stmt = $pdo->prepare("INSERT INTO event (title, start_date, end_date, content) VALUES (?, ?, ?, ?)");
     $stmt->execute([
@@ -30,13 +29,31 @@ try{
         }
         
         $stmt_img = $pdo->prepare("INSERT INTO event_images(event_id, image_path) VALUES (?, ?)");
+        
+        $upload_dir = 'uploads/';
+        if (!file_exists($upload_dir)) {
+            mkdir($upload_dir, 0777, true);
+        }
+    
+        $imagePaths = [];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $maxSize = 5 * 1024 * 1024;
+        
         foreach ($data['image_paths'] as $path) {
-            $stmt_img->execute([$event_id, $path]);
+            $filename = basename($path);
+            $new_path = $upload_dir . $filename;
+            
+             if (file_exists($path)) {
+                rename($path, $new_path);
+            }
+            
+            $stmt_img->execute([$event_id, $filename]);
         }
     }
-} catch(PDOException $e){
+    unset($_SESSION['event']);
+} catch (Exception $e){
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント登録できません。</p>";
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント登録できませんでした。</p>";
     exit;
 }
 ?>
@@ -57,16 +74,15 @@ try{
             .header-bar {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
                 margin: 20px;
                 text-align: center;
             }
 
             .header-bar h1 {
-                margin: 0;
+                margin-bottom: 20px;
                 font-size: 24px;
-                margin: 20px;
             }
             
             .back-link {
@@ -78,6 +94,7 @@ try{
                 text-decoration: none;
                 border-radius: 6px;
                 transition: background-color 0.3s ease;
+                cursor: pointer;
             }
 
             .back-link:hover {
