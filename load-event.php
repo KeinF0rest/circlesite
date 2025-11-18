@@ -12,7 +12,8 @@ try {
         $event['title'] = htmlspecialchars($event['title']);
         $event['start'] = $event['start_date'];
         if (!empty($event['end_date'])) {
-            $event['end'] = $event['end_date'];
+            $event['end'] = date('Y-m-d', strtotime($event['end_date'] . ' +1 day'));
+            $event['original_end'] = $event['end_date'];
         }
     }
     

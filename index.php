@@ -108,7 +108,7 @@ if (!isset($_SESSION['user'])) {
                         const event = info.event;
                         const title = event.title;
                         const start = event.start ? event.start.toLocaleDateString('ja-JP') : '';
-                        const end = event.end ? event.end.toLocaleDateString('ja-JP') : '';
+                        const end = event.extendedProps.original_end ? new Date(event.extendedProps.original_end).toLocaleDateString('ja-JP') : '';
                         
                         let html = `
                             <a href="event-info.php?id=${event.id}" class="event-card">
