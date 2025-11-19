@@ -7,7 +7,8 @@ if (!isset($_SESSION['user'])) {
 }
 
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$stmt = $pdo->query("SELECT * FROM blog ORDER BY registered_time DESC");
+$stmt = $pdo->prepare("SELECT * FROM blog WHERE delete_flag = 0 ORDER BY registered_time DESC");
+$stmt->execute();
 $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -34,6 +35,7 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 margin: 0;
                 font-size: 24px;
             }
+            
             .blog-card {
                 background-color: #f9f9f9;
                 border: 1px solid #ccc;
@@ -46,7 +48,9 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
             
             .blog-card:hover {
-                box-shadow: 0 0 8px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: scale(1.02);
+                transition: all 0.2s ease;
             }
             
             .regist-button {
