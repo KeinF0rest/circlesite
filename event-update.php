@@ -85,6 +85,21 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
                 align-items: flex-start;
             }
 
+            #preview-area {
+                margin-top: 10px;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            #preview-area img {
+                max-width: 120px;
+                max-height: 120px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                object-fit: cover;
+            }
+            
             .image-slot {
                 width: 100%;
                 height: 100px;
@@ -164,22 +179,41 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
             <div class="form-row">
                 <label>写真</label>
                 <?php if (!empty($images)): ?>
-                <?php foreach ($images as $img): ?>
-                    <div class="image-preview">
-                        <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="登録済み画像">
-                    </div>
-                <?php endforeach; ?>
+                    <?php foreach ($images as $img): ?>
+                        <div id="preview-area">
+                            <img src="<?= htmlspecialchars($img['image_path']) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;" alt="登録済み画像">
+                        </div>
+                    <?php endforeach; ?>
                 <?php endif; ?>
                 
-                    <label class="image-slot">
-                        <span class="plus">＋</span>
-                        <input type="file" name="image_path" accept="image/*" id="imageInput">
-                    </label>
+                <label class="image-slot">
+                    <span class="plus">＋</span>
+                    <input type="file" name="image_path[]" accept="image/*" id="imageInput" multiple>
+                </label>
             </div>
             
             <div class="submit-area">
                 <button type="submit" class="submit-button">更新</button>
             </div>         
         </form>
+        
+        <script>
+            document.getElementById('imageInput').addEventListener('change', function(event) {
+                const previewArea = document.getElementById('preview-area');
+
+                const files = event.target.files;
+                Array.from(files).forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        previewArea.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        </script>
     </body>
 </html>
