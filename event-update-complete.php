@@ -55,10 +55,10 @@ try {
         }
         if ($old_images !== $new_images) {
             $changes[] = "写真";
-}
+        }
     }
 } catch (PDOException $e) {
-        error_log($e->getMessage());
+    error_log($e->getMessage());
     echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント更新ができませんでした。</p>";
     exit;
 }

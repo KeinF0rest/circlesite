@@ -8,23 +8,29 @@ if (!isset($_SESSION['user'])) {
 
 $id = $_GET['id'] ?? null; 
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$id]);
-$blog = $stmt->fetch();
-
-if (!$blog) {
-    echo "該当するブログが見つかりません。";
-    exit;
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    $stmt = $pdo->prepare("DELETE FROM blog WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
     $stmt->execute([$id]);
+    $blog = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    header("Location: blog-delete-complete.php");
+    if (!$blog) {
+        echo "該当するブログが見つかりません。";
+        exit;
+    }
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+        $stmt = $pdo->prepare("UPDATE blog SET delete_flag = 1 WHERE id = ?");
+        $stmt->execute([$id]);
+    
+        header("Location: blog-delete-complete.php");
+        exit;
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができませんでした。</p>";
     exit;
 }
 
@@ -50,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 justify-content: center;
                 padding: 20px;
             }
+            
             .header-bar h1 {
                 font-size: 24px;
                 margin: 0;
@@ -60,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 text-align: center;
                 margin-bottom: 20px;
             }
+            
             .back-button {
                 position: absolute;
                 right: 20px;
@@ -83,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 margin-bottom: 6px;
                 font-size: 15px;
             }
+            
             .form-row div {
                 padding: 10px;
                 background-color: #fff;
@@ -92,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 line-height: 1.6;
                 white-space: pre-wrap;
             }
+            
             .submit-area {
                 display: flex;
                 justify-content: flex-end;
