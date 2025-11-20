@@ -15,39 +15,45 @@ if (!isset($_SESSION['user'])) {
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
         <style>
-            body{
+            body {
                 font-family: sans-serif;
                 margin: 0;
             }
-            .header-bar{
+            
+            .header-bar {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin: 20px;
             }
-            .header-bar h1{
+            
+            .header-bar h1 {
                 margin: 0;
                 font-size: 24px;
             }
-            .back-button{
+            
+            .back-button {
                 font-size: 16px;
                 text-decoration: none;
                 color: #4CAF50;
                 position: absolute;
                 right: 40px; 
             }
-            form {
-                padding: 0 20px;
+            
+            .form-row {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin: 20px;
             }
-            .form-row{
-                margin-bottom: 20px;
-            }
-            label{
+            
+            label {
                 display: block;
                 font-weight: bold;
                 margin-bottom: 5px;
             }
-            input[type="text"], textarea{
+            
+            input[type="text"], textarea {
                 width: 100%;
                 padding: 10px;
                 font-size: 16px;
@@ -55,15 +61,20 @@ if (!isset($_SESSION['user'])) {
                 border: 1px solid #ccc;
                 box-sizing: border-box;
             }
-            textarea{
+            
+            textarea {
                 height: 200px;
                 resize: vertical;
             }
-            .submit-area{
+            
+            .submit-area {
                 display: flex;
                 justify-content: flex-end;
+                margin-top: 20px;
+                margin-right: 20px;
             }
-            .submit-area button{
+            
+            .submit-button {
                 padding: 10px 20px;
                 font-size: 16px;
                 border: none;
@@ -85,7 +96,7 @@ if (!isset($_SESSION['user'])) {
         <form action="blog-regist-confirm.php" method="post">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required>
             </div>
             
             <div class="form-row">
@@ -94,7 +105,7 @@ if (!isset($_SESSION['user'])) {
             </div>
             
             <div class="submit-area">
-                <button type="submit">確認する</button>
+                <button type="submit" class="submit-button">確認する</button>
             </div>
         </form>
     </body>
