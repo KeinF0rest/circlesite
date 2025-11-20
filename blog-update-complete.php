@@ -6,30 +6,41 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$id = $_POST['id'] ?? null;
-$newTitle = $_POST['title'] ?? '';
-$newContent = $_POST['content'] ?? '';
-
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-$stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$id]);
-$blog = $stmt->fetch();
-
-$changes = [];
-if ($newTitle !== $blog['title']) {
-    $changes[] = 'タイトル';
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $id = $_POST['id'] ?? null;
+    
+    $newTitle = $_POST['title'] ?? '';
+    $newContent = $_POST['content'] ?? '';
+    
+    $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$id]);
+    $blog = $stmt->fetch();
+    
+    if (!$blog) {
+        echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
+        exit;
+    }
+    
+    $changes = [];
+    if ($newTitle !== $blog['title']) {
+        $changes[] = 'タイトル';
+    }
+    if ($newContent !== $blog['content']) {
+        $changes[] = '内容';
+    }
+    
+    if (!empty($changes)) {
+        $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ? WHERE id = ?");
+        $stmt->execute([$newTitle, $newContent, $id]);
+    }
+} catch (PDOException $e) {
+    error_log($e->getMessage());
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためブログ更新ができませんでした。</p>";
+    exit;
 }
-if ($newContent !== $blog['content']) {
-    $changes[] = '内容';
-}
-
-if (!empty($changes)) {
-    $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ? WHERE id = ?");
-    $stmt->execute([$newTitle, $newContent, $id]);
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -85,5 +96,4 @@ if (!empty($changes)) {
             <a href="blog-info.php?id=<?= htmlspecialchars($id) ?>" class="back-link">ブログへ</a>
         </div>
     </body>
-    
 </html>
