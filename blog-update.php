@@ -14,6 +14,11 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$id]);
 $blog = $stmt->fetch();
+
+if (!$blog) {
+    echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +37,7 @@ $blog = $stmt->fetch();
             .header-bar {
                 display: flex;
                 justify-content: space-between;
-                padding: 20px;
+                margin: 20px;
                 align-items: center;
             }
             
@@ -46,18 +51,20 @@ $blog = $stmt->fetch();
                 text-decoration: none;
             }
             
-            form {
-                padding: 0 20px;
+            .form-row {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin: 20px;
             }
-            .form-row{
-                margin-bottom: 20px;
-            }
-            label{
+            
+            label {
                 display: block;
                 font-weight: bold;
                 margin-bottom: 5px;
             }
-            input[type="text"], textarea{
+            
+            input[type="text"], textarea {
                 width: 100%;
                 padding: 10px;
                 font-size: 16px;
@@ -65,7 +72,8 @@ $blog = $stmt->fetch();
                 border: 1px solid #ccc;
                 box-sizing: border-box;
             }
-            textarea{
+            
+            textarea {
                 height: 200px;
                 resize: vertical;
             }
@@ -100,7 +108,7 @@ $blog = $stmt->fetch();
             
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" value="<?= htmlspecialchars($blog['title']) ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($blog['title']) ?>" required>
             </div>
             
             <div class="form-row">
