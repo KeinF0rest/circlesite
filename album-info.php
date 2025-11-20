@@ -18,6 +18,11 @@ $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = 
 $stmt_img->execute([$id]);
 $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
+if (!$album) {
+    echo "<p style='color:red;'>指定されたアルバムは存在しません。</p>";
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +50,7 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
                 margin: 0;
             }
             
-            .back-button{
+            .back-button {
                 text-decoration: none;
                 font-size: 16px;
                 color: #4CAF50;
@@ -76,6 +81,7 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
                 box-shadow: 0 2px 6px rgba(0,0,0,0.1);
                 z-index: 100;
             }
+            
             .menu-popup.visible {
                 display: block;
             }
@@ -89,6 +95,7 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
             .menu-popup li {
                 margin: 8px 0;
             }
+            
             .menu-popup ul {
                 list-style: none;
                 margin: 0;
