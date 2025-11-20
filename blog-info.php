@@ -6,11 +6,6 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-if (!$blog) {
-    echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
-    exit;
-}
-
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $id = $_GET['id'] ?? null;
@@ -19,6 +14,10 @@ $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$id]);
 $blog = $stmt->fetch();
 
+if (!$blog) {
+    echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
