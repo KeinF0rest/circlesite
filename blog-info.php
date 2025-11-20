@@ -6,6 +6,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+if (!$blog) {
+    echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
+    exit;
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $id = $_GET['id'] ?? null;
@@ -41,7 +46,7 @@ $blog = $stmt->fetch();
                 margin: 0;
             }
             
-            .back-button{
+            .back-button {
                 text-decoration: none;
                 font-size: 16px;
                 color: #4CAF50;
@@ -54,60 +59,61 @@ $blog = $stmt->fetch();
                 transition: background-color 0.2s ease;
             }
 
-            
             .menu-wrapper {
                 position: relative;
                 display: flex;
                 justify-content: flex-end;
                 margin-right: 20px;
-}
-.menu-popup {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    z-index: 100;
-}
+            }
+            
+            .menu-popup {
+                display: none;
+                position: absolute;
+                top: 40px;
+                right: 0;
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                z-index: 100;
+            }
 
-.menu-popup.visible {
-    display: block;
-}
+            .menu-popup.visible {
+                display: block;
+            }
+            
             .menu-popup ul {
-    list-style: none;
-    margin: 0;
-    padding: 10px;
-}
+                list-style: none;
+                margin: 0;
+                padding: 10px;
+            }
 
-.menu-popup li {
-    margin: 8px 0;
-}
+            .menu-popup li {
+                margin: 8px 0;
+            }
             .menu-popup ul {
-    list-style: none;
-    margin: 0;
-    padding: 10px;
-}
+                list-style: none;
+                margin: 0;
+                padding: 10px;
+            }
 
-.menu-popup li {
-    margin: 8px 0;
-}
+            .menu-popup li {
+                margin: 8px 0;
+            }
 
-.menu-popup a {
-    text-decoration: none;
-    color: #333;
-    font-size: 14px;
-    padding: 4px 8px;
-    display: block;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
+            .menu-popup a {
+                text-decoration: none;
+                color: #333;
+                font-size: 14px;
+                padding: 4px 8px;
+                display: block;
+                border-radius: 4px;
+                transition: background-color 0.2s ease;
+            }
 
-.menu-popup a:hover {
-    background-color: #f0f0f0;
-}
+            .menu-popup a:hover {
+                background-color: #f0f0f0;
+            }
             
             .content {
                 border: 1px solid #ccc;
@@ -116,11 +122,17 @@ $blog = $stmt->fetch();
                 background-color: #f9f9f9;
                 font-size: 16px;
                 line-height: 1.6;
-                white-space: pre-wrap;
                 margin: 20px;
                 color: #333;
+                line-height: 1.8;
             }
             
+            .blog-date {
+                font-size: 14px;
+                color: #666;
+                justify-self: end;
+                margin-right: 20px;
+            }
         </style>
     </head>
     <body>
@@ -145,11 +157,15 @@ $blog = $stmt->fetch();
             <?= nl2br(htmlspecialchars(preg_replace('/^[\p{Z}\s]+/u', '', $blog['content']))) ?>
         </div>
         
+        <div class="blog-date">
+            登録日:<?= htmlspecialchars(date('Y/m/d', strtotime($blog['registered_time']))) ?>
+        </div>
+        
         <script>
             function toggleMenu() {
-    const menu = document.getElementById('menu-popup');
-    menu.classList.toggle('visible');
-}
+                const menu = document.getElementById('menu-popup');
+                menu.classList.toggle('visible');
+            }
         </script>
     </body>
 </html>
