@@ -9,14 +9,14 @@ if (!isset($_SESSION['user'])) {
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $title = preg_replace('/^[\p{Z}\s]+/u', '', $_POST['title'] ?? '');
-    $content = preg_replace('/^[\p{Z}\s]+/u', '', $_POST['content'] ?? '');
+    
+    $title = $_POST['title'] ?? '';
+    $content = $_POST['content'] ?? '';
 
     $stmt = $pdo->prepare("INSERT INTO blog (title, content) VALUES (?, ?)");
     $stmt->execute([$title, $content]);
 } catch (PDOException $e) {
-    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためイベント登録できません。</p>";
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためブログ登録できませんでした。</p>";
     exit;
 }
 ?>
@@ -34,7 +34,7 @@ try {
                 margin: 0;
                 text-align: center;
             }
-
+            
             .header-bar {
                 font-size: 24px;
                 margin-bottom: 40px;
@@ -49,10 +49,6 @@ try {
                 text-decoration: none;
                 border-radius: 6px;
             }
-
-            .blog-button:hover {
-                background-color: #45a049;
-            }
         </style>
     </head>
     <body>
@@ -61,8 +57,6 @@ try {
         <div class="header-bar">
             <h1>ブログが登録されました。</h1>
             <a href="blog.php" class="back-link">ブログへ</a>
-        </div>
-        
-        
+        </div>  
     </body>
 </html>
