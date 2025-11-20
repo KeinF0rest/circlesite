@@ -35,19 +35,18 @@ foreach ($albums as $album) {
             }
             
             .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 20px;
             }
 
             .header-bar h1 {
                 margin: 0;
                 font-size: 24px;
             }
+            
             .regist-button {
-                right: 0;
-                top: 0;
                 font-size: 24px;
                 padding: 6px 12px;
                 color: #333;
@@ -67,6 +66,12 @@ foreach ($albums as $album) {
                 text-decoration: none;
             }
             
+            .album-card img:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: scale(1.02);
+                transition: all 0.2s ease;
+            }
+            
             .album-card img {
                 width: 100%;
                 max-width: 100%;
@@ -75,7 +80,7 @@ foreach ($albums as $album) {
                 border-radius: 6px;
             }
             
-            .album-card h2 {
+            .album-card h1 {
                 font-size: 20px;
                 color: #333;
                 text-decoration: none;
@@ -93,7 +98,7 @@ foreach ($albums as $album) {
         <div class="album-grid">
             <?php foreach ($albums as $album): ?>
             <a href="album-info.php?id=<?= htmlspecialchars($album['id']) ?>" class="album-card">
-                <h2><?= htmlspecialchars($album['title']) ?></h2>
+                <h1><?= htmlspecialchars($album['title']) ?></h1>
                 <img src="<?= htmlspecialchars($album_thumbnails[$album['id']]) ?>" alt="サムネイル">
             </a>
             <?php endforeach; ?>
