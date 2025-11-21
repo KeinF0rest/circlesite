@@ -11,35 +11,49 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     $title = $_POST['title'] ?? '';
-    $files = $_FILES['image'] ?? null;
 
     $stmt = $pdo->prepare("INSERT INTO album (title) VALUES (?)");
     $stmt->execute([$title]);
     $album_id = $pdo->lastInsertId();
 
-    $upload_dir = 'uploads/';
+    $upload_dir = __DIR__ . '/uploads/';
     if (!file_exists($upload_dir)) {
-        mkdir($upload_dir, 0777, true);
+        mkdir($upload_dir, 0755, true);
     }
     
     $imagePaths = [];
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    $allowedTypes = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif'];
     $maxSize = 5 * 1024 * 1024;
 
-    foreach ($files['tmp_name'] as $index => $tmp_name) {
-        if (is_uploaded_file($tmp_name)) {
-            $type = mime_content_type($tmp_name);
+    $files = $_FILES['image'] ?? null;
+    if ($files && isset($files['tmp_name'])) {
+        foreach ($files['tmp_name'] as $index => $tmp_name) {
+            if (!is_uploaded_file($tmp_name)) {
+                continue;
+            }
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $type = finfo_file($finfo, $tmp_name);
+            finfo_close($finfo);
+    
             $size = $files['size'][$index];
+            if (!array_key_exists($type, $allowedTypes)) {
+                continue;
+            }
+            if ($size > $maxSize) {
+                continue;
+            }
             
-            $ext = pathinfo($files['name'][$index], PATHINFO_EXTENSION);
+            $ext = $allowedTypes[$type];
             $filename = uniqid('img_', true) . '.' . $ext;
             $path = $upload_dir . $filename;
 
-            move_uploaded_file($tmp_name, $path);
-            $imagePaths[] = $path;
-
-            $stmt_img = $pdo->prepare("INSERT INTO album_images (album_id, image_path) VALUES (?, ?)");
-            $stmt_img->execute([$album_id, $path]);
+            if (move_uploaded_file($tmp_name, $path)) {
+                $stmt_img = $pdo->prepare("INSERT INTO album_images (album_id, image_path) VALUES (?, ?)");
+                $stmt_img->execute([$album_id, 'uploads/' . $filename]);
+                $imagePaths[] = 'uploads/' . $filename;
+            } else {
+                error_log("ファイル移動失敗: {$files['name'][$index]}");
+            }
         }
     }
 } catch(Exception $e) {
@@ -86,10 +100,6 @@ try {
                 text-decoration: none;
                 border-radius: 6px;
                 transition: background-color 0.3s ease;
-            }
-
-            .back-link:hover {
-                background-color: #45a049;
             }
         </style>
     </head>
