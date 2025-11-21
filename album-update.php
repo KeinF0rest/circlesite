@@ -18,6 +18,11 @@ $album = $stmt->fetch();
 $stmt_img = $pdo->prepare("SELECT * FROM album_images WHERE album_id = ? AND delete_flag = 0");
 $stmt_img->execute([$album_id]);
 $images = $stmt_img->fetchAll();
+
+if (!$album) {
+    echo "<p style='color:red;'>指定されたアルバムは存在しません。</p>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +47,7 @@ $images = $stmt_img->fetchAll();
             
             .header-bar h1 {
                 font-size: 24px;
+                margin: 0;
             }
             
             .back-button {
@@ -50,14 +56,23 @@ $images = $stmt_img->fetchAll();
                 text-decoration: none;
             }
             
-            .form-row{
+            .form-row {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
                 margin: 20px;
             }
             
-            label{
-                display: block;
+            .form-row label {
                 font-weight: bold;
-                margin-bottom: 5px;
+                font-size: 16px;
+            }
+            
+            .form-row input {
+                padding: 8px;
+                font-size: 16px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
             }
             
             .image-list {
@@ -100,6 +115,7 @@ $images = $stmt_img->fetchAll();
                 opacity: 0;
                 cursor: pointer;
             }
+            
             .submit-area {
                 display: flex;
                 justify-content: flex-end;
@@ -130,22 +146,26 @@ $images = $stmt_img->fetchAll();
             
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" value="<?= htmlspecialchars($album['title']) ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($album['title']) ?>" required>
             </div>
             
             <div class="form-row">
-            <label>写真</label>
-            <div class="image-list">
-                <?php foreach ($images as $img): ?>
-                    <div class="image-item">
-                        <img src="<?= htmlspecialchars($img['image_path']) ?>" width="120">
-                        <label>
-                            <input type="checkbox" name="delete_images[]" value="<?= $img['id'] ?>">削除
-                        </label>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+                <label>写真</label>
+                <div class="image-list">
+                    <?php if (!empty($images)): ?>
+                        <?php foreach ($images as $img): ?>
+                            <div class="image-item">
+                                <img src="<?= htmlspecialchars($img['image_path']) ?>" width="120" alt="アルバム画像">
+                                <label>
+                                    <input type="checkbox" name="delete_images[]" value="<?= $img['id'] ?>">削除
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>画像は登録されていません。</p>
+                    <?php endif; ?>
                 </div>
+            </div>
 
             <div class="form-row">
                 <label>新しい画像を追加</label>
@@ -155,7 +175,6 @@ $images = $stmt_img->fetchAll();
                 </label>
             </div>
             
-
             <div class="submit-area">
                 <button type="submit" class="submit-button">更新</button>
             </div>
