@@ -55,6 +55,13 @@ if (!isset($_SESSION['user'])) {
                 font-size: 16px;
             }
             
+            .form-row input {
+                padding: 8px;
+                font-size: 16px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+            }
+            
             .image-slot {
                 width: 100%;
                 height: 100px;
@@ -84,11 +91,11 @@ if (!isset($_SESSION['user'])) {
             }
             
             #previewArea {
-                display: flex;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, 120px);
                 gap: 10px;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
             }
+            
             #previewArea img {
                 width: 100%;
                 object-fit: cover;
@@ -103,12 +110,14 @@ if (!isset($_SESSION['user'])) {
                 color: #555;
                 margin-top: 10px;
             }
-            .submit-area{
+            
+            .submit-area {
                 display: flex;
                 justify-content: flex-end;
                 margin: 20px;
             }
-            .submit-area button{
+            
+            .submit-area button {
                 padding: 10px 20px;
                 font-size: 16px;
                 border: none;
@@ -131,7 +140,7 @@ if (!isset($_SESSION['user'])) {
             <div class="form-grid">
                 <div class="form-row">
                     <label>タイトル</label>
-                    <input type="text" name="title" id="title" maxlength="30" pattern="[ぁ-んァ-ヶ一-龠A-Za-z0-9ー\s]+" required>
+                    <input type="text" name="title" id="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" required>
                 </div>
             
                 <div class="form-row">
