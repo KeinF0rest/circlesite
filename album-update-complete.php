@@ -87,14 +87,13 @@ try {
             
             .header-bar {
                 max-width: 600px;
-                margin: 20px auto;
+                margin: 20px;
                 text-align: center;
             }
             
             .header-bar h1 {
                 margin: 0;
                 font-size: 24px;
-                margin: 20px;
             }
             
             .back-link {
@@ -106,10 +105,6 @@ try {
                 text-decoration: none;
                 border-radius: 6px;
                 transition: background-color 0.3s ease;
-            }
-            
-            .back-link:hover {
-                background-color: #45a049;
             }
         </style>
     </head>
