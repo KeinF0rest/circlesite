@@ -170,7 +170,7 @@ $already_joined = $stmt_check->fetchColumn() > 0;
                 justify-content: space-between;
                 align-items: center;
                 margin-top: 10px;
-                padding: 10px 0;
+                padding-top: 10px;
             }
             
             .event-actions button {
@@ -191,9 +191,27 @@ $already_joined = $stmt_check->fetchColumn() > 0;
             .action-buttons button:hover {
                 opacity: 0.85;
             }
-
-            .event-participants {
+            
+            .event-footer {
+                display: flex;
+                justify-content: space-between; 
+                align-items: center;
+            }
+            
+            .event-participant {
                 font-weight: bold;
+            }
+            
+            .chat-button {
+                display: inline-block;
+                padding: 6px 12px;
+                border-radius: 6px;
+            }
+            
+            .chat-icon {
+                width: 35px;
+                height: 35px;
+                vertical-align: middle;
             }
         </style>
     </head>
@@ -250,11 +268,19 @@ $already_joined = $stmt_check->fetchColumn() > 0;
 
                 <div class="event-registered-date">
                     登録日：<?= htmlspecialchars(date('Y/m/d', strtotime($event['registered_time']))) ?>
-                </div>
+                </div> 
             </div>
             
-            <div class="event-participant">
-                参加人数：<span id="participant-count"><?= htmlspecialchars($participant_count) ?></span>人
+            <div class="event-footer">
+                <div class="event-participant">
+                    参加人数：<span id="participant-count"><?= htmlspecialchars($participant_count) ?></span>人
+                </div>
+                
+                <div class="event-chat">
+                    <a href="chat.php?event_id=<?= htmlspecialchars($event['id']) ?>" class="chat-button">
+                        <img src="chat_17343583.png" alt="チャット" class="chat-icon">
+                    </a>
+                </div>
             </div>
         </div>
         <script>
