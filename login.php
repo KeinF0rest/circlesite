@@ -19,7 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user'] = [
                 'id' => $user['id'],
                 'mail' => $user['mail'],
-                'authority' => $user['authority']
+                'authority' => $user['authority'],
+                'nickname' => $user['nickname'],
+                'profile_image' => $user['profile_image']
             ];
             header("Location: index.php");
             exit();

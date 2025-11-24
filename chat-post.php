@@ -4,7 +4,7 @@ $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $event_id = $_POST['event_id'];  
-$user_id = $_SESSION['user_id'];     
+$user_id = $_SESSION['user']['id'];     
 $message = $_POST['message']; 
 $image_path = null;
 

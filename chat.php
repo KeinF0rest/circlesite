@@ -62,12 +62,13 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             .msg {
                 display: flex;
+                flex-direction: column;
                 align-items: flex-end;
-                margin-bottom: 12px;
+                margin-bottom: 10px;
             }
 
             .msg.me {
-                justify-content: flex-end;
+                align-items: flex-end;
             }
             
             .icon {
@@ -75,24 +76,42 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 height: 40px;
                 border-radius: 50%;
                 object-fit: cover;
-                margin: 0 8px;
+                margin-bottom: 4px;
+            }
+            
+            .default-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #ccc;
             }
 
+            .nickname {
+                font-size: 14px;
+                margin-bottom: 4px;
+            }
+            
+            .msg-body {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
             .bubble {
                 max-width: 60%;
                 padding: 10px;
                 border-radius: 10px;
                 background: #f1f1f1;
-                position: relative;
             }
-            .meta {
+            
+            .date {
                 font-size: 12px;
                 color: #888;
-                text-align: right;
-                margin-top: 4px;
             }
+            
             .msg.me .bubble {
-                background: #DCF8C6; /* LINE風の緑 */
+                background: #DCF8C6;
             }
             
             .form-grid {
@@ -158,22 +177,37 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="chat-thread">
             <?php foreach ($messages as $msg): ?>
-                <div class="msg <?= $msg['user_id'] == $_SESSION['user_id'] ? 'me' : 'other' ?>">
-                    <?php if ($msg['user_id'] != $_SESSION['user_id']): ?>
-                        <img class="icon" src="<?= htmlspecialchars($msg['profile_image']) ?>" alt="">
-                    <?php endif; ?>
+                <div class="msg <?= $msg['user_id'] == $_SESSION['user']['id'] ? 'me' : 'other' ?>">
+                    
+                    <div class="nickname">
+                        <?= htmlspecialchars($msg['nickname']) ?>
+                    </div>
+                    
+                    <div class="msg-body">
+                        <?php if ($msg['user_id'] == $_SESSION['user']['id']): ?>
+                            <?php if (!empty($_SESSION['user']['profile_image'])): ?>
+                                <img class="icon" src="<?= htmlspecialchars($_SESSION['user']['profile_image']) ?>" alt="">
+                            <?php else: ?>
+                                <div class="icon default-icon"></div>
+                            <?php endif; ?>
+                            <?php else: ?>
+                            <?php if (!empty($msg['profile_image'])): ?>
+                                <img class="icon" src="<?= htmlspecialchars($msg['profile_image']) ?>" alt="">
+                            <?php else: ?>
+                                <div class="icon default-icon"></div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+    
                         <div class="bubble">
-                            <p>
-                                <strong><?= htmlspecialchars($msg['nickname']) ?>:</strong>
-                                <?= nl2br(htmlspecialchars($msg['message'])) ?>
-                            </p>
-                            <div class="meta">
-                                <span class="time"><?= $msg['registered_time'] ?></span>
-                            </div>
+                            <?= nl2br(htmlspecialchars($msg['message'])) ?>
                         </div>
-                    <?php if ($msg['user_id'] == $_SESSION['user_id']): ?>
-                        <img class="icon" src="<?= htmlspecialchars($msg['icon']) ?>" alt="">
-                    <?php endif; ?>
+                    </div>
+                    
+                    <div class="date">
+                        <span class="time">
+                            <?= date('Y-m-d H:i', strtotime($msg['registered_time'])) ?>
+                        </span>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
