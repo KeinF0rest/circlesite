@@ -15,7 +15,7 @@ $eventStmt = $pdo->prepare("SELECT title FROM event WHERE id = ?");
 $eventStmt->execute([$event_id]);
 $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.registered_time, u.nickname, u.profile_image FROM message m JOIN users u ON m.user_id = u.id WHERE m.event_id = ? ORDER BY m.registered_time ASC");
+$stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.image_path, m.registered_time, u.nickname, u.profile_image FROM message m JOIN users u ON m.user_id = u.id WHERE m.event_id = ? ORDER BY m.registered_time ASC");
 $stmt->execute([$event_id]);
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
@@ -101,8 +101,19 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             .bubble {
                 max-width: 60%;
                 padding: 10px;
-                border-radius: 10px;
+                border-radius: 6px;
                 background: #f1f1f1;
+            }
+            
+            .chat-image {
+                max-width: 100%;
+            }
+            
+            .chat-image img {
+                display: block;
+                width: 100%;
+                height: auto;
+                border-radius: 6px;
             }
             
             .date {
@@ -110,7 +121,12 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 color: #888;
             }
             
+            .msg.me .msg-body {
+                justify-content: flex-end;
+            }
+            
             .msg.me .bubble {
+                margin-left: 8px;
                 background: #DCF8C6;
             }
             
@@ -190,7 +206,7 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php else: ?>
                                 <div class="icon default-icon"></div>
                             <?php endif; ?>
-                            <?php else: ?>
+                        <?php else: ?>
                             <?php if (!empty($msg['profile_image'])): ?>
                                 <img class="icon" src="<?= htmlspecialchars($msg['profile_image']) ?>" alt="">
                             <?php else: ?>
@@ -199,7 +215,15 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
     
                         <div class="bubble">
-                            <?= nl2br(htmlspecialchars($msg['message'])) ?>
+                            <?php if (!empty($msg['message'])): ?> 
+                                <?= nl2br(htmlspecialchars($msg['message'])) ?>
+                            <?php endif; ?>
+                            
+                            <?php if (!empty($msg['image_path'])): ?>
+                                <div class="chat-image">
+                                    <img src="<?= htmlspecialchars($msg['image_path']) ?>" style="max-width:200px; margin-top:8px; border-radius:6px;">
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     
@@ -215,11 +239,29 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="form-grid">
             <form method="post" action="chat-post.php" enctype="multipart/form-data">
                 <input type="hidden" name="event_id" value="<?= htmlspecialchars($event_id) ?>">
-                <textarea name="message" placeholder="メッセージを入力" required></textarea>
-                <input type="file" id="image" name="image" accept="image/*" style="display:none;">
+                <textarea name="message" placeholder="メッセージを入力"></textarea>
+                <input type="file" id="image" name="image" accept="image/*" style="display:none;" onchange="previewImage(event)">
                 <label for="image" class="plus-button">＋</label>
                 <button type="submit">送信</button>
             </form>
+            
+            <img id="preview" style="max-width:100px; display:none; margin-top: 10px;">
         </div>
+        
+        <script>
+            document.getElementById("image").addEventListener("change", previewImage);
+            function previewImage(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+        </script>
     </body>
 </html>

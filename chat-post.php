@@ -10,7 +10,7 @@ $image_path = null;
 
 if (!empty($_FILES['image']['name'])) {
     $targetDir = "uploads/";
-    $fileName = time() . "_" . basename($_FILES["image"]["name"]);
+    $fileName = uniqid() . '_' . basename($_FILES["image"]["name"]);
     $targetFile = $targetDir . $fileName;
 
     $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
@@ -20,9 +20,10 @@ if (!empty($_FILES['image']['name'])) {
         $image_path = $targetFile;
     }
 }
-
-$stmt = $pdo->prepare("INSERT INTO message (event_id, user_id, message, image_path) VALUES (?, ?, ?, ?)");
-$stmt->execute([$event_id, $user_id, $message, $image_path]);
+if (!empty($message) || !empty($image_path)) {
+    $stmt = $pdo->prepare("INSERT INTO message (event_id, user_id, message, image_path) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$event_id, $user_id, $message, $image_path]);
+}
 
 header("Location: chat.php?event_id=" . $event_id);
 exit;
