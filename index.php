@@ -86,6 +86,13 @@ if (!isset($_SESSION['user'])) {
     <body>
         <?php include 'header.php'; ?>
         
+        <?php if (!empty($_SESSION['error'])): ?>
+            <div class="error-message" style="color:red; margin:10px;">
+                <?= htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+        
         <div class="header-bar">
             <h1>カレンダー</h1>
         </div>
