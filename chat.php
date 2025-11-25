@@ -236,6 +236,13 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
         
+        <?php if (!empty($_SESSION['error'])): ?>
+            <div class="error-message" style="color:red; margin:10px;">
+                <?= htmlspecialchars($_SESSION['error']) ?>
+            </div>
+            <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+        
         <div class="form-grid">
             <form method="post" action="chat-post.php" enctype="multipart/form-data">
                 <input type="hidden" name="event_id" value="<?= htmlspecialchars($event_id) ?>">
