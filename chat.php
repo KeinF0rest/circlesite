@@ -15,10 +15,14 @@ $eventStmt = $pdo->prepare("SELECT title FROM event WHERE id = ?");
 $eventStmt->execute([$event_id]);
 $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.image_path, m.registered_time, u.nickname, u.profile_image FROM message m JOIN users u ON m.user_id = u.id WHERE m.event_id = ? ORDER BY m.registered_time ASC");
+$stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.image_path, m.registered_time, u.nickname, u.profile_image, (SELECT COUNT(*) FROM message_read r WHERE r.message_id = m.id) AS read_count FROM message m JOIN users u ON m.user_id = u.id WHERE m.event_id = ? ORDER BY m.registered_time ASC");
 $stmt->execute([$event_id]);
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
+$stmt = $pdo->prepare("INSERT IGNORE INTO message_read (message_id, user_id, read_time) VALUES (?, ?, NOW())");
+foreach ($messages as $msg) {
+    $stmt->execute([$msg['id'], $_SESSION['user']['id']]);
+}
 ?>
 
 <!DOCTYPE html>
@@ -231,6 +235,11 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <span class="time">
                             <?= date('Y-m-d H:i', strtotime($msg['registered_time'])) ?>
                         </span>
+                        <?php if ($msg['user_id'] == $_SESSION['user']['id']): ?>
+        <?php if ($msg['read_count'] > 0): ?>
+            <span class="read-flag">既読 <?= $msg['read_count'] ?></span>
+        <?php endif; ?>
+    <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
