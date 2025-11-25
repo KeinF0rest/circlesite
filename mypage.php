@@ -10,12 +10,24 @@ $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $id = $_GET['id'] ?? null;
 
 if($id){
+    if ($_SESSION['user']['authority'] == 0 && $id != $_SESSION['user']['id']) {
+        $_SESSION['error'] = "アクセス権限がありません。";
+        header("Location: index.php");
+        exit();
+    }
     $sql = "SELECT * FROM users WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
-    $_SESSION['user_id'] = $user['id'];
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+    } else {
+        $_SESSION['error'] = "ユーザー情報が見つかりません。";
+        header("Location: index.php");
+        exit();
+    }
+    
 }
 ?>
 
@@ -198,14 +210,16 @@ if($id){
             <a href="index.php" class="back-button">戻る</a>
         </div>
             
-        <div class="menu-wrapper">
-            <div class="menu-icon" onclick="toggleMenu()">⋯</div>
-            <div class="menu-popup" id="menu-popup">
-                <ul>
-                    <li><a href="account-delete.php?id=<?= $user['id'] ?>">削除</a></li>
-                </ul>
+        <?php if ($_SESSION['user']['authority'] != 0): ?>
+            <div class="menu-wrapper">
+                <div class="menu-icon" onclick="toggleMenu()">⋯</div>
+                <div class="menu-popup" id="menu-popup">
+                    <ul>
+                        <li><a href="account-delete.php?id=<?= $user['id'] ?>">削除</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <form action="mypage-update-complete.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
