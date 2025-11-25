@@ -240,7 +240,7 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <form method="post" action="chat-post.php" enctype="multipart/form-data">
                 <input type="hidden" name="event_id" value="<?= htmlspecialchars($event_id) ?>">
                 <textarea name="message" placeholder="メッセージを入力"></textarea>
-                <input type="file" id="image" name="image" accept="image/*" style="display:none;" onchange="previewImage(event)">
+                <input type="file" id="image" name="image" accept="image/*" style="display:none;">
                 <label for="image" class="plus-button">＋</label>
                 <button type="submit">送信</button>
             </form>
@@ -262,6 +262,11 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     reader.readAsDataURL(file);
                 }
             }
+            document.querySelector(".form-grid form").addEventListener("submit", () => {
+                const preview = document.getElementById("preview");
+                preview.style.display = "none";
+                preview.src = "";
+            });
         </script>
     </body>
 </html>
