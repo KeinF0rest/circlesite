@@ -223,15 +223,17 @@ $already_joined = $stmt_check->fetchColumn() > 0;
             <a href="event.php" class="back-button">戻る</a>
         </div>
         
-        <div class="menu-wrapper">
-            <div class="menu-icon" onclick="toggleMenu()">⋯</div>
-            <div class="menu-popup" id="menu-popup">
-                <ul>
-                    <li><a href="event-update.php?id=<?= $event['id'] ?>">更新</a></li>
-                    <li><a href="event-delete.php?id=<?= $event['id'] ?>">削除</a></li>
-                </ul>
+        <?php if ($_SESSION['user']['authority'] != 0): ?>
+            <div class="menu-wrapper">
+                <div class="menu-icon" onclick="toggleMenu()">⋯</div>
+                <div class="menu-popup" id="menu-popup">
+                    <ul>
+                        <li><a href="event-update.php?id=<?= $event['id'] ?>">更新</a></li>
+                        <li><a href="event-delete.php?id=<?= $event['id'] ?>">削除</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
         
         <div class="event-container">
             <div class="event-image <?= !empty($images) ? 'no-border' : '' ?>">
