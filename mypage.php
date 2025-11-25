@@ -286,10 +286,15 @@ if($id){
                 
                 <div class="form-row">
                     <label>アカウント権限</label>
-                    <select name="authority">
-                        <option value="0" <?= $user['authority'] == 0 ? 'selected' : '' ?>>一般</option>
-                        <option value="1" <?= $user['authority'] == 1 ? 'selected' : '' ?>>管理者</option>
-                    </select>
+                    <?php if ($_SESSION['user']['authority'] == 1): ?>
+                        <select name="authority">
+                            <option value="0" <?= $user['authority'] == 0 ? 'selected' : '' ?>>一般</option>
+                            <option value="1" <?= $user['authority'] == 1 ? 'selected' : '' ?>>管理者</option>
+                        </select>
+                    <?php else: ?>
+                        <span><?= $user['authority'] == 0 ? '一般' : '管理者' ?></span>
+                        <input type="hidden" name="authority" value="<?= $user['authority'] ?>">
+                    <?php endif; ?>
                 </div>
             </div>
             
