@@ -19,7 +19,7 @@ $stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.image_pa
 $stmt->execute([$event_id]);
 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("INSERT IGNORE INTO message_read (message_id, user_id, read_time) VALUES (?, ?, NOW())");
+$stmt = $pdo->prepare("INSERT IGNORE INTO message_read (message_id, user_id) VALUES (?, ?)");
 foreach ($messages as $msg) {
     $stmt->execute([$msg['id'], $_SESSION['user']['id']]);
 }
@@ -236,10 +236,10 @@ foreach ($messages as $msg) {
                             <?= date('Y-m-d H:i', strtotime($msg['registered_time'])) ?>
                         </span>
                         <?php if ($msg['user_id'] == $_SESSION['user']['id']): ?>
-        <?php if ($msg['read_count'] > 0): ?>
-            <span class="read-flag">既読 <?= $msg['read_count'] ?></span>
-        <?php endif; ?>
-    <?php endif; ?>
+                            <?php if ($msg['read_count'] > 0): ?>
+                                <span class="read-flag">既読 <?= $msg['read_count'] ?></span>
+                            <?php endif; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
