@@ -9,7 +9,11 @@
                     <li><a href="event.php">イベント</a></li>
                     <li><a href="blog.php">ブログ</a></li>
                     <li><a href="album.php">アルバム</a></li>
-                    <li><a href="account.php">アカウント</a></li>
+                    
+                    <?php if ($_SESSION['user']['authority'] !=0): ?>
+                        <li><a href="account.php">アカウント</a></li>
+                    <?php endif; ?>
+                    
                     <li><a href="logout.php">ログアウト</a></li>
                 </ul>
             </div>
