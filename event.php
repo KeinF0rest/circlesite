@@ -92,7 +92,9 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="header-bar">
             <h1>イベント一覧</h1>
-            <a href="event-regist.php" class="regist-button">＋</a>
+            <?php if ($_SESSION['user']['authority'] != 0): ?>
+                <a href="event-regist.php" class="regist-button">＋</a>
+            <?php endif; ?>
         </div>
         
         <div class="event-grid">
