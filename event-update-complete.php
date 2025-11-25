@@ -6,6 +6,12 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+if ($_SESSION['user']['authority'] == 0) {
+    $_SESSION['error'] = "アクセス権限がありません。";
+    header("Location: index.php");
+    exit();
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $title = $_POST['title'] ?? '';
