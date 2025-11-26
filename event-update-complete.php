@@ -16,7 +16,10 @@ $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $title = $_POST['title'] ?? '';
 $start_date = $_POST['start_date'] ?? '';
-$end_date = $_POST['end_date'] ?? '';
+$end_date = $_POST['end_date'] ?? null;
+if ($end_date === '') {
+    $end_date = null;
+}
 $content = $_POST['content'] ?? '';
 $event_id = $_POST['id'] ?? null;
 $new_images = $_POST['image_path'] ?? [];
