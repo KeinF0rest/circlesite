@@ -84,6 +84,29 @@ try {
                 transform: scale(1.02);
                 transition: all 0.2s ease;
             }
+            
+            .notification-card h2 {
+                margin: 0 0 10px;
+                font-size: 18px;
+                color: #333;
+            }
+            
+            .notification-card p {
+                margin: 0;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .read-btn {
+                margin-top: 12px;
+                padding: 8px 14px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+            }
         </style>
     </head>
     <body>
