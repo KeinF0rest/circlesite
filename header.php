@@ -38,7 +38,7 @@ $unread_count = $stmt->fetchColumn();
 </div>
 <div class="header-bottom">
     <div class="header-buttons">
-        <button onclick="location.href='notification.php'">
+        <button onclick="location.href='notification.php'" class="notification-btn">
             通知
             <?php if ($unread_count > 0): ?>
                 <span class="badge"><?= $unread_count ?></span>
