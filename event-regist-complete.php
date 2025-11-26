@@ -22,7 +22,7 @@ try{
     $stmt->execute([
         $data['title'],
         $data['start_date'],
-        $data['end_date'],
+        !empty($data['end_date']) ? $data['end_date'] : null,
         $data['content'],
     ]);
     
