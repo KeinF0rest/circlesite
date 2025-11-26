@@ -16,7 +16,7 @@ try {
     LEFT JOIN event e ON (n.type='event' AND n.related_id=e.id)
     LEFT JOIN album a ON (n.type='album' AND n.related_id=a.id)
     LEFT JOIN blog b ON (n.type='blog' AND n.related_id=b.id)
-    WHERE (n.user_id IS NULL OR n.user_id = ?) AND n.n_read = 0
+    WHERE n.user_id = ? AND n.n_read = 0
     ORDER BY n.registered_time DESC
     ");
     $stmt->execute([$_SESSION['user']['id']]);

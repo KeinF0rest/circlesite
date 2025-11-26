@@ -28,11 +28,18 @@ try{
     
     $event_id = $pdo->lastInsertId();
     
-    $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('event', 'regist', ?, ?, NULL, 0)");
-    $stmt_notify->execute([
-        $event_id,
-        "イベント「{$data['title']}」が登録されました。"
-    ]);
+    $stmt_users = $pdo->query("SELECT id FROM users");
+    $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+    
+    $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('event', 'regist', ?, ?, ?, 0)");
+    foreach ($users as $u) {
+        $stmt_notify->execute([
+            $event_id,
+            "イベント「{$data['title']}」が登録されました。",
+            $u['id']
+        ]);
+    }
+    
     
     if (!empty($data['image_paths'])) {
         if (count($data['image_paths']) > 5) {
