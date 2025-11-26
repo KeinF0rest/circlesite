@@ -1,3 +1,11 @@
+<?php
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM notification WHERE (user_id IS NULL OR user_id=?) AND n_read=0");
+$stmt->execute([$_SESSION['user']['id']]);
+$unread_count = $stmt->fetchColumn();
+?>
 <!-- header.php -->
 <div class="header-top">
     <div class="site-title">サークル名</div>
@@ -30,7 +38,12 @@
 </div>
 <div class="header-bottom">
     <div class="header-buttons">
-        <button onclick="location.href='notification.php'">通知</button>
+        <button onclick="location.href='notification.php'">
+            通知
+            <?php if ($unread_count > 0): ?>
+                <span class="badge"><?= $unread_count ?></span>
+            <?php endif; ?>
+        </button>
         <button onclick="location.href='mypage.php?id=<?= $_SESSION['user']['id'] ?>'">マイページ</button>
     </div>
 </div>
