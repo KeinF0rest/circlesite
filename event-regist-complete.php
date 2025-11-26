@@ -28,6 +28,12 @@ try{
     
     $event_id = $pdo->lastInsertId();
     
+    $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('event', 'regist', ?, ?, NULL, 0)");
+    $stmt_notify->execute([
+        $event_id,
+        "イベント「{$data['title']}」が登録されました。"
+    ]);
+    
     if (!empty($data['image_paths'])) {
         if (count($data['image_paths']) > 5) {
             echo "<p style='color:red;'>画像は最大5枚まで登録できます。</p>";
