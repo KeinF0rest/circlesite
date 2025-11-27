@@ -82,7 +82,7 @@ try {
             }
         }
     }
-} catch (PDOException $e) {
+} catch (Exception $e) {
     error_log($e->getMessage());
     echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント更新ができませんでした。</p>";
     exit;

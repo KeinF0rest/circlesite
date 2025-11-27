@@ -27,9 +27,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             $stmt_img = $pdo->prepare("DELETE FROM event_images WHERE event_id = ?");
             $stmt_img->execute([$delete_id]);
             
+            $stmt_title = $pdo->prepare("SELECT title FROM event WHERE id = ?");
+            $stmt_title->execute([$delete_id]);
+            $event_title = $stmt_title->fetchColumn();
+            
+            $stmt_users = $pdo->query("SELECT id FROM users");
+            $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+            
+            $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('event', 'delete', ?, ?, ?, 0)");
+            
+            foreach ($users as $u) {
+                $stmt_notify->execute([
+                    $delete_id,
+                    "イベント「{$event_title}」が削除されました。",
+                    $u['id']
+                ]);
+            }
+            
             header("Location: event-delete-complete.php");
             exit;
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             error_log($e->getMessage());
             echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができません。</p>";
             exit;
