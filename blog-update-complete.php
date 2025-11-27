@@ -35,8 +35,23 @@ try {
     if (!empty($changes)) {
         $stmt = $pdo->prepare("UPDATE blog SET title = ?, content = ? WHERE id = ?");
         $stmt->execute([$newTitle, $newContent, $id]);
+        
+        $change_text = implode("・", $changes);
+        
+        $stmt_users = $pdo->query("SELECT id FROM users");
+        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+        
+        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('blog', 'update', ?, ?, ?, 0)");
+
+        foreach ($users as $u) {
+            $stmt_notify->execute([
+                $id,
+                "ブログ「{$newTitle}」が更新されました。（変更箇所: {$change_text}）",
+                $u['id']
+            ]);
+        }
     }
-} catch (PDOException $e) {
+} catch (Exception $e) {
     error_log($e->getMessage());
     echo"<p style='color:red; font-weight:bold;'>エラーが発生したためブログ更新ができませんでした。</p>";
     exit;
