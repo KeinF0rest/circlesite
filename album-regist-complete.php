@@ -15,6 +15,19 @@ try {
     $stmt = $pdo->prepare("INSERT INTO album (title) VALUES (?)");
     $stmt->execute([$title]);
     $album_id = $pdo->lastInsertId();
+    
+    $stmt_users = $pdo->query("SELECT id FROM users");
+    $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+    
+    $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('album', 'regist', ?, ?, ?, 0)");
+    
+    foreach ($users as $u) {
+        $stmt_notify->execute([
+            $album_id,
+            "アルバム「{$title}」が登録されました。",
+            $u['id']
+        ]);
+    }
 
     $upload_dir = __DIR__ . '/uploads/';
     if (!file_exists($upload_dir)) {
