@@ -6,29 +6,55 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$id = $_GET['id'] ?? null;
+    $id = $_GET['id'] ?? null;
     
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $stmt = $pdo->prepare("UPDATE album SET delete_flag = 1 WHERE id = ?");
-    $stmt->execute([$id]);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+        $stmt = $pdo->prepare("UPDATE album SET delete_flag = 1 WHERE id = ?");
+        $stmt->execute([$id]);
 
-    $stmt_img = $pdo->prepare("UPDATE album_images SET delete_flag = 1 WHERE album_id = ?");
-    $stmt_img->execute([$id]);
+        $stmt_img = $pdo->prepare("UPDATE album_images SET delete_flag = 1 WHERE album_id = ?");
+        $stmt_img->execute([$id]);
         
-    header("Location: album-delete-complete.php");
+        $stmt_title = $pdo->prepare("SELECT title FROM album WHERE id = ?");
+        $stmt_title->execute([$id]);
+        $album_title = $stmt_title->fetchColumn();
+        
+        $stmt_users = $pdo->query("SELECT id FROM users");
+        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+        
+        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('album', 'delete', ?, ?, ?, 0)");
+        
+        foreach ($users as $u) {
+            $stmt_notify->execute([
+                $id,
+                "アルバム「{$album_title}」が削除されました。",
+                $u['id']
+            ]);
+        }
+        header("Location: album-delete-complete.php");
+        exit;
+    }
+    $stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$id]);
+    $album = $stmt->fetch();
+    
+    if (!$album) {
+        echo "該当するアルバムが見つかりません。";
+        exit;
+    }
+
+    $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM album_images WHERE album_id = ? AND delete_flag = 0");
+    $stmt_img->execute([$id]);
+    $image_count = $stmt_img->fetchColumn();
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム削除できません。</p>";
     exit;
 }
-$stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$id]);
-$album = $stmt->fetch();
-
-$stmt_img = $pdo->prepare("SELECT COUNT(*) FROM album_images WHERE album_id = ? AND delete_flag = 0");
-$stmt_img->execute([$id]);
-$image_count = $stmt_img->fetchColumn();
-
 ?>
 
 <!DOCTYPE html>
