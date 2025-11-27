@@ -65,6 +65,22 @@ try {
         if ($old_images !== $new_images) {
             $changes[] = "写真";
         }
+        if (!empty($changes)) {
+            $change_text = implode(".", $changes);
+            
+            $stmt_users = $pdo->query("SELECT id FROM users");
+            $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+            
+            $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('event', 'update', ?, ?, ?, 0)");
+            
+            foreach ($users as $u) {
+                $stmt_notify->execute([
+                    $event_id,
+                    "イベント「{$title}」が更新されました。",
+                    $u['id']
+                ]);
+            }
+        }
     }
 } catch (PDOException $e) {
     error_log($e->getMessage());
