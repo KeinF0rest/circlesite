@@ -25,6 +25,23 @@ try {
         $stmt = $pdo->prepare("UPDATE blog SET delete_flag = 1 WHERE id = ?");
         $stmt->execute([$id]);
     
+        $stmt_title = $pdo->prepare("SELECT title FROM blog WHERE id = ?");
+        $stmt_title->execute([$id]);
+        $blog_title = $stmt_title->fetchColumn();
+        
+        $stmt_users = $pdo->query("SELECT id FROM users");
+        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+        
+        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('blog', 'delete', ?, ?, ?, 0)");
+
+        foreach ($users as $u) {
+            $stmt_notify->execute([
+                $id,
+                "ブログ「{$blog_title}」が削除されました。",
+                $u['id']
+            ]);
+        }
+        
         header("Location: blog-delete-complete.php");
         exit;
     }
