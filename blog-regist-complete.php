@@ -15,7 +15,22 @@ try {
 
     $stmt = $pdo->prepare("INSERT INTO blog (title, content) VALUES (?, ?)");
     $stmt->execute([$title, $content]);
-} catch (PDOException $e) {
+    
+    $blog_id = $pdo->lastInsertId();
+    
+    $stmt_users = $pdo->query("SELECT id FROM users");
+    $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('blog', 'regist', ?, ?, ?, 0)");
+
+    foreach ($users as $u) {
+        $stmt_notify->execute([
+            $blog_id,
+            "ブログ「{$title}」が登録されました。",
+            $u['id']
+        ]);
+    }
+} catch (Exception $e) {
     echo "<p style='color:red; font-weight:bold;'>エラーが発生したためブログ登録できませんでした。</p>";
     exit;
 }

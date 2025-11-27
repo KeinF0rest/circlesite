@@ -76,7 +76,7 @@ try {
             foreach ($users as $u) {
                 $stmt_notify->execute([
                     $event_id,
-                    "イベント「{$title}」が更新されました。",
+                    "イベント「{$title}」が更新されました。（変更箇所: {$change_text}）",
                     $u['id']
                 ]);
             }
