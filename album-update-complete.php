@@ -8,7 +8,6 @@ if (!isset($_SESSION['user'])) {
 
 $changed = false;
 try {
-    
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -63,6 +62,24 @@ try {
                 $stmt_img->execute([$id, $path]);
                 $changed = true;
             }
+        }
+    }
+    if ($changed) {
+        $stmt_title = $pdo->prepare("SELECT title FROM album WHERE id = ?");
+        $stmt_title->execute([$id]);
+        $album_title = $stmt_title->fetchColumn();
+
+        $stmt_users = $pdo->query("SELECT id FROM users");
+        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('album', 'update', ?, ?, ?, 0)");
+
+        foreach ($users as $u) {
+            $stmt_notify->execute([
+                $id,
+                "アルバム「{$album_title}」が更新されました。",
+                $u['id']
+            ]);
         }
     }
 } catch (Exception $e) {
