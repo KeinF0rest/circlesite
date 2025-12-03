@@ -1,20 +1,20 @@
 <?php
 session_start();
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 $error = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mail = $_POST['mail'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    try {
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $mail = $_POST['mail'] ?? '';
+        $password = $_POST['password'] ?? '';
+        
         $stmt = $pdo->prepare("SELECT * FROM users WHERE mail = ? AND delete_flag = 0");
         $stmt->execute([$mail]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user'] = [
                 'id' => $user['id'],
@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error = "メールアドレスまたはパスワードが正しくありません。";
         }
-    } catch (Exception $e) {
-        $error = "エラーが発生したためログイン情報を取得できません。";
     }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためログイン情報を取得できませんでした。</p>";
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -44,9 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             body {
                 font-family: sans-serif;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
+            }
+            
+            .error-container {
+                text-align: center;
+                margin-bottom: 20px;
             }
             
             .login-grid {
@@ -104,11 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </style>
     </head>
     <body>
+        <?php if (!empty($error)): ?>
+            <div class="error-container">
+                <p style="color:red;"><?= htmlspecialchars($error) ?></p>
+            </div>
+        <?php endif; ?>
+        
         <div class="login-grid">
             <h1>ログイン</h1>
-            <?php if (!empty($error)): ?>
-                <p style="color:red;"><?= htmlspecialchars($error) ?></p>
-            <?php endif; ?>
             <form action="" method="post">
                 <label>メールアドレス</label>
                 <input type="email" name="mail" maxlength="100" required>
@@ -120,5 +129,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </body>
-
 </html>
