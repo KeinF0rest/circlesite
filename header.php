@@ -1,4 +1,9 @@
 <?php
+if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) {
+    header("Location: index.php");
+    exit();
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
