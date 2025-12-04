@@ -191,6 +191,7 @@ if (!$event) {
         
         <div class="submit-area">
             <form method="post">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($event['id']) ?>">
                 <button type="submit" name="delete" class="submit-button">削除</button>
             </form>
         </div>
