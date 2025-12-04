@@ -6,6 +6,12 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+if ($_SESSION['user']['authority'] == 0) {
+    $_SESSION['error'] = "アクセス権限がありません。";
+    header("Location: index.php");
+    exit();
+}
+
 $_SESSION['regist'] = [
     'family_name' => $_POST['family_name'],
     'last_name' => $_POST['last_name'],
@@ -25,7 +31,6 @@ $masked_password = str_repeat('●', $password_length);
 
 $gender = $_SESSION['regist']['gender'] === '0' ? '男性' : '女性';
 $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
-
 ?>
 
 <!DOCTYPE html>
