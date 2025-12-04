@@ -17,6 +17,8 @@ $hashed_password = password_hash($_SESSION['regist']['password'], PASSWORD_DEFAU
 
 try{
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
     $sql = "INSERT INTO users (
     family_name, last_name, nickname, mail, password, gender, postal_code,
     prefecture, address1, address2, authority) VALUES (
@@ -36,9 +38,13 @@ try{
         $data['address2'],
         $data['authority'],
     ]);
-} catch(PDOException $e) {
-    error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。</p>";
+} catch (Exception $e) {
+    if ($e->errorInfo[1] == 1062) {
+        echo "<p style='color:red; font-weight:bold;'>すでに登録されているメールアドレスです。</p>";
+    } else {
+         echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。</p>";
+    }
+    echo '<p><a href="account-regist.php" style="display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;">登録画面に戻る</a></p>';
     exit;
 }
 
