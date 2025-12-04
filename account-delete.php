@@ -124,7 +124,7 @@ try {
 
             .form-row {
                 display: flex;
-                align-items: center;
+                justify-content: center;
                 gap: 10px;
                 margin-bottom: 16px;
 
@@ -138,7 +138,10 @@ try {
             }
             
             .form-row div {
-                text-align: center;
+                flex: 1;
+                max-width: 100px;
+                white-space: nowrap; 
+                text-align: left;
             }
             
             .submit-area {
@@ -198,7 +201,7 @@ try {
             
             <div class="form-row">
                 <label>パスワード</label>
-                <div>表示されません</div>
+                <div>安全上表示されません</div>
             </div>
             
             <div class="form-row">
