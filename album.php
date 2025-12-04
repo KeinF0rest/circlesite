@@ -92,7 +92,9 @@ foreach ($albums as $album) {
         
         <div class="header-bar">
             <h1>アルバム</h1>
-            <a href="album-regist.php" class="regist-button">＋</a>
+            <?php if ($_SESSION['user']['authority'] != 0): ?>
+                <a href="album-regist.php" class="regist-button">＋</a>
+            <?php endif; ?>
         </div>
         
         <div class="album-grid">
