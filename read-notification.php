@@ -1,9 +1,14 @@
 <?php
 session_start();
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$id = $_GET['id'] ?? null;
+$id = $_POST['id'] ?? $_GET['id'] ?? null;
 $redirect = $_GET['redirect'] ?? 'notification.php';
 
 if ($id) {

@@ -144,7 +144,7 @@ try {
                 <?php else: ?>
                     <div class="notification-card">
                         <h2><?= htmlspecialchars($msg) ?></h2>
-                        <p>日時: <?= htmlspecialchars($n['created_at']) ?></p>
+                        <p>日時: <?= htmlspecialchars($n['registered_time']) ?></p>
                         <form method="post" action="read-notification.php">
                             <input type="hidden" name="id" value="<?= $n['id'] ?>">
                             <button type="submit" class="read-btn">既読にする</button>
