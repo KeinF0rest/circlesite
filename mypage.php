@@ -232,22 +232,22 @@ if($id){
                 
                 <div class="form-row">
                     <label>名前（姓）</label>
-                    <input type="text" name="family_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['family_name'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="family_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['family_name'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
                     <label>名前（名）</label>
-                    <input type="text" name="last_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['last_name'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="last_name" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF]+" value="<?= htmlspecialchars($user['last_name'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
                     <label>ニックネーム</label>
-                    <input type="text" name="nickname" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($user['nickname'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="nickname" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($user['nickname'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
                     <label>メールアドレス</label>
-                    <input type="email" name="mail" maxlength="100" pattern="^[a-zA-Z0-9@.\-]+$" value="<?= htmlspecialchars($user['mail'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="email" name="mail" maxlength="100" pattern="^[a-zA-Z0-9@.\-]+$" value="<?= htmlspecialchars($user['mail'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
@@ -267,7 +267,7 @@ if($id){
                 
                 <div class="form-row">
                     <label>郵便番号</label>
-                    <input type="text" name="postal_code" maxlength="7" pattern="\d{7}" value="<?= htmlspecialchars($user['postal_code'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="postal_code" maxlength="7" pattern="\d{7}" value="<?= htmlspecialchars($user['postal_code'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
@@ -290,12 +290,12 @@ if($id){
 
                 <div class="form-row">
                     <label>住所（市区町村）</label>
-                    <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address1'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address1'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
                     <label>住所（番地）</label>
-                    <input type="text" name="address2" maxlength="100" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address2'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="text" name="address2" maxlength="100" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($user['address2'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
                 
                 <div class="form-row">
