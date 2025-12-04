@@ -62,7 +62,6 @@ try {
         'last_name' => '名前（名）',
         'nickname' => 'ニックネーム',
         'mail' => 'メールアドレス',
-        'password' => 'パスワード',
         'gender' => '性別',
         'postal_code' => '郵便番号',
         'prefecture' => '都道府県',
@@ -79,9 +78,9 @@ try {
         }
     }
 
-    if (!empty($_POST['password'])) {
-        $changes[] = 'パスワード';
-    }
+    if (!empty($_POST['password']) && !password_verify($_POST['password'], $before['password'])) {
+    $changes[] = 'パスワード';
+}
 
     if (!empty($_FILES['profile_image']['tmp_name'])) {
         $changes[] = "プロフィール画像";
@@ -107,7 +106,6 @@ try {
             }
             
             .header-bar {
-                max-width: 600px;
                 margin: 20px;
                 text-align: center;
             }
