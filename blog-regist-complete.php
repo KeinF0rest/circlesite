@@ -60,6 +60,11 @@ try {
                 font-size: 24px;
                 margin-bottom: 40px;
             }
+            
+            .header-bar h1 {
+                margin-bottom: 20px;
+                font-size: 24px;
+            }
 
             .back-link {
                 display: inline-block;

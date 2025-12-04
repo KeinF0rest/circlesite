@@ -96,7 +96,7 @@ if ($_SESSION['user']['authority'] == 0) {
         
         <div class="header-bar">
             <h1>ブログ新規登録</h1>
-            <a href="index.php" class="back-button">戻る</a>
+            <a href="blog.php" class="back-button">戻る</a>
         </div>
         
         <form action="blog-regist-confirm.php" method="post">
