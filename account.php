@@ -14,7 +14,7 @@ if ($_SESSION['user']['authority'] == 0) {
 
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
-$sql = "SELECT id, nickname, profile_image FROM users WHERE delete_flag = 0";
+$sql = "SELECT id, nickname, profile_image FROM users WHERE delete_flag = 0 ORDER BY registered_time DESC";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
