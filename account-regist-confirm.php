@@ -59,16 +59,7 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
                 font-size: 24px;
                 margin: 0;
             }
-
-            .back-button {
-                position: absolute;
-                right: 0;
-                top: 0;
-                font-size: 16px;
-                text-decoration: none;
-                color: greenyellow;
-            }
-
+            
             .confirm-grid {
                 display: grid;
                 grid-template-columns: 1fr;
@@ -95,7 +86,7 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
             }
 
             .confirm-row .value {
-                width: 130px;
+                width: 100px;
                 text-align: left;
             }
 
@@ -111,16 +102,24 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
                 font-size: 16px;
                 border: none;
                 border-radius: 6px;
+                cursor: pointer;
+            }
+            
+            .back-button {
+                background-color: #ccc;
+                color: #333;
+            }
+            
+            .submit-button {
                 background-color: #4CAF50;
                 color: white;
-                cursor: pointer;
             }
         </style>
     </head>
     <body>
         <?php include 'header.php'; ?>
         <div class="header-bar">
-            <h1>アカウント新規登録確認</h1>
+            <h1>アカウント登録確認</h1>
         </div>
         
         <div class="confirm-grid">
@@ -182,10 +181,10 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
         
         <div class="button-area">
             <form action="account-regist.php" method="POST">
-                <button type="submit">前に戻る</button>
+                <button type="submit" class="back-button">戻る</button>
             </form>
             <form action="account-regist-complete.php" method="POST">
-                <button type="submit">登録する</button>
+                <button type="submit" class="submit-button">登録する</button>
             </form>
         </div>
     </body>
