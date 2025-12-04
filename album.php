@@ -75,7 +75,7 @@ foreach ($albums as $album) {
             .album-card img {
                 width: 100%;
                 max-width: 100%;
-                height: auto;
+                height: 200px;
                 object-fit: cover;
                 border-radius: 6px;
             }
