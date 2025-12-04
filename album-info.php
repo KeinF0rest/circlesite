@@ -124,7 +124,7 @@ if (!$album) {
             
             .image-grid img {
                 width: 100%;
-                height: auto;
+                height: 200px;
                 object-fit: cover;
                 border-radius: 6px;
             }
