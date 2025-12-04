@@ -149,7 +149,7 @@ if ($_SESSION['user']['authority'] == 0) {
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>イベント登録</h1>
+            <h1>イベント新規登録</h1>
             <a href="event.php" class="back-button">戻る</a>
         </div>
         

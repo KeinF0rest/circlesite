@@ -119,7 +119,7 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
     <body>
         <?php include 'header.php'; ?>
         <div class="header-bar">
-            <h1>アカウント登録確認</h1>
+            <h1>アカウント新規登録確認</h1>
         </div>
         
         <div class="confirm-grid">

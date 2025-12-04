@@ -105,7 +105,7 @@ $data = $_SESSION['regist'] ?? [];
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>アカウント登録</h1>
+            <h1>アカウント新規登録</h1>
             <a href="account.php" class="back-button">戻る</a>
         </div>
         
