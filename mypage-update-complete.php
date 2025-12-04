@@ -87,7 +87,8 @@ try {
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント更新ができませんでした。</p>";
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント更新ができませんでした。</p>";
+    echo "<p><a href='mypage.php?id=" . $_SESSION['user']['id'] . "' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>マイページ画面に戻る</a></p>";
     exit;
 }
 ?>

@@ -318,7 +318,7 @@ if($id){
             </div>
             
             <div class="submit-area">
-                <button type="submit" class="submit-button">変更</button>
+                <button type="submit" class="submit-button">更新</button>
             </div>
         </form>
         <script>
