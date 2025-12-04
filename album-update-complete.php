@@ -109,13 +109,12 @@ try {
             }
             
             .header-bar {
-                max-width: 600px;
                 margin: 20px;
                 text-align: center;
             }
             
             .header-bar h1 {
-                margin: 0;
+                margin-bottom: 20px;
                 font-size: 24px;
             }
             

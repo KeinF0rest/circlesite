@@ -28,12 +28,12 @@ if ($_SESSION['user']['authority'] == 0) {
             
             .header-bar {
                 text-align: center;
-                margin-bottom: 30px;
+                margin: 20px;
             }
             
             .header-bar h1 {
                 font-size: 24px;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
             }
             
             .back-link {
