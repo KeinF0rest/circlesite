@@ -101,7 +101,9 @@ $blogs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         <div class="header-bar">
             <h1>ブログ一覧</h1>
-            <a href="blog-regist.php" class="regist-button">＋</a>
+            <?php if ($_SESSION['user']['authority'] != 0): ?>
+                <a href="blog-regist.php" class="regist-button">＋</a>
+            <?php endif; ?>
         </div>
         
         <div class="blog-grid">
