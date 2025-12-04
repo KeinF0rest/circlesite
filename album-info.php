@@ -142,7 +142,7 @@ if (!$album) {
             <div class="menu-icon" onclick="toggleMenu()">⋯</div>
             <div class="menu-popup" id="menu-popup">
                 <ul>
-                    <li><a href="album-update.php?id=<?= $album['id'] ?>">追加</a></li>
+                    <li><a href="album-update.php?id=<?= $album['id'] ?>">更新</a></li>
                     <li><a href="album-delete.php?id=<?= $album['id'] ?>">削除</a></li>
                 </ul>
             </div>
