@@ -139,12 +139,12 @@ try {
                 <?php if ($n['action'] !== 'delete'): ?>
                     <a href="read-notification.php?id=<?= $n['id'] ?>&redirect=<?= $n['type'] ?>-info.php?id=<?= $n['related_id'] ?>" class="notification-card">
                         <h2><?= htmlspecialchars($msg) ?></h2>
-                        <p>日時: <?= htmlspecialchars($n['registered_time']) ?></p>
+                        <p>日時: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($n['registered_time']))) ?></p>
                     </a>
                 <?php else: ?>
                     <div class="notification-card">
                         <h2><?= htmlspecialchars($msg) ?></h2>
-                        <p>日時: <?= htmlspecialchars($n['registered_time']) ?></p>
+                        <p>日時: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($n['registered_time']))) ?></p>
                         <form method="post" action="read-notification.php">
                             <input type="hidden" name="id" value="<?= $n['id'] ?>">
                             <button type="submit" class="read-btn">既読にする</button>
