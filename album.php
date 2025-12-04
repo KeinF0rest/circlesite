@@ -91,7 +91,7 @@ foreach ($albums as $album) {
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>アルバム</h1>
+            <h1>アルバム一覧</h1>
             <?php if ($_SESSION['user']['authority'] != 0): ?>
                 <a href="album-regist.php" class="regist-button">＋</a>
             <?php endif; ?>

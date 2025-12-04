@@ -22,12 +22,13 @@ if($id){
     
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
+        
+        $isSelf = ($_SESSION['user']['id'] == $user['id']);
     } else {
         $_SESSION['error'] = "ユーザー情報が見つかりません。";
         header("Location: index.php");
         exit();
     }
-    
 }
 ?>
 
@@ -206,8 +207,12 @@ if($id){
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>マイページ</h1>
-            <a href="index.php" class="back-button">戻る</a>
+            <h1><?= $isSelf ? 'マイページ' : 'アカウント情報' ?></h1>
+            <?php if ($_SESSION['user']['authority'] == 1): ?>
+                <a href="account.php" class="back-button">戻る</a>
+            <?php else: ?>
+                <a href="index.php" class="back-button">戻る</a>
+            <?php endif; ?>
         </div>
             
         <?php if ($_SESSION['user']['authority'] != 0): ?>
