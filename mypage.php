@@ -15,7 +15,7 @@ if($id){
         header("Location: index.php");
         exit();
     }
-    $sql = "SELECT * FROM users WHERE id = ?";
+    $sql = "SELECT * FROM users WHERE id = ? AND delete_flag = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -25,7 +25,7 @@ if($id){
         
         $isSelf = ($_SESSION['user']['id'] == $user['id']);
     } else {
-        $_SESSION['error'] = "ユーザー情報が見つかりません。";
+        $_SESSION['error'] = "アカウント情報が見つかりません。";
         header("Location: index.php");
         exit();
     }

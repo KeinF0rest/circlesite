@@ -12,10 +12,16 @@ try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "SELECT * FROM users WHERE id = ?";
+    $sql = "SELECT * FROM users WHERE id = ? AND delete_flag = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $before = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$before) {
+        $_SESSION['error'] = "指定されたアカウントは存在しないか、すでに削除されています。";
+        header("Location: index.php");
+        exit();
+    }
 
     $imagePath = $before['profile_image'];
     if (!empty($_FILES['profile_image']['tmp_name'])) {
@@ -32,7 +38,7 @@ try {
         $password = $before['password'];
     }
 
-    $sql = "UPDATE users SET family_name = ?, last_name = ?, nickname = ?, mail = ?, password = ?, gender = ?, postal_code = ?, prefecture = ?, address1 = ?, address2 = ?, authority = ?, profile_image = ? WHERE id = ?";
+    $sql = "UPDATE users SET family_name = ?, last_name = ?, nickname = ?, mail = ?, password = ?, gender = ?, postal_code = ?, prefecture = ?, address1 = ?, address2 = ?, authority = ?, profile_image = ? WHERE id = ? AND delete_flag = 0";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -51,10 +57,16 @@ try {
         $id
     ]);
 
-    $sql = "SELECT * FROM users WHERE id = ?";
+    $sql = "SELECT * FROM users WHERE id = ? AND delete_flag = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
     $after = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$after) {
+        $_SESSION['error'] = "更新対象のアカウントは存在しないか、削除されています。";
+        header("Location: index.php");
+        exit();
+    }
 
     $changes = [];
     $fields = [
