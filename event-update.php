@@ -78,32 +78,25 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
             .form-row textarea {
                 resize: vertical;
             }
-
-            .form-row:last-child {
-                justify-content: flex-end;
-            }
             
             .form-row input[type="date"] {
                 width: 160px;
             }
 
-            .form-row.image-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
             #preview-area {
-                margin-top: 10px;
                 display: flex;
                 gap: 10px;
-                flex-wrap: wrap;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                margin-top: 20px;
             }
 
             #preview-area img {
-                max-width: 120px;
-                max-height: 120px;
+                width: 120px;
+                height: 120px;
                 border-radius: 6px;
-                border: 1px solid #ccc;
+                scroll-snap-align: center;
+                flex-shrink: 0;
                 object-fit: cover;
             }
             
@@ -185,18 +178,19 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
             
             <div class="form-row">
                 <label>写真</label>
-                <?php if (!empty($images)): ?>
-                    <?php foreach ($images as $img): ?>
-                        <div id="preview-area">
-                            <img src="<?= htmlspecialchars($img['image_path']) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;" alt="登録済み画像">
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
                 
                 <label class="image-slot">
                     <span class="plus">＋</span>
                     <input type="file" name="image_path[]" accept="image/*" id="imageInput" multiple>
                 </label>
+                
+                <div id="preview-area">
+                    <?php if (!empty($images)): ?>
+                        <?php foreach ($images as $img): ?>
+                            <img src="<?= htmlspecialchars($img['image_path']) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;" alt="登録済み画像">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
             
             <div class="submit-area">
