@@ -142,15 +142,17 @@ if (!$blog) {
             <a href="blog.php" class="back-button">戻る</a>
         </div>
         
-        <div class="menu-wrapper">
-            <div class="menu-icon" onclick="toggleMenu()">⋯</div>
-            <div class="menu-popup" id="menu-popup">
-                <ul>
-                    <li><a href="blog-update.php?id=<?= $blog['id'] ?>">更新</a></li>
-                    <li><a href="blog-delete.php?id=<?= $blog['id'] ?>">削除</a></li>
-                </ul>
+       <?php if ($_SESSION['user']['authority'] != 0): ?>
+            <div class="menu-wrapper">
+                <div class="menu-icon" onclick="toggleMenu()">⋯</div>
+                <div class="menu-popup" id="menu-popup">
+                    <ul>
+                        <li><a href="blog-update.php?id=<?= $blog['id'] ?>">更新</a></li>
+                        <li><a href="blog-delete.php?id=<?= $blog['id'] ?>">削除</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
         
         <div class="content">
             <?= nl2br(htmlspecialchars(preg_replace('/^[\p{Z}\s]+/u', '', $blog['content']))) ?>
