@@ -121,9 +121,9 @@ if(!empty($_FILES['image_path']['name'][0])) {
             }
 
             .submit-area {
-                margin: 20px;
                 display: flex;
                 justify-content: flex-end;
+                margin: 20px;
                 gap: 10px;
             }
 
@@ -135,12 +135,12 @@ if(!empty($_FILES['image_path']['name'][0])) {
                 cursor: pointer;
             }
 
-            .submit-area button[type="submit"]:first-child {
+            .back-button {
                 background-color: #ccc;
                 color: #333;
             }
 
-            .submit-area button[type="submit"]:last-child {
+            .submit-button {
                 background-color: #4CAF50;
                 color: white;
             }
@@ -190,11 +190,11 @@ if(!empty($_FILES['image_path']['name'][0])) {
         
         <div class="submit-area">
             <form action="event-regist.php" method="POST">
-                <button type="submit">前に戻る</button>
+                <button type="submit" class="back-button">戻る</button>
             </form>
         
             <form action="event-regist-complete.php" method="POST">
-                <button type="submit">登録する</button>
+                <button type="submit" class="submit-button">登録する</button>
             </form>
         </div>
     </body>
