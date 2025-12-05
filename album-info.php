@@ -138,15 +138,18 @@ if (!$album) {
             <a href="album.php" class="back-button">戻る</a>
         </div>
         
-        <div class="menu-wrapper">
-            <div class="menu-icon" onclick="toggleMenu()">⋯</div>
-            <div class="menu-popup" id="menu-popup">
-                <ul>
-                    <li><a href="album-update.php?id=<?= $album['id'] ?>">更新</a></li>
-                    <li><a href="album-delete.php?id=<?= $album['id'] ?>">削除</a></li>
-                </ul>
+        <?php if ($_SESSION['user']['authority'] != 0): ?>
+            <div class="menu-wrapper">
+                <div class="menu-icon" onclick="toggleMenu()">⋯</div>
+                <div class="menu-popup" id="menu-popup">
+                    <ul>
+                        <li><a href="album-update.php?id=<?= $album['id'] ?>">更新</a></li>
+                        <li><a href="album-delete.php?id=<?= $album['id'] ?>">削除</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
+        
         <?php if (!empty($images)): ?>
             <div class="image-grid">
                 <?php foreach ($images as $img): ?>
