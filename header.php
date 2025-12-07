@@ -27,7 +27,7 @@ $unread_count = $stmt->fetchColumn();
                         <li><a href="account.php">アカウント</a></li>
                     <?php endif; ?>
                     
-                    <li><a href="logout.php">ログアウト</a></li>
+                    <li><a href="logout.php" class="logout">ログアウト</a></li>
                 </ul>
             </div>
         </nav>
