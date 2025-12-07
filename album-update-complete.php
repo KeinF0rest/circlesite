@@ -12,7 +12,6 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$changed = false;
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -20,10 +19,11 @@ try {
     $id = $_POST['id'] ?? null;
     $title = $_POST['title'] ?? '';
     
+    $changes = [];
     if ($title !== '') {
         $stmt = $pdo->prepare("UPDATE album SET title = ? WHERE id = ?");
         $stmt->execute([$title, $id]);
-        $changed = true;
+        $changes[] = 'タイトル';
     }
 
     $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM album_images WHERE album_id = ? AND delete_flag = 0");
@@ -48,7 +48,7 @@ try {
             $stmt_del = $pdo->prepare("UPDATE album_images SET delete_flag = 1 WHERE id = ?");
             $stmt_del->execute([$img_id]);
         }
-        $changed = true;
+        $changes[] = '写真';
     }
 
     if (!empty($_FILES['new_images']['tmp_name'][0])) {
@@ -66,14 +66,16 @@ try {
 
                 $stmt_img = $pdo->prepare("INSERT INTO album_images (album_id, image_path) VALUES (?, ?)");
                 $stmt_img->execute([$id, $path]);
-                $changed = true;
             }
         }
+        $changes[] = '写真';
     }
-    if ($changed) {
+    if (!empty($changes)) {
         $stmt_title = $pdo->prepare("SELECT title FROM album WHERE id = ?");
         $stmt_title->execute([$id]);
         $album_title = $stmt_title->fetchColumn();
+        
+        $change_text = implode("・", $changes);
 
         $stmt_users = $pdo->query("SELECT id FROM users");
         $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
@@ -83,7 +85,7 @@ try {
         foreach ($users as $u) {
             $stmt_notify->execute([
                 $id,
-                "アルバム「{$album_title}」が更新されました。",
+                "アルバム「{$album_title}」が更新されました。（変更箇所: {$change_text}）",
                 $u['id']
             ]);
         }
@@ -134,8 +136,8 @@ try {
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <?php if ($changed): ?>
-                <h1>アルバムが更新されました。</h1>
+            <?php if (!empty($changes)): ?>
+                <h1><?= implode('、', $changes) ?>が更新されました。</h1>
             <?php else: ?>
                 <h1>変更はありませんでした。</h1>
             <?php endif; ?>
