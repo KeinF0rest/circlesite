@@ -119,22 +119,7 @@ try {
         
         <div class="notification-grid">
             <?php foreach ($notifications as $n): ?>
-                <?php
-                $title = $n['event_title'] ?? $n['album_title'] ?? $n['blog_title'] ?? '';
-                if ($n['type'] === 'event') {
-                    if ($n['action'] === 'regist') $msg = "イベント「{$title}」が登録されました。";
-                    if ($n['action'] === 'update') $msg = "イベント「{$title}」が更新されました。";
-                    if ($n['action'] === 'delete') $msg = "イベント「{$title}」が削除されました。";
-                } elseif ($n['type'] === 'album') {
-                    if ($n['action'] === 'regist') $msg = "アルバム「{$title}」が登録されました。";
-                    if ($n['action'] === 'update') $msg = "アルバム「{$title}」が更新されました。";
-                    if ($n['action'] === 'delete') $msg = "アルバム「{$title}」が削除されました。";
-                } elseif ($n['type'] === 'blog') {
-                    if ($n['action'] === 'regist') $msg = "ブログ「{$title}」が登録されました。";
-                    if ($n['action'] === 'update') $msg = "ブログ「{$title}」が更新されました。";
-                    if ($n['action'] === 'delete') $msg = "ブログ「{$title}」が削除されました。";
-                }
-                ?>
+                <?php $msg = $n['message']; ?>
                     
                 <?php if ($n['action'] !== 'delete'): ?>
                     <a href="read-notification.php?id=<?= $n['id'] ?>&redirect=<?= $n['type'] ?>-info.php?id=<?= $n['related_id'] ?>" class="notification-card">
