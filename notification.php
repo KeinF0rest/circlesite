@@ -22,9 +22,9 @@ try {
     $stmt->execute([$_SESSION['user']['id']]);
     $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
-    error_log($e->getMessage());
-    echo "<p style='color:red;'>通知の取得に失敗しました。</p>";
-    exit; 
+    echo "<p style='color:red;'>エラーが発生したため通知の取得ができませんでした。</p>";
+    echo "<p><a href='notification.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>通知一覧に戻る</a></p>";
+    exit();
 }
 ?>
 
