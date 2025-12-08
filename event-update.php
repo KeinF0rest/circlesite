@@ -173,7 +173,8 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" required><?= htmlspecialchars($event['content']) ?></textarea>
+                <textarea name="content" maxlength="500" rows="6" required oninput="updateCount(this)"><?= htmlspecialchars($event['content']) ?></textarea>
+                <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
             </div>
             
             <div class="form-row">
@@ -214,6 +215,16 @@ $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
                     };
                     reader.readAsDataURL(file);
                 });
+            });
+            
+            function updateCount(el) {
+                const count = el.value.length;
+                document.getElementById('char-count').textContent = count + "/500";
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const textarea = document.querySelector('textarea[name="content"]');
+                updateCount(textarea);
             });
         </script>
     </body>
