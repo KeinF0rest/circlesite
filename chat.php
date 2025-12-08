@@ -21,7 +21,9 @@ $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $stmt = $pdo->prepare("INSERT IGNORE INTO message_read (message_id, user_id) VALUES (?, ?)");
 foreach ($messages as $msg) {
-    $stmt->execute([$msg['id'], $_SESSION['user']['id']]);
+    if ($msg['user_id'] != $_SESSION['user']['id']) {
+        $stmt->execute([$msg['id'], $_SESSION['user']['id']]);
+    }
 }
 ?>
 
@@ -67,7 +69,7 @@ foreach ($messages as $msg) {
             .msg {
                 display: flex;
                 flex-direction: column;
-                align-items: flex-end;
+                align-items: flex-start;
                 margin-bottom: 10px;
             }
 
@@ -282,6 +284,11 @@ foreach ($messages as $msg) {
                 const preview = document.getElementById("preview");
                 preview.style.display = "none";
                 preview.src = "";
+            });
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                const chatThread = document.querySelector(".chat-thread");
+                chatThread.scrollTop = chatThread.scrollHeight;
             });
         </script>
     </body>
