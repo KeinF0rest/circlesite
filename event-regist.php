@@ -172,7 +172,8 @@ if ($_SESSION['user']['authority'] == 0) {
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" required><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
+                <textarea name="content" maxlength="500" rows="6" required oninput="updateCount(this)"><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
+                <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
             </div>
             
             <div class="form-row">
@@ -243,6 +244,16 @@ if ($_SESSION['user']['authority'] == 0) {
                 imageInput.closest('.form-grid').appendChild(area);
                 return area;
             }
+            
+            function updateCount(el) {
+                const count = el.value.length;
+                document.getElementById('char-count').textContent = count + "/500";
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const textarea = document.querySelector('textarea[name="content"]');
+                updateCount(textarea);
+            });
         </script>
     </body>
 </html>
