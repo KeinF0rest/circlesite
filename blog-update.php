@@ -119,12 +119,25 @@ if (!$blog) {
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" required><?= htmlspecialchars($blog['content']) ?></textarea>
+                <textarea name="content" maxlength="500" required oninput="updateCount(this)"><?= htmlspecialchars($blog['content']) ?></textarea>
+                <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
             </div>
             
             <div class="submit-area">
                 <button type="submit" class="submit-button">更新</button>
             </div>
         </form>
+        
+        <script>
+            function updateCount(el) {
+                const count = el.value.length;
+                document.getElementById('char-count').textContent = count + "/500";
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                const textarea = document.querySelector('textarea[name="content"]');
+                updateCount(textarea);
+            });
+</script>
     </body>
 </html>
