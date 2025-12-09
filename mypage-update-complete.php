@@ -9,7 +9,7 @@ if (!isset($_SESSION['user'])) {
 $id = $_POST['id'] ?? null;
 
 try {
-    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;charset=utf8mb4", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $sql = "SELECT * FROM users WHERE id = ? AND delete_flag = 0";

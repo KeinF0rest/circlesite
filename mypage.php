@@ -6,7 +6,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+$pdo = new PDO("mysql:dbname=circlesite;host=localhost;charset=utf8mb4", "root", "");
 $id = $_GET['id'] ?? null;
 
 if($id){
