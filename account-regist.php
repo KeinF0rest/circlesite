@@ -171,7 +171,7 @@ $data = $_SESSION['regist'] ?? [];
             
             <div class="form-row">
                 <label>住所（市区町村）</label>
-                <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9]+" value="<?= htmlspecialchars($data['address1'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                <input type="text" name="address1" maxlength="10" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A1-\u30FA\u3000\u30FC0-9\-]+" value="<?= htmlspecialchars($data['address1'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             
             <div class="form-row">

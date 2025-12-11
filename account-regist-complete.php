@@ -42,7 +42,7 @@ try{
     if ($e->errorInfo[1] == 1062) {
         echo "<p style='color:red; font-weight:bold;'>すでに登録されているメールアドレスです。</p>";
     } else {
-         echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できません。</p>";
+         echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント登録できませんでした。</p>";
     }
     echo '<p><a href="account-regist.php" style="display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;">登録画面に戻る</a></p>';
     exit;
@@ -94,7 +94,7 @@ unset($_SESSION['regist']);
         
         <div class="header-bar">
             <h1>アカウント登録完了しました。</h1>
-            <a href="account.php" class="back-link">アカウント一覧へ</a>
+            <a href="account.php" class="back-link">アカウントへ</a>
         </div>
     </body>
 </html>
