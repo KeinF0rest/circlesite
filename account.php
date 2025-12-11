@@ -12,14 +12,21 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-
-$sql = "SELECT id, nickname, profile_image FROM users WHERE delete_flag = 0 ORDER BY registered_time DESC";
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$account = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $sql = "SELECT id, nickname, profile_image FROM users WHERE delete_flag = 0 ORDER BY registered_time DESC";
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $account = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント一覧画面が閲覧できません。</p>";
+    echo "<p><a href='index.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>トップ画面に戻る</a></p>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
