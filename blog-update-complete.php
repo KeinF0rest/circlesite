@@ -26,7 +26,8 @@ try {
     $blog = $stmt->fetch();
     
     if (!$blog) {
-        echo "<p style='color:red;'>指定されたブログは存在しません。</p>";
+        $_SESSION['error'] = "指定されたブログは存在しません。";
+        header("Location: blog.php");
         exit;
     }
     

@@ -23,7 +23,8 @@ try {
     $blog = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$blog) {
-        echo "該当するブログが見つかりません。";
+        $_SESSION['error'] = "指定されたブログは存在しません。";
+        header("Location: blog.php");
         exit;
     }
     
@@ -53,7 +54,7 @@ try {
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができませんでした。</p>";
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためブログ削除ができませんでした。</p>";
     exit;
 }
 
