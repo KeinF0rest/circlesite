@@ -17,7 +17,7 @@ $album_id = $_GET['id'] ?? null;
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$stmt = $pdo->prepare("SELECT * FROM album WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$album_id]);
 $album = $stmt->fetch();
 
