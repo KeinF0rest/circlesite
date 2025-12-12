@@ -49,7 +49,7 @@ try {
     $album = $stmt->fetch();
     
     if (!$album) {
-        $_SESSION['error'] = "指定されたブログは存在しません。";
+        $_SESSION['error'] = "指定されたアルバムは存在しません。";
         header("Location: album.php");
         exit;
     }
