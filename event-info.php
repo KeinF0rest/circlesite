@@ -27,6 +27,12 @@ $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_
 $stmt_check->execute([$event_id, $user_id]);
 $already_joined = $stmt_check->fetchColumn() > 0;
 
+if (!$event) {
+    $_SESSION['error'] = "指定されたイベントは存在しません。";
+    header("Location: event.php");
+    exit;
+}
+
 ?>
 
 <!DOCTYPE html>

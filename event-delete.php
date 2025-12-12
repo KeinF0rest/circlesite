@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             exit;
         } catch (Exception $e) {
             error_log($e->getMessage());
-            echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができません。</p>";
+            echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができませんでした。</p>";
             exit;
         }
     }
@@ -58,7 +58,8 @@ $stmt->execute([$event_id]);
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$event) {
-    echo "該当するイベントが見つかりません。";
+    $_SESSION['error'] = "指定されたイベントは存在しません。";
+    header("Location: event.php");
     exit;
 }
 ?>

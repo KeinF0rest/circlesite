@@ -22,6 +22,12 @@ $event = $stmt->fetch(PDO::FETCH_ASSOC);
 $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
 $stmt_img->execute([$event['id']]);
 $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
+
+if (!$event) {
+    $_SESSION['error'] = "指定されたイベントは存在しません。";
+    header("Location: event.php");
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
