@@ -18,7 +18,7 @@ try {
     $before = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$before) {
-        $_SESSION['error'] = "指定されたアカウントは存在しないか、すでに削除されています。";
+        $_SESSION['error'] = "アカウント情報が見つかりません。";
         header("Location: index.php");
         exit();
     }
@@ -63,7 +63,7 @@ try {
     $after = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$after) {
-        $_SESSION['error'] = "更新対象のアカウントは存在しないか、削除されています。";
+        $_SESSION['error'] = "アカウント情報が見つかりません。";
         header("Location: index.php");
         exit();
     }

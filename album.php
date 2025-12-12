@@ -6,18 +6,26 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-
-$stmt = $pdo->prepare("SELECT * FROM album WHERE delete_flag = 0 ORDER BY registered_time DESC");
-$stmt->execute();
-$albums = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$album_thumbnails = [];
-foreach ($albums as $album) {
-    $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time DESC LIMIT 1");
-    $stmt_img->execute([$album['id']]);
-    $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
-    $album_thumbnails[$album['id']] = $image['image_path'] ?? null;
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $pdo->prepare("SELECT * FROM album WHERE delete_flag = 0 ORDER BY registered_time DESC");
+    $stmt->execute();
+    $albums = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $album_thumbnails = [];
+    foreach ($albums as $album) {
+        $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time DESC LIMIT 1");
+        $stmt_img->execute([$album['id']]);
+        $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
+        $album_thumbnails[$album['id']] = $image['image_path'] ?? null;
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント一覧画面が閲覧できません。</p>";
+    echo "<p><a href='index.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>トップ画面に戻る</a></p>";
+    exit;
 }
 ?>
 
