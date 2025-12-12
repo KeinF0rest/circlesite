@@ -6,6 +6,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: index.php");
+    exit();
+}
+
 $id = $_POST['id'] ?? null;
 
 try {
@@ -18,7 +23,7 @@ try {
     $before = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$before) {
-        $_SESSION['error'] = "アカウント情報が見つかりません。";
+        $_SESSION['error'] = "指定されたアカウントは存在しません。";
         header("Location: index.php");
         exit();
     }

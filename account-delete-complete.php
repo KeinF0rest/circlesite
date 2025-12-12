@@ -11,6 +11,11 @@ if ($_SESSION['user']['authority'] == 0) {
     header("Location: index.php");
     exit();
 }
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: account.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

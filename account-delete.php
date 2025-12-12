@@ -16,15 +16,16 @@ try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $user_id = $_SESSION['user_id'] ?? null;
+    $id = $_GET['id'] ?? null;
 
     $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND delete_flag = 0");
-    $stmt->execute([$user_id]);
+    $stmt->execute([$id]);
     $user = $stmt->fetch();
 
     if (!$user) {
-        echo "ユーザー情報が見つかりません。";
-        exit;
+        $_SESSION['error'] = "指定されたアカウントは存在しません。";
+        header("Location: index.php");
+        exit();
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {

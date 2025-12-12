@@ -25,7 +25,7 @@ if($id){
         
         $isSelf = ($_SESSION['user']['id'] == $user['id']);
     } else {
-        $_SESSION['error'] = "アカウント情報が見つかりません。";
+        $_SESSION['error'] = "指定されたアカウントは存在しません。";
         header("Location: index.php");
         exit();
     }
