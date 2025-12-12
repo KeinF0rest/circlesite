@@ -49,7 +49,8 @@ try {
     $album = $stmt->fetch();
     
     if (!$album) {
-        echo "該当するアルバムが見つかりません。";
+        $_SESSION['error'] = "指定されたブログは存在しません。";
+        header("Location: album.php");
         exit;
     }
 
@@ -58,7 +59,7 @@ try {
     $image_count = $stmt_img->fetchColumn();
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム削除できません。</p>";
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム削除できませんでした。</p>";
     exit;
 }
 ?>

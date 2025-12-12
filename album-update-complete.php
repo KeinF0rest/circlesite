@@ -92,7 +92,7 @@ try {
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム更新できません。</p>";
+    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム更新できませんでした。</p>";
     exit;
 }
 ?>

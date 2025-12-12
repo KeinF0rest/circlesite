@@ -26,7 +26,8 @@ $stmt_img->execute([$album_id]);
 $images = $stmt_img->fetchAll();
 
 if (!$album) {
-    echo "<p style='color:red;'>指定されたアルバムは存在しません。</p>";
+    $_SESSION['error'] = "指定されたブログは存在しません。";
+    header("Location: album.php");
     exit;
 }
 ?>
