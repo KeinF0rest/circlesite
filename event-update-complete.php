@@ -12,6 +12,11 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: event.php");
+    exit();
+}
+
 $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $title = $_POST['title'] ?? '';
