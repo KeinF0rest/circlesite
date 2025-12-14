@@ -106,8 +106,6 @@ if ($_SESSION['user']['authority'] == 0) {
                 width: 100%;
                 object-fit: cover;
                 border-radius: 6px;
-                scroll-snap-align: center;
-                flex-shrink: 0;
             }
             
             #image-count {
@@ -138,7 +136,7 @@ if ($_SESSION['user']['authority'] == 0) {
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>アルバム登録</h1>
+            <h1>アルバム新規登録</h1>
             <a href="album.php" class="back-button">戻る</a>
         </div>
         
@@ -157,13 +155,13 @@ if ($_SESSION['user']['authority'] == 0) {
                     </label>
                 </div>
             
-                <?php if (!empty($_SESSION['album']['image_paths'])): ?>
-                    <div id="previewArea">
+                <div id="previewArea">
+                    <?php if (!empty($_SESSION['album']['image_paths'])): ?>
                         <?php foreach ($_SESSION['album']['image_paths'] as $path): ?>
                             <img src="<?= htmlspecialchars($path) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;">
                         <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+                </div>
             
                 <div id="image-count" style="text-align:right; font-size:14px; color:#555; margin-top:10px;"></div>
             </div>
@@ -174,52 +172,60 @@ if ($_SESSION['user']['authority'] == 0) {
         </form>
 
         <script>
+            let selectedFiles = [];
             const imageInput = document.getElementById('image');
-            const imageCount = document.getElementById('image-count');
-            const previewArea = document.getElementById('previewArea') || createPreviewArea();
+            const previewArea = document.getElementById('previewArea');
             const MAX_IMAGES = 10;
 
             imageInput.addEventListener('change', () => {
-                const files = imageInput.files;
-                const count = files.length;
+                const files = Array.from(imageInput.files);
+                selectedFiles.push(...files);
 
-                if (count > MAX_IMAGES) {
-                    alert(`最大${MAX_IMAGES}枚まで登録できます。選択された枚数：${count}枚`);
-                    imageInput.value = '';
-                    imageCount.textContent = '';
-                    previewArea.innerHTML = '';
-                    return;
+                if (selectedFiles.length > MAX_IMAGES) {
+                    alert(`最大${MAX_IMAGES}枚までです`);
+                    selectedFiles = selectedFiles.slice(0, MAX_IMAGES);
                 }
-                
-                imageCount.textContent = `${count}枚 選択されています`;
+
+                renderPreview();
+                imageInput.value = '';
+            });
+            function renderPreview() {
                 previewArea.innerHTML = '';
-                
-                Array.from(files).forEach(file => {
-                    if (!file.type.startsWith('image/')) return;
-                    
+                selectedFiles.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = e => {
+                        const wrapper = document.createElement('div');
+                        wrapper.style.position = 'relative';
+                        wrapper.style.display = 'inline-block';
+                        wrapper.style.margin = '5px';
+
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.style.width = '120px';
                         img.style.height = '120px';
                         img.style.objectFit = 'cover';
                         img.style.borderRadius = '6px';
-                        previewArea.appendChild(img);
+
+                        const btn = document.createElement('button');
+                        btn.textContent = '×';
+                        btn.style.position = 'absolute';
+                        btn.style.top = '10px';
+                        btn.style.right = '0';
+                        btn.style.background = '#999';
+                        btn.style.color = 'white';
+                        btn.style.border = 'none';
+                        btn.style.cursor = 'pointer';
+                        btn.onclick = () => {
+                            selectedFiles.splice(index, 1);
+                            renderPreview();
+                        };
+
+                        wrapper.appendChild(img);
+                        wrapper.appendChild(btn);
+                        previewArea.appendChild(wrapper);
                     };
                     reader.readAsDataURL(file);
                 });
-            });
-            
-            function createPreviewArea() {
-                const area = document.createElement('div');
-                area.id = 'previewArea';
-                area.style.display = 'flex';
-                area.style.gap = '10px';
-                area.style.overflowX = 'auto';
-                area.style.scrollSnapType = 'x mandatory';
-                imageInput.closest('.form-grid').appendChild(area);
-                return area;
             }
         </script>
     </body>

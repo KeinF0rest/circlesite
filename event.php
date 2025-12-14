@@ -19,9 +19,6 @@ try {
     echo "<p><a href='index.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>トップ画面に戻る</a></p>";
     exit;
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
