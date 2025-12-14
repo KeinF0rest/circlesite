@@ -53,7 +53,8 @@ if ($_SESSION['user']['authority'] == 0) {
             .form-row {
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
+                gap: 5px;
+                margin-bottom: 10px;
             }
 
             .form-row label {
@@ -100,6 +101,7 @@ if ($_SESSION['user']['authority'] == 0) {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, 120px);
                 gap: 10px;
+                margin-top: 10px;
             }
             
             #previewArea img {
@@ -172,60 +174,52 @@ if ($_SESSION['user']['authority'] == 0) {
         </form>
 
         <script>
-            let selectedFiles = [];
             const imageInput = document.getElementById('image');
-            const previewArea = document.getElementById('previewArea');
+            const imageCount = document.getElementById('image-count');
+            const previewArea = document.getElementById('previewArea') || createPreviewArea();
             const MAX_IMAGES = 10;
 
             imageInput.addEventListener('change', () => {
-                const files = Array.from(imageInput.files);
-                selectedFiles.push(...files);
+                const files = imageInput.files;
+                const count = files.length;
 
-                if (selectedFiles.length > MAX_IMAGES) {
-                    alert(`最大${MAX_IMAGES}枚までです`);
-                    selectedFiles = selectedFiles.slice(0, MAX_IMAGES);
+                if (count > MAX_IMAGES) {
+                    alert(`最大${MAX_IMAGES}枚まで登録できます。選択された枚数：${count}枚`);
+                    imageInput.value = '';
+                    imageCount.textContent = '';
+                    previewArea.innerHTML = '';
+                    return;
                 }
-
-                renderPreview();
-                imageInput.value = '';
-            });
-            function renderPreview() {
+                
+                imageCount.textContent = `${count}枚 選択されています`;
                 previewArea.innerHTML = '';
-                selectedFiles.forEach((file, index) => {
+                
+                Array.from(files).forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+                    
                     const reader = new FileReader();
                     reader.onload = e => {
-                        const wrapper = document.createElement('div');
-                        wrapper.style.position = 'relative';
-                        wrapper.style.display = 'inline-block';
-                        wrapper.style.margin = '5px';
-
                         const img = document.createElement('img');
                         img.src = e.target.result;
                         img.style.width = '120px';
                         img.style.height = '120px';
                         img.style.objectFit = 'cover';
                         img.style.borderRadius = '6px';
-
-                        const btn = document.createElement('button');
-                        btn.textContent = '×';
-                        btn.style.position = 'absolute';
-                        btn.style.top = '10px';
-                        btn.style.right = '0';
-                        btn.style.background = '#999';
-                        btn.style.color = 'white';
-                        btn.style.border = 'none';
-                        btn.style.cursor = 'pointer';
-                        btn.onclick = () => {
-                            selectedFiles.splice(index, 1);
-                            renderPreview();
-                        };
-
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(btn);
-                        previewArea.appendChild(wrapper);
+                        previewArea.appendChild(img);
                     };
                     reader.readAsDataURL(file);
                 });
+            });
+            
+            function createPreviewArea() {
+                const area = document.createElement('div');
+                area.id = 'previewArea';
+                area.style.display = 'flex';
+                area.style.gap = '10px';
+                area.style.overflowX = 'auto';
+                area.style.scrollSnapType = 'x mandatory';
+                imageInput.closest('.form-grid').appendChild(area);
+                return area;
             }
         </script>
     </body>
