@@ -90,7 +90,7 @@ if (!$album) {
             
             .image-item img {
                 width: 100%;
-                height: auto;
+                height: 300px;
                 object-fit: cover;
                 border-radius: 6px;
             }
@@ -121,6 +121,20 @@ if (!$album) {
                 inset: 0;
                 opacity: 0;
                 cursor: pointer;
+            }
+            
+            #previewArea {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, 120px);
+                gap: 10px;
+                margin: 20px;
+            }
+
+            #previewArea img {
+                width: 120px;
+                height: 120px;
+                object-fit: cover;
+                border-radius: 6px;
             }
             
             .submit-area {
@@ -182,9 +196,52 @@ if (!$album) {
                 </label>
             </div>
             
+            <div id="previewArea"></div>
+            <div id="image-count" style="text-align:right; font-size:14px; color:#555; margin-top:10px;"></div>
+            
             <div class="submit-area">
                 <button type="submit" class="submit-button">更新</button>
             </div>
         </form>
+        
+        <script>
+            const imageInput = document.getElementById('imageInput');
+            const imageCount = document.getElementById('image-count');
+            const previewArea = document.getElementById('previewArea');
+            const MAX_IMAGES = 10;
+            
+            const existingCount = <?= count($images) ?>;
+            
+            imageInput.addEventListener('change', () => {
+                const newFiles = Array.from(imageInput.files);
+                const deleteCount = document.querySelectorAll('input[name="delete_images[]"]:checked').length;
+                const totalCount = existingCount - deleteCount + newFiles.length;
+
+                if (totalCount > MAX_IMAGES) {
+                    alert(`最大${MAX_IMAGES}枚までです。現在 ${totalCount} 枚です。`);
+                    imageInput.value = '';
+                    previewArea.innerHTML = '';
+                    return;
+                }
+                imageCount.textContent = `${newFiles.length}枚 選択されています`;
+                previewArea.innerHTML = '';
+
+                newFiles.forEach(file => {
+                    if (!file.type.startsWith('image/')) return;
+
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '120px';
+                        img.style.height = '120px';
+                        img.style.objectFit = 'cover';
+                        img.style.borderRadius = '6px';
+                        previewArea.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        </script>
     </body>
 </html>
