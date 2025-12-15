@@ -12,54 +12,61 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+$id = $_GET['id'] ?? null;
+
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $id = $_GET['id'] ?? null;
-    
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-        $stmt = $pdo->prepare("UPDATE album SET delete_flag = 1 WHERE id = ?");
-        $stmt->execute([$id]);
-
-        $stmt_img = $pdo->prepare("UPDATE album_images SET delete_flag = 1 WHERE album_id = ?");
-        $stmt_img->execute([$id]);
-        
-        $stmt_title = $pdo->prepare("SELECT title FROM album WHERE id = ?");
-        $stmt_title->execute([$id]);
-        $album_title = $stmt_title->fetchColumn();
-        
-        $stmt_users = $pdo->query("SELECT id FROM users");
-        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
-        
-        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('album', 'delete', ?, ?, ?, 0)");
-        
-        foreach ($users as $u) {
-            $stmt_notify->execute([
-                $id,
-                "アルバム「{$album_title}」が削除されました。",
-                $u['id']
-            ]);
-        }
-        header("Location: album-delete-complete.php");
-        exit;
-    }
     $stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
     $stmt->execute([$id]);
-    $album = $stmt->fetch();
-    
+    $album = $stmt->fetch(PDO::FETCH_ASSOC);
+
     if (!$album) {
         $_SESSION['error'] = "指定されたアルバムは存在しません。";
-        header("Location: album.php");
-        exit;
+        header("Location: index.php");
+        exit();
     }
-
+    
     $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM album_images WHERE album_id = ? AND delete_flag = 0");
     $stmt_img->execute([$id]);
     $image_count = $stmt_img->fetchColumn();
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+        $delete_id = $_POST['id'] ?? null;
+        if ($delete_id) {
+            $stmt = $pdo->prepare("UPDATE album SET delete_flag = 1 WHERE id = ?");
+            $stmt->execute([$delete_id]);
+
+            $stmt_img = $pdo->prepare("UPDATE album_images SET delete_flag = 1 WHERE album_id = ?");
+            $stmt_img->execute([$delete_id]);
+        
+            $stmt_title = $pdo->prepare("SELECT title FROM album WHERE id = ?");
+            $stmt_title->execute([$delete_id]);
+            $album_title = $stmt_title->fetchColumn();
+        
+            $stmt_users = $pdo->query("SELECT id FROM users");
+            $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+        
+            $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('album', 'delete', ?, ?, ?, 0)");
+        
+            foreach ($users as $u) {
+                $stmt_notify->execute([
+                    $id,
+                    "アルバム「{$album_title}」が削除されました。",
+                    $u['id']
+                ]);
+            }
+            $_SESSION['delete_complete'] = true;
+            header("Location: album-delete-complete.php");
+            exit;
+        }
+    }
 } catch (Exception $e) {
     error_log($e->getMessage());
+    $safeId = htmlspecialchars((string)($_POST['id'] ?? ''), ENT_QUOTES, 'UTF-8');
     echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム削除できませんでした。</p>";
+    echo "<p><a href='album-info.php?id=" . $safeId . "' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アルバム情報画面に戻る</a></p>";
     exit;
 }
 ?>
@@ -149,6 +156,7 @@ try {
         
         <div class="submit-area">
             <form method="post">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($album['id']) ?>">
                 <button type="submit" name="submit" class="submit-button">削除</button>
             </form>
         </div>
