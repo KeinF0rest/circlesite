@@ -53,7 +53,7 @@ try {
                     $u['id']
                 ]);
             }
-            
+            $_SESSION['delete_complete'] = true;
             header("Location: event-delete-complete.php");
             exit;
         } 

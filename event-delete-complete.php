@@ -12,10 +12,11 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if (empty($_SESSION['delete_complete'])) {
     header("Location: event.php");
     exit();
 }
+unset($_SESSION['delete_complete']);
 ?>
 
 <!DOCTYPE html>
