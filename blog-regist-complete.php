@@ -38,6 +38,7 @@ try {
     }
 } catch (Exception $e) {
     echo "<p style='color:red; font-weight:bold;'>エラーが発生したためブログ登録できませんでした。</p>";
+    echo "<p><a href='blog-regist.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>ブログ登録画面に戻る</a></p>";
     exit;
 }
 ?>

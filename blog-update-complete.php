@@ -65,7 +65,9 @@ try {
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためブログ更新ができませんでした。</p>";
+    $safeId = htmlspecialchars((string)($_POST['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためブログ更新ができませんでした。</p>";
+    echo "<p><a href='blog-info.php?id=" . $safeId . "' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>ブログ情報画面に戻る</a></p>";
     exit;
 }
 ?>

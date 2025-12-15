@@ -139,6 +139,6 @@ if (!$blog) {
                 const textarea = document.querySelector('textarea[name="content"]');
                 updateCount(textarea);
             });
-</script>
+        </script>
     </body>
 </html>
