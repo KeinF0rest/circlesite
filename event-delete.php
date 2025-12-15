@@ -12,15 +12,25 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$event_id = $_GET['id'] ?? null;
+$id = $_GET['id'] ?? null;
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$id]);
+    $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-    $delete_id = $_POST['id'] ?? null;
-    if ($delete_id) {
-        try {
+    if (!$event) {
+        $_SESSION['error'] = "指定されたイベントは存在しません。";
+        header("Location: event.php");
+        exit;
+    }
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+        $delete_id = $_POST['id'] ?? null;
+        if ($delete_id) {
             $stmt = $pdo->prepare("UPDATE event SET delete_flag = 1 WHERE id = ?");
             $stmt->execute([$delete_id]);
             
@@ -46,20 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             
             header("Location: event-delete-complete.php");
             exit;
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-            echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができませんでした。</p>";
-            exit;
-        }
+        } 
     }
-}
-$stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$event_id]);
-$event = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$event) {
-    $_SESSION['error'] = "指定されたイベントは存在しません。";
-    header("Location: event.php");
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    $safeId = htmlspecialchars((string)($_POST['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためイベント削除ができませんでした。</p>";
+    echo "<p><a href='event-info.php?id=" . $safeId . "' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>イベント情報画面に戻る</a></p>";
     exit;
 }
 ?>
