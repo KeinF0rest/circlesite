@@ -12,15 +12,15 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+$id = $_GET['id'] ?? null;
+
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $id = $_GET['id'] ?? null;
-
     $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? AND delete_flag = 0");
     $stmt->execute([$id]);
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
         $_SESSION['error'] = "指定されたアカウントは存在しません。";
@@ -29,15 +29,21 @@ try {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-        $stmt = $pdo->prepare("UPDATE users SET delete_flag = 1 WHERE id = ?");
-        $stmt->execute([$user_id]);
-
-        header('Location: account-delete-complete.php');
-        exit;
+        $delete_id = $_POST['id'] ?? null;
+        if ($delete_id) {
+            $stmt = $pdo->prepare("UPDATE users SET delete_flag = 1 WHERE id = ?");
+            $stmt->execute([$delete_id]);
+            
+            $_SESSION['delete_complete'] = true;
+            header('Location: account-delete-complete.php');
+            exit;
+        }
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント削除ができませんでした。</p>";
+    $safeId = htmlspecialchars((string)($_POST['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント削除ができませんでした。</p>";
+    echo "<p><a href='mypage.php?id=" . $safeId . "' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アカウント情報画面に戻る</a></p>";
     exit;
 }
 
@@ -238,6 +244,7 @@ try {
         
         <div class="submit-area">
             <form method="post">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
                 <button type="submit" name="delete" class="submit-button">削除</button>
             </form>
         </div>
