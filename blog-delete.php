@@ -29,27 +29,31 @@ try {
     }
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-        $stmt = $pdo->prepare("UPDATE blog SET delete_flag = 1 WHERE id = ?");
-        $stmt->execute([$id]);
+        $delete_id = $_POST['id'] ?? null;
+        if ($delete_id) {
+            $stmt = $pdo->prepare("UPDATE blog SET delete_flag = 1 WHERE id = ?");
+            $stmt->execute([$delete_id]);
     
-        $stmt_title = $pdo->prepare("SELECT title FROM blog WHERE id = ?");
-        $stmt_title->execute([$id]);
-        $blog_title = $stmt_title->fetchColumn();
+            $stmt_title = $pdo->prepare("SELECT title FROM blog WHERE id = ?");
+            $stmt_title->execute([$delete_id]);
+            $blog_title = $stmt_title->fetchColumn();
         
-        $stmt_users = $pdo->query("SELECT id FROM users");
-        $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+            $stmt_users = $pdo->query("SELECT id FROM users");
+            $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
         
-        $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('blog', 'delete', ?, ?, ?, 0)");
+            $stmt_notify = $pdo->prepare("INSERT INTO notification (type, action, related_id, message, user_id, n_read) VALUES ('blog', 'delete', ?, ?, ?, 0)");
 
-        foreach ($users as $u) {
-            $stmt_notify->execute([
-                $id,
-                "ブログ「{$blog_title}」が削除されました。",
-                $u['id']
-            ]);
+            foreach ($users as $u) {
+                $stmt_notify->execute([
+                    $id,
+                    "ブログ「{$blog_title}」が削除されました。",
+                    $u['id']
+                ]);
+            }
+            $_SESSION['delete_complete'] = true;
+            header("Location: blog-delete-complete.php");
+            exit;
         }
-        header("Location: blog-delete-complete.php");
-        exit;
     }
 } catch (Exception $e) {
     error_log($e->getMessage());
