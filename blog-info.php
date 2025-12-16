@@ -6,19 +6,34 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-
 $id = $_GET['id'] ?? null;
 
-$stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$id]);
-$blog = $stmt->fetch();
-
-if (!$blog) {
-    $_SESSION['error'] = "指定されたブログは存在しません。";
-    header("Location: blog.php");
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $pdo->prepare("SELECT * FROM blog WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$id]);
+    $blog = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$blog) {
+        $_SESSION['error'] = "指定されたブログは存在しません。";
+        header("Location: blog.php");
+        exit;
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためブログ情報が取得できませんでした。</p>";
+    echo "<p><a href='blog.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>ブログに戻る</a></p>";
     exit;
 }
+
+
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
