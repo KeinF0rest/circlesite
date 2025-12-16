@@ -6,24 +6,31 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-
 $id = $_GET['id'] ?? null;
 
-$stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$id]);
-$album = $stmt->fetch();
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $pdo->prepare("SELECT * FROM album WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$id]);
+    $album = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time ASC");
-$stmt_img->execute([$id]);
-$images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time ASC");
+    $stmt_img->execute([$id]);
+    $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
-if (!$album) {
-    $_SESSION['error'] = "指定されたアルバムは存在しません。";
-    header("Location: album.php");
+    if (!$album) {
+        $_SESSION['error'] = "指定されたアルバムは存在しません。";
+        header("Location: album.php");
+        exit;
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム情報が取得できませんでした。</p>";
+    echo "<p><a href='album.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アルバムに戻る</a></p>";
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
