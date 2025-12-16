@@ -6,15 +6,18 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;charset=utf8mb4", "root", "");
 $id = $_GET['id'] ?? null;
 
-if($id){
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;charset=utf8mb4", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
     if ($_SESSION['user']['authority'] == 0 && $id != $_SESSION['user']['id']) {
         $_SESSION['error'] = "アクセス権限がありません。";
         header("Location: index.php");
         exit();
     }
+    
     $sql = "SELECT * FROM users WHERE id = ? AND delete_flag = 0";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$id]);
@@ -22,13 +25,21 @@ if($id){
     
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
-        
         $isSelf = ($_SESSION['user']['id'] == $user['id']);
     } else {
         $_SESSION['error'] = "指定されたアカウントは存在しません。";
-        header("Location: index.php");
+        header("Location: account.php");
         exit();
     }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアカウント情報が取得できませんでした。</p>";
+    if ($_SESSION['user']['authority'] == 1) {
+        echo "<p><a href='account.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アカウントに戻る</a></p>";
+    } else {
+        echo "<p><a href='index.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>トップページに戻る</a></p>";
+    }
+    exit;
 }
 ?>
 
