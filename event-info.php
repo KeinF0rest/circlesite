@@ -6,33 +6,40 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
-
 $event_id = $_GET['id'] ?? null;
 $user_id = $_SESSION['user']['id'];
 
-$stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
-$stmt->execute([$event_id]);
-$event = $stmt->fetch(PDO::FETCH_ASSOC);
+try {
+    $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
+    $stmt->execute([$event_id]);
+    $event = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$event) {
+        $_SESSION['error'] = "指定されたイベントは存在しません。";
+        header("Location: event.php");
+        exit;
+    }
+    
+    $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
+    $stmt_img->execute([$event['id']]);
+    $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
-$stmt_img->execute([$event['id']]);
-$images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ?");
+    $stmt_count->execute([$event_id]);
+    $participant_count = $stmt_count->fetchColumn();
 
-$stmt_count = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ?");
-$stmt_count->execute([$event_id]);
-$participant_count = $stmt_count->fetchColumn();
-
-$stmt_check = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ? AND user_id = ?");
-$stmt_check->execute([$event_id, $user_id]);
-$already_joined = $stmt_check->fetchColumn() > 0;
-
-if (!$event) {
-    $_SESSION['error'] = "指定されたイベントは存在しません。";
-    header("Location: event.php");
+    $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ? AND user_id = ?");
+    $stmt_check->execute([$event_id, $user_id]);
+    $already_joined = $stmt_check->fetchColumn() > 0;
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためイベント情報が取得できませんでした。</p>";
+    echo "<p><a href='event.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>イベントに戻る</a></p>";
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -313,7 +320,7 @@ if (!$event) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ event_id: eventId, status: status, user_id: userId })
-            })
+                })
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('participant-count').textContent = data.count;
