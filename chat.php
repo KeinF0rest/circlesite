@@ -11,9 +11,21 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $event_id = $_GET['event_id'] ?? null;
 
-$eventStmt = $pdo->prepare("SELECT title FROM event WHERE id = ?");
+if (empty($event_id)) {
+    $_SESSION['error'] = "イベントが指定されていません。";
+    header("Location: index.php");
+    exit();
+}
+
+$eventStmt = $pdo->prepare("SELECT title FROM event WHERE id = ? AND delete_flag = 0");
 $eventStmt->execute([$event_id]);
 $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$event) {
+    $_SESSION['error'] = "指定されたイベントは存在しません。";
+    header("Location: index.php");
+    exit();
+}
 
 $stmt = $pdo->prepare("SELECT m.id, m.event_id, m.user_id, m.message, m.image_path, m.registered_time, u.nickname, u.profile_image, (SELECT COUNT(*) FROM message_read r WHERE r.message_id = m.id) AS read_count FROM message m JOIN users u ON m.user_id = u.id WHERE m.event_id = ? ORDER BY m.registered_time ASC");
 $stmt->execute([$event_id]);
