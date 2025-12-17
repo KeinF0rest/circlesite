@@ -125,14 +125,14 @@ if (!$album) {
             
             #previewArea {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, 120px);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
                 margin: 20px;
             }
 
             #previewArea img {
-                width: 120px;
-                height: 120px;
+                width: 100%;
+                height: 300px;
                 object-fit: cover;
                 border-radius: 6px;
             }
@@ -192,7 +192,7 @@ if (!$album) {
                 <label>新しい画像を追加</label>
                 <label class="image-slot">
                     <span class="plus">＋</span>
-                    <input type="file" name="image_path[]" accept="image/*" multiple id="imageInput">
+                    <input type="file" name="new_images[]" accept="image/*" multiple id="imageInput">
                 </label>
             </div>
             
@@ -233,10 +233,6 @@ if (!$album) {
                     reader.onload = e => {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.width = '120px';
-                        img.style.height = '120px';
-                        img.style.objectFit = 'cover';
-                        img.style.borderRadius = '6px';
                         previewArea.appendChild(img);
                     };
                     reader.readAsDataURL(file);
