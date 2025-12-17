@@ -99,13 +99,14 @@ if ($_SESSION['user']['authority'] == 0) {
             
             #previewArea {
                 display: grid;
-                grid-template-columns: repeat(auto-fill, 120px);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
                 margin-top: 10px;
             }
             
             #previewArea img {
                 width: 100%;
+                height: 300px;
                 object-fit: cover;
                 border-radius: 6px;
             }
@@ -176,7 +177,7 @@ if ($_SESSION['user']['authority'] == 0) {
         <script>
             const imageInput = document.getElementById('image');
             const imageCount = document.getElementById('image-count');
-            const previewArea = document.getElementById('previewArea') || createPreviewArea();
+            const previewArea = document.getElementById('previewArea');
             const MAX_IMAGES = 10;
 
             imageInput.addEventListener('change', () => {
@@ -201,26 +202,11 @@ if ($_SESSION['user']['authority'] == 0) {
                     reader.onload = e => {
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.style.width = '120px';
-                        img.style.height = '120px';
-                        img.style.objectFit = 'cover';
-                        img.style.borderRadius = '6px';
                         previewArea.appendChild(img);
                     };
                     reader.readAsDataURL(file);
                 });
             });
-            
-            function createPreviewArea() {
-                const area = document.createElement('div');
-                area.id = 'previewArea';
-                area.style.display = 'flex';
-                area.style.gap = '10px';
-                area.style.overflowX = 'auto';
-                area.style.scrollSnapType = 'x mandatory';
-                imageInput.closest('.form-grid').appendChild(area);
-                return area;
-            }
         </script>
     </body>
 </html>

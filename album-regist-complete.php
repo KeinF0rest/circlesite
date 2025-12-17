@@ -12,14 +12,20 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: album.php");
+    exit();
+}
+
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     $title = $_POST['title'] ?? '';
 
-    $stmt = $pdo->prepare("INSERT INTO album (title) VALUES (?)");
-    $stmt->execute([$title]);
+    $sql_album = "INSERT INTO album (title) VALUES (?)";
+    $stmt_album = $pdo->prepare($sql_album);
+    $stmt_album->execute([$title]);
     $album_id = $pdo->lastInsertId();
     
     $stmt_users = $pdo->query("SELECT id FROM users");
@@ -75,9 +81,10 @@ try {
             }
         }
     }
-} catch(Exception $e) {
+} catch　(Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム登録できません。: " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム登録できませんでした。</p>";
+    echo "<p><a href='album-regist.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アルバム登録画面に戻る</a></p>";
     exit;
 }
 ?>
@@ -118,7 +125,6 @@ try {
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
-                transition: background-color 0.3s ease;
             }
         </style>
     </head>
