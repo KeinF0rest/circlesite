@@ -27,9 +27,13 @@ try {
     $stmt_img->execute([$event['id']]);
     $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ?");
+    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM event_participant ep JOIN users u ON ep.user_id = u.id WHERE ep.event_id = ? AND u.delete_flag = 0");
     $stmt_count->execute([$event_id]);
     $participant_count = $stmt_count->fetchColumn();
+    
+    $stmt_participants = $pdo->prepare("SELECT u.nickname FROM event_participant ep JOIN users u ON ep.user_id = u.id WHERE ep.event_id = ? AND u.delete_flag = 0");
+    $stmt_participants->execute([$event_id]);
+    $participants = $stmt_participants->fetchAll(PDO::FETCH_ASSOC);
 
     $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ? AND user_id = ?");
     $stmt_check->execute([$event_id, $user_id]);
@@ -226,6 +230,29 @@ try {
                 height: 35px;
                 vertical-align: middle;
             }
+            
+            .participant-list {
+                margin-top: 5px;
+                padding: 10px;
+                background: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+            }
+            
+            .participant-list p {
+                margin: 0 0 5px;
+                font-weight: bold;
+                color: #333;
+            }
+            
+            .participant-list ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
         </style>
     </head>
     <body>
@@ -297,6 +324,19 @@ try {
                     </a>
                 </div>
             </div>
+            
+            <?php if ($_SESSION['user']['authority'] != 0): ?>
+                    <div class="participant-list">
+                        <?php if (!empty($participants)): ?>
+                            <p><strong>参加者</strong></p>
+                            <ul>
+                                <?php foreach ($participants as $p): ?>
+                                    <li><?= htmlspecialchars($p['nickname']) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
         </div>
         <script>
             function toggleMenu(){
