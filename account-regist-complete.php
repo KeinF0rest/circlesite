@@ -12,6 +12,11 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: account.php");
+    exit();
+}
+
 $data = $_SESSION['regist'];
 $hashed_password = password_hash($_SESSION['regist']['password'], PASSWORD_DEFAULT);
 
@@ -47,7 +52,6 @@ try{
     echo '<p><a href="account-regist.php" style="display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;">登録画面に戻る</a></p>';
     exit;
 }
-
 unset($_SESSION['regist']);
 ?>
 

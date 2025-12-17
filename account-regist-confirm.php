@@ -12,6 +12,11 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: account.php");
+    exit();
+}
+
 $_SESSION['regist'] = [
     'family_name' => $_POST['family_name'],
     'last_name' => $_POST['last_name'],
