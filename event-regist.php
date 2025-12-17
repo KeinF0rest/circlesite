@@ -11,6 +11,8 @@ if ($_SESSION['user']['authority'] == 0) {
     header("Location: index.php");
     exit();
 }
+
+$data = $_SESSION['regist'] ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +59,17 @@ if ($_SESSION['user']['authority'] == 0) {
                 font-weight: bold;
                 font-size: 16px;
             }
+            
+            .form-row-inline {
+                display: flex;          
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .form-row-inline input[type="date"],
+            .form-row-inline input[type="time"] {
+                width: 160px;
+            }
 
             .form-row input, .form-row textarea {
                 width: calc(100% - 20px);
@@ -72,10 +85,6 @@ if ($_SESSION['user']['authority'] == 0) {
 
             .form-row:last-child {
                 justify-content: flex-end;
-            }
-            
-            .form-row input[type="date"] {
-                width: 160px;
             }
 
             .form-row.image-row {
@@ -120,7 +129,8 @@ if ($_SESSION['user']['authority'] == 0) {
             }
             
             #previewArea img {
-                width: 100%;
+                width: 300px;
+                height: 300px;
                 object-fit: cover;
                 border-radius: 6px;
                 scroll-snap-align: center;
@@ -155,43 +165,49 @@ if ($_SESSION['user']['authority'] == 0) {
         
         <form id="event-form" action="event-regist-confirm.php" method="POST" enctype="multipart/form-data">
             <div class="form-grid">
-            <div class="form-row">
-                <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($_SESSION['event']['title'] ?? '') ?>" required>
-            </div>
+                <div class="form-row">
+                    <label>タイトル</label>
+                    <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($data['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
             
-            <div class="form-row">
-                <label>開始日</label>
-                <input type="date" name="start_date" value="<?= htmlspecialchars($_SESSION['event']['start_date'] ?? '') ?>" required>
-            </div>
+                <div class="form-row">
+                    <label>開始日</label>
+                    <div class="form-row-inline"> 
+                        <input type="date" name="start_date" value="<?= htmlspecialchars($data['start_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                        <input type="time" name="start_time" value="<?= htmlspecialchars($data['start_time'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
+                    </div>
+                </div>
             
-            <div class="form-row">
-                <label>終了日</label>
-                <input type="date" name="end_date" value="<?= htmlspecialchars($_SESSION['event']['end_date'] ?? '') ?>">
-            </div>
+                <div class="form-row">
+                    <label>終了日</label>
+                    <div class="form-row-inline">
+                        <input type="date" name="end_date" value="<?= htmlspecialchars($data['end_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                        <input type="time" name="end_time" value="<?= htmlspecialchars($data['end_time'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    </div>
+                </div>
             
-            <div class="form-row">
-                <label>内容</label>
-                <textarea name="content" maxlength="500" rows="6" required oninput="updateCount(this)"><?= htmlspecialchars($_SESSION['event']['content'] ?? '') ?></textarea>
-                <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
-            </div>
+                <div class="form-row">
+                    <label>内容</label>
+                    <textarea name="content" maxlength="500" rows="6" required oninput="updateCount(this)"><?= htmlspecialchars($data['content'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                    <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
+                </div>
             
-            <div class="form-row">
-                <label>写真</label>
-                <label class="image-slot">
-                    <span class="plus">＋</span>
-                    <input type="file" name="image_path[]" accept="image/*" multiple id="imageInput">
-                </label>
-            </div>
+                <div class="form-row">
+                    <label>写真</label>
+                    <label class="image-slot">
+                        <span class="plus">＋</span>
+                        <input type="file" name="image_path[]" accept="image/*" multiple id="imageInput">
+                    </label>
+                </div>
             
-            <?php if (!empty($_SESSION['event']['image_paths'])): ?>
                 <div id="previewArea">
-                    <?php foreach ($_SESSION['event']['image_paths'] as $path): ?>
-                        <img src="<?= htmlspecialchars($path) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;">
-                    <?php endforeach; ?>
+                    <?php if (!empty($data['image_paths'])): ?>
+                        <?php foreach ($data['image_paths'] as $path): ?>
+                            <img src="<?= htmlspecialchars($path, ENT_QUOTES, 'UTF-8') ?>">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-                </div>
+            </div>
             
             <div class="submit-area">
                 <button type="submit">確認する</button>
@@ -200,7 +216,7 @@ if ($_SESSION['user']['authority'] == 0) {
         
         <script>
             document.getElementById('imageInput').addEventListener('change', function(e) {
-                const previewArea = document.getElementById('previewArea') || createPreviewArea();
+                const previewArea = document.getElementById('previewArea')
                 previewArea.innerHTML = '';
 
                 const files = Array.from(e.target.files);
@@ -215,10 +231,6 @@ if ($_SESSION['user']['authority'] == 0) {
                     reader.onload = function(event) {
                         const img = document.createElement('img');
                         img.src = event.target.result;
-                        img.style.width = '120px';
-                        img.style.height = '120px';
-                        img.style.borderRadius = '6px';
-                        img.style.objectFit = 'cover';
                         previewArea.appendChild(img);
                     };
                     reader.readAsDataURL(file);
@@ -226,24 +238,19 @@ if ($_SESSION['user']['authority'] == 0) {
             });
             
             document.getElementById('event-form').addEventListener('submit', function(e) {
-                const start = new Date(document.querySelector('[name="start_date"]').value);
-                const end = new Date(document.querySelector('[name="end_date"]').value);
-                if (end && start && end < start) {
-                    alert("終了日は開始日以降を選択してください");
-                    e.preventDefault();
+                const startDate = document.querySelector('[name="start_date"]').value;
+                const startTime = document.querySelector('[name="start_time"]').value;
+                const endDate   = document.querySelector('[name="end_date"]').value;
+                const endTime   = document.querySelector('[name="end_time"]').value;
+                if (startDate && startTime && endDate && endTime) {
+                    const start = new Date(`${startDate}T${startTime}`);
+                    const end   = new Date(`${endDate}T${endTime}`);
+                    if (end < start) {
+                        alert("終了日時は開始日時以降を選択してください");
+                        e.preventDefault();
+                    }
                 }
             });
-            
-            function createPreviewArea() {
-                const area = document.createElement('div');
-                area.id = 'previewArea';
-                area.style.display = 'flex';
-                area.style.gap = '10px';
-                area.style.overflowX = 'auto';
-                area.style.scrollSnapType = 'x mandatory';
-                imageInput.closest('.form-grid').appendChild(area);
-                return area;
-            }
             
             function updateCount(el) {
                 const count = el.value.length;

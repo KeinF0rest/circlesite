@@ -12,17 +12,25 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$data = $_SESSION['event'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: event.php");
+    exit();
+}
+
+$data = $_SESSION['regist'];
 
 try{
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    $stmt = $pdo->prepare("INSERT INTO event (title, start_date, end_date, content) VALUES (?, ?, ?, ?)");
+    $sql = "INSERT INTO event (title, start_date, start_time, end_date, end_time, content) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([
         $data['title'],
         $data['start_date'],
+        $data['start_time'],
         !empty($data['end_date']) ? $data['end_date'] : null,
+        !empty($data['end_time']) ? $data['end_time'] : null,
         $data['content'],
     ]);
     
@@ -39,7 +47,6 @@ try{
             $u['id']
         ]);
     }
-    
     
     if (!empty($data['image_paths'])) {
         if (count($data['image_paths']) > 5) {
@@ -65,16 +72,17 @@ try{
              if (file_exists($path)) {
                 rename($path, $new_path);
             }
-            
             $stmt_img->execute([$event_id, $filename]);
         }
     }
     unset($_SESSION['event']);
-} catch (Exception $e){
+} catch (Exception $e) {
     error_log($e->getMessage());
-    echo"<p style='color:red; font-weight:bold;'>エラーが発生したためイベント登録できませんでした。</p>";
+    echo "<p style='color:red; font-weight:bold;'>エラーが発生したためイベント登録できませんでした。</p>";
+    echo "<p><a href='event-regist.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>イベント登録画面に戻る</a></p>";
     exit;
 }
+unset($_SESSION['regist']);
 ?>
 
 <!DOCTYPE html>
@@ -112,12 +120,7 @@ try{
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
-                transition: background-color 0.3s ease;
                 cursor: pointer;
-            }
-
-            .back-link:hover {
-                background-color: #45a049;
             }
         </style>
     </head>

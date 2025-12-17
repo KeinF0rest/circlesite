@@ -12,15 +12,12 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$image_paths = $_SESSION['event']['image_paths'] ?? [];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: event.php");
+    exit();
+}
 
-$_SESSION['event'] = [
-    'title' => $_POST['title'],
-    'start_date' => $_POST['start_date'],
-    'end_date' => $_POST['end_date'],
-    'content' => $_POST['content'],
-    'image_paths' => $image_paths
-];
+$_SESSION['event']['image_paths'] = $_SESSION['event']['image_paths'] ?? [];
 
 if(!empty($_FILES['image_path']['name'][0])) {
     $_SESSION['event']['image_paths'] = [];
@@ -35,16 +32,22 @@ if(!empty($_FILES['image_path']['name'][0])) {
                 $filename = uniqid('', true) . '_' . basename($name);
                 $filepath = 'temp/' . $filename;
             
-                move_uploaded_file($tmp_name, $filepath);
-                $_SESSION['event']['image_paths'][] = $filepath;
+                if (move_uploaded_file($tmp_name, $filepath)) {
+                    $_SESSION['event']['image_paths'][] = $filepath;
+                }
             }  
         }
     }
-} elseif (!empty($_SESSION['event']['image_paths'])) {
-} else {
-    $_SESSION['event']['image_paths'] = [];
 }
-
+$_SESSION['regist'] = [
+    'title' => $_POST['title'],
+    'start_date' => $_POST['start_date'],
+    'start_time' => $_POST['start_time'],
+    'end_date' => $_POST['end_date'] ?? '',
+    'end_time' => $_POST['end_time'] ?? '',
+    'content' => $_POST['content'],
+    'image_paths' => $_SESSION['event']['image_paths']
+];
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +87,7 @@ if(!empty($_FILES['image_path']['name'][0])) {
                 display: flex;
                 flex-direction: row;
                 align-items: flex-start;
-                gap: 20px;
+                gap: 10px;
             }
 
             .confirm-row label {
@@ -102,7 +105,9 @@ if(!empty($_FILES['image_path']['name'][0])) {
             }
 
             .confirm-row img {
-                max-width: 300px;
+                width: 300px;
+                height: 300px;
+                object-fit: cover;
                 border-radius: 6px;
             }
             
@@ -113,6 +118,16 @@ if(!empty($_FILES['image_path']['name'][0])) {
                 border-radius: 6px;
                 background-color: #f9f9f9;
                 padding: 20px;
+            }
+            
+            .confirm-row-inline {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .confirm-row-inline .value {
+                width: 160px;
             }
             
             label {
@@ -150,36 +165,42 @@ if(!empty($_FILES['image_path']['name'][0])) {
         <?php include 'header.php'; ?>
         
         <div class="header-bar">
-            <h1>イベント内容の確認</h1>
+            <h1>イベント新規登録確認</h1>
         </div>
         
         <div class="confirm-grid">
             <div class="confirm-row">
                 <label>タイトル</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['event']['title']) ?></div>
+                <div class="value"><?= htmlspecialchars($_SESSION['regist']['title'], ENT_QUOTES, 'UTF-8') ?></div>
             </div>
             
             <div class="confirm-row">
                 <label>開始日</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['event']['start_date']) ?></div>
+                <div class="confirm-row-inline">
+                    <div class="value"><?= htmlspecialchars($_SESSION['regist']['start_date'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="value"><?= htmlspecialchars($_SESSION['regist']['start_time'], ENT_QUOTES, 'UTF-8') ?></div>
+                </div>
             </div>
             
             <div class="confirm-row">
                 <label>終了日</label>
-                <div class="value"><?= htmlspecialchars($_SESSION['event']['end_date']) ?></div>
+                <div class="confirm-row-inline">
+                    <div class="value"><?= htmlspecialchars($_SESSION['regist']['end_date'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <div class="value"><?= htmlspecialchars($_SESSION['regist']['end_time'], ENT_QUOTES, 'UTF-8') ?></div>
+                </div>
             </div>
             
             <label>内容</label>
             <div class="confirm-row content">
-                <div class="value"><?= nl2br(htmlspecialchars($_SESSION['event']['content'])) ?></div>
+                <div class="value"><?= nl2br(htmlspecialchars($_SESSION['regist']['content'], ENT_QUOTES, 'UTF-8')) ?></div>
             </div>
             
             <label>写真</label>
             <div class="confirm-row image">
-                <?php if(!empty($_SESSION['event']['image_paths'])): ?>
+                <?php if(!empty($_SESSION['regist']['image_paths'])): ?>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <?php foreach ($_SESSION['event']['image_paths'] as $path): ?>
-                            <img src="<?= htmlspecialchars($path) ?>" width="150">
+                        <?php foreach ($_SESSION['regist']['image_paths'] as $path): ?>
+                            <img src="<?= htmlspecialchars($path, ENT_QUOTES, 'UTF-8') ?>">
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
