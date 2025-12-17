@@ -11,6 +11,8 @@ if ($_SESSION['user']['authority'] == 0) {
     header("Location: index.php");
     exit();
 }
+
+$data = $_SESSION['regist'] ?? [];
 ?>
 
 <!DOCTYPE html>
@@ -102,12 +104,12 @@ if ($_SESSION['user']['authority'] == 0) {
         <form action="blog-regist-confirm.php" method="post">
             <div class="form-row">
                 <label>タイトル</label>
-                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($_POST['title'] ?? '') ?>" required>
+                <input type="text" name="title" maxlength="30" pattern="[\u3040-\u309F\u4E00-\u9FAF\u30A0-\u30FF0-9!-/:-@¥[-`{-~　\s]+" value="<?= htmlspecialchars($data['title'] ?? '', ENT_QUOTES, 'UTF-8') ?>" required>
             </div>
             
             <div class="form-row">
                 <label>内容</label>
-                <textarea name="content" maxlength="500" required oninput="updateCount(this)"><?= htmlspecialchars($_POST['content'] ?? '') ?></textarea> 
+                <textarea name="content" maxlength="500" required oninput="updateCount(this)"><?= htmlspecialchars($data['content'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea> 
                 <div id="char-count" style="text-align:right; font-size:14px; color:#666;">0/500</div>
             </div>
             

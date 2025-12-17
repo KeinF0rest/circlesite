@@ -12,15 +12,23 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: blog.php");
+    exit();
+}
+
+$data = $_SESSION['regist'];
+
 try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    $title = $_POST['title'] ?? '';
-    $content = $_POST['content'] ?? '';
 
-    $stmt = $pdo->prepare("INSERT INTO blog (title, content) VALUES (?, ?)");
-    $stmt->execute([$title, $content]);
+    $sql = "INSERT INTO blog (title, content) VALUES (?, ?)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        $data['title'],
+        $data['content'],
+    ]);
     
     $blog_id = $pdo->lastInsertId();
     
@@ -32,7 +40,7 @@ try {
     foreach ($users as $u) {
         $stmt_notify->execute([
             $blog_id,
-            "ブログ「{$title}」が登録されました。",
+            "ブログ「{$data['title']}」が登録されました。",
             $u['id']
         ]);
     }
@@ -41,6 +49,7 @@ try {
     echo "<p><a href='blog-regist.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>ブログ登録画面に戻る</a></p>";
     exit;
 }
+unset($_SESSION['regist']);
 ?>
 
 <!DOCTYPE html>

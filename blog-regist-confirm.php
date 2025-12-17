@@ -12,8 +12,15 @@ if ($_SESSION['user']['authority'] == 0) {
     exit();
 }
 
-$title = $_POST['title'] ?? '';
-$content = $_POST['content'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: blog.php");
+    exit();
+}
+
+$_SESSION['regist'] = [
+    'title' => $_POST['title'],
+    'content' => $_POST['content'],
+];
 ?>
 
 <!DOCTYPE html>
@@ -101,23 +108,19 @@ $content = $_POST['content'] ?? '';
         </div>
         
         <div class="confirm-row">
-            <div class="value"><?= htmlspecialchars($title) ?></div>
+            <div class="value"><?= htmlspecialchars($_SESSION['regist']['title'], ENT_QUOTES, 'UTF-8') ?></div>
         </div>
         
         <div class="confirm-row-content">
-            <div class="value"><?= htmlspecialchars($content) ?></div>
+            <div class="value"><?= htmlspecialchars($_SESSION['regist']['content'], ENT_QUOTES, 'UTF-8') ?></div>
         </div>
         
         <div class="submit-area">
             <form action="blog-regist.php" method="post">
-                <input type="hidden" name="title" value="<?= htmlspecialchars($title) ?>">
-                <input type="hidden" name="content" value="<?= htmlspecialchars($content) ?>">
                 <button type="submit" class="back-button">戻る</button>
             </form>
             
             <form action="blog-regist-complete.php" method="post">
-                <input type="hidden" name="title" value="<?= htmlspecialchars($title) ?>">
-                <input type="hidden" name="content" value="<?= htmlspecialchars($content) ?>">
                 <button type="submit" class="submit-button">登録する</button>
             </form>
         </div>
