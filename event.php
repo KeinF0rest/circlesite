@@ -10,7 +10,7 @@ try {
     $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    $sql = "SELECT id, title, registered_time, start_date, end_date FROM event WHERE delete_flag = 0 ORDER BY registered_time DESC";
+    $sql = "SELECT id, title, registered_time, start_date, start_time, end_date, end_time FROM event WHERE delete_flag = 0 ORDER BY registered_time DESC";
     $stmt = $pdo->query($sql);
     $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
@@ -115,19 +115,26 @@ try {
         <div class="event-grid">
             <?php foreach ($events as $event): ?>
                 <?php
-                $today = date('Y-m-d');
+                $now = new DateTime();
+            
+                $startDate = $event['start_date'];
+                $startTime = $event['start_time'];
+                $startDateTime = new DateTime("$startDate $startTime");
 
-                $start = !empty($event['start_date']) ? date('Y-m-d', strtotime($event['start_date'])) : null;
-                $end = !empty($event['end_date']) ? date('Y-m-d', strtotime($event['end_date'])) : null;
+                $endDate = !empty($event['end_date']) ? $event['end_date'] : null;
+                $endTime = !empty($event['end_time']) ? $event['end_time'] : null;
+                $endDateTime = null;
             
-                $isEnded = $end !== null && $end < $today;
-            
-                $isOngoing = $start !== null && $start <= $today && ($end === null || $end >= $today);
-            
-                if ($start === $today) {
-                    $isOngoing = true;
-                    $isEnded = false;
+                if ($endDate && $endTime) {
+                    $endDateTime = new DateTime("$endDate $endTime");
+                } elseif ($endDate && !$endTime) {
+                    $endDateTime = new DateTime("$endDate 23:59:59");
+                } else {
+                    $endDateTime = new DateTime("$startDate 23:59:59");
                 }
+            
+                $isOngoing = ($now >= $startDateTime && $now <= $endDateTime);
+                $isEnded = ($now > $endDateTime);
             
                 $cardClass = $isEnded ? "event-card ended" : "event-card";
                 ?>
