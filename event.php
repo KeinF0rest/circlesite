@@ -61,6 +61,16 @@ try {
                 padding: 20px;
             }
             
+            .fc-event-time {
+                display: none !important;
+            }
+            
+            .fc-daygrid-event-dot {
+                display: none !important;
+            }
+            
+            .fc-daygrid-event:hover { background-color: #4CAF50 !important; /* 常に緑 */ color: #fff !important; }
+            
             .event-card {
                 background-color: #f9f9f9;
                 border: 1px solid #ccc;

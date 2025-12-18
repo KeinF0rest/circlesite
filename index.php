@@ -114,17 +114,26 @@ if (!isset($_SESSION['user'])) {
                     eventClick: function (info) {
                         const event = info.event;
                         const title = event.title;
-                        const start = event.start ? event.start.toLocaleDateString('ja-JP') : '';
+                        
+                        const start = event.extendedProps.original_start ? new Date(event.extendedProps.original_start).toLocaleString('ja-JP', {
+                            month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+                        }) : '';
+                        
                         let end = null;
                         if (event.extendedProps.original_end) {
-                            end = new Date(event.extendedProps.original_end).toLocaleDateString('ja-JP');
+                            end = new Date(event.extendedProps.original_end).toLocaleString('ja-JP', {
+                                month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+                            });
                         }
+                        
                         const participants = event.extendedProps.participant_count || 0;
                         
                         let html = `
                             <a href="event-info.php?id=${event.id}" class="event-card">
                                 <div class="event-title"><strong>${title}</strong></div>
-                                <div class="event-date">${end ? `開催日: ${start} ～ ${end}` : `開催日: ${start}`}</div>
+                                <div class="event-date">
+                                    ${end ? `開催期間: ${start} ～ ${end}` : `開催日: ${start}`}
+                                </div>
                                 <div class="event-participant">参加人数: ${participants}人</div>
                             </a>
                         `;
