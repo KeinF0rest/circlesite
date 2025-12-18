@@ -21,12 +21,16 @@ $pdo = new PDO("mysql:dbname=circlesite;host=localhost;", "root", "");
 
 $title = $_POST['title'] ?? '';
 $start_date = $_POST['start_date'] ?? '';
+$start_time = $_POST['start_time'] ?? '';
 $end_date = $_POST['end_date'] ?? null;
-if ($end_date === '') {
-    $end_date = null;
-}
+$end_time = $_POST['end_time'] ?? null;
+
+if ($end_date === '') $end_date = null;
+if ($end_time === '') $end_time = null;
+
 $content = $_POST['content'] ?? '';
 $event_id = $_POST['id'] ?? null;
+
 $new_images = [];
 if (!empty($_FILES['image_path']['tmp_name'][0])) {
     foreach ($_FILES['image_path']['tmp_name'] as $index => $tmpName) {
@@ -46,46 +50,61 @@ if (!empty($_FILES['image_path']['tmp_name'][0])) {
 
 try {
     if ($event_id) {
-        $stmt_old = $pdo->prepare("SELECT title, start_date, end_date, content FROM event WHERE id = ?");
+        $stmt_old = $pdo->prepare("SELECT title, start_date, start_time, end_date, end_time, content FROM event WHERE id = ?");
         $stmt_old->execute([$event_id]);
         $old = $stmt_old->fetch(PDO::FETCH_ASSOC);
         
-        $stmt_old_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
-        $stmt_old_img->execute([$event_id]);
-        $old_images = $stmt_old_img->fetchAll(PDO::FETCH_COLUMN);
+        $stmt_img = $pdo->prepare("SELECT COUNT(*) FROM event_images WHERE event_id = ? AND delete_flag = 0"); $stmt_img->execute([$event_id]);
+        $current_count = $stmt_img->fetchColumn();
         
-        $stmt = $pdo->prepare("UPDATE event SET title = ?, start_date = ?, end_date = ?, content = ? WHERE id = ?");
-        $stmt->execute([$title, $start_date, $end_date, $content, $event_id]);
+        $delete_ids = $_POST['delete_images'] ?? [];
+        $final_count = $current_count - count($delete_ids) + count($new_images);
+        if ($final_count > 5) {
+            echo "<p style='color:red;'>画像は最大5枚まで登録できます。</p>";
+            exit;
+        }
+        
+        $changes = [];
+        
+        $stmt = $pdo->prepare("UPDATE event SET title = ?, start_date = ?, start_time = ?, end_date = ?, end_time = ?, content = ? WHERE id = ?");
+        $stmt->execute([$title, $start_date, $start_time, $end_date, $end_time, $content, $event_id]);
+        
+        if (!empty($delete_ids)) {
+            $stmt_del = $pdo->prepare("UPDATE event_images SET delete_flag=1 WHERE id=? AND event_id=?");
+            foreach ($delete_ids as $img_id) {
+                $stmt_del->execute([$img_id, $event_id]);
+            }
+        }
         
         if (!empty($new_images)) {
-            $pdo->prepare("DELETE FROM event_images WHERE event_id = ?")->execute([$event_id]);
-            if (count($new_images) > 5) {
-                echo "<p style='color:red;'>画像は最大5枚まで登録できます。</p>";
-                exit;
-            }
             $stmt_img = $pdo->prepare("INSERT INTO event_images(event_id, image_path) VALUES (?, ?)");
             foreach ($new_images as $path) {
                 $stmt_img->execute([$event_id, $path]);
             }
-            $changes[] = "写真";
         }
         
-        $changes = [];
         if ($old['title'] !== $title) {
             $changes[] = "タイトル";
         }
         if ($old['start_date'] !== $start_date) {
             $changes[] = "開始日";
         }
+        if ($old['start_time'] !== $start_time) {
+            $changes[] = "開始時間";
+        }
         if ($old['end_date'] !== $end_date) {
             $changes[] = "終了日";
+        }
+        if ($old['end_time'] !== $end_time) {
+            $changes[] = "終了時間";
         }
         if ($old['content'] !== $content) {
             $changes[] = "内容";
         }
-        if (!empty($new_images)) {
+        if (!empty($delete_ids) || !empty($new_images)) {
             $changes[] = "写真";
         }
+        
         if (!empty($changes)) {
             $change_text = implode(".", $changes);
             

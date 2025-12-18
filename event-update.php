@@ -19,7 +19,7 @@ $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$event_id]);
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
+$stmt_img = $pdo->prepare("SELECT id, image_path FROM event_images WHERE event_id = ?");
 $stmt_img->execute([$event['id']]);
 $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
@@ -72,8 +72,14 @@ if (!$event) {
                 font-weight: bold;
                 font-size: 16px;
             }
+            
+            .form-row-inline input[type="date"],
+            .form-row-inline input[type="time"] {
+                width: 160px;
+            }
 
-            .form-row input, .form-row textarea {
+            .form-row input,
+            .form-row textarea {
                 width: calc(100% - 20px);
                 padding: 8px;
                 font-size: 16px;
@@ -85,24 +91,45 @@ if (!$event) {
                 resize: vertical;
             }
             
-            .form-row input[type="date"] {
-                width: 160px;
+            .image-list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
             }
-
-            #preview-area {
+            
+            .image-item {
                 display: flex;
-                gap: 10px;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                margin-top: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .image-item label {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 4px;
+                margin-top: 6px;
+                white-space: nowrap;
+            }
+            
+            .image-item img {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 6px;
             }
 
-            #preview-area img {
-                width: 120px;
-                height: 120px;
+            #previewArea {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                margin: 20px;
+            }
+
+            #previewArea img {
+                width: 100%;
+                height: 300px;
                 border-radius: 6px;
-                scroll-snap-align: center;
-                flex-shrink: 0;
                 object-fit: cover;
             }
             
@@ -169,12 +196,18 @@ if (!$event) {
             
             <div class="form-row">
                 <label>開始日</label>
-                <input type="date" name="start_date" value="<?= htmlspecialchars($event['start_date']) ?>" required>
+                <div class="form-row-inline">
+                    <input type="date" name="start_date" value="<?= htmlspecialchars($event['start_date']) ?>" required>
+                    <input type="time" name="start_time" value="<?= htmlspecialchars($event['start_time']) ?>" required>
+                </div>
             </div>
             
             <div class="form-row">
                 <label>終了日</label>
-                <input type="date" name="end_date" value="<?= htmlspecialchars($event['end_date']) ?>">
+                <div class="form-row-inline">
+                    <input type="date" name="end_date" value="<?= htmlspecialchars($event['end_date']) ?>">
+                    <input type="time" name="end_time" value="<?= htmlspecialchars($event['end_time']) ?>">
+                </div>
             </div>
             
             <div class="form-row">
@@ -185,20 +218,30 @@ if (!$event) {
             
             <div class="form-row">
                 <label>写真</label>
+                <div class="image-list">
+                    <?php if (!empty($images)): ?>
+                        <?php foreach ($images as $img): ?>
+                            <div class="image-item">
+                                <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
+                                <label><input type="checkbox" name="delete_images[]" value="<?= htmlspecialchars($img['id']) ?>">削除</label>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>画像は登録されていません。</p>
+                    <?php endif; ?>
+                </div>
+            </div>
                 
+            <div class="form-row">
+                <label>新しい写真を追加</label>
                 <label class="image-slot">
                     <span class="plus">＋</span>
                     <input type="file" name="image_path[]" accept="image/*" id="imageInput" multiple>
                 </label>
-                
-                <div id="preview-area">
-                    <?php if (!empty($images)): ?>
-                        <?php foreach ($images as $img): ?>
-                            <img src="<?= htmlspecialchars($img['image_path']) ?>" style="width:120px; height:120px; object-fit:cover; border-radius:6px;" alt="登録済み画像">
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </div>
             </div>
+                
+            <div id="previewArea"></div>
+            <div id="image-count" style="text-align:right; font-size:14px; color:#555; margin-top:10px;"></div>
             
             <div class="submit-area">
                 <button type="submit" class="submit-button">更新</button>
@@ -206,11 +249,28 @@ if (!$event) {
         </form>
         
         <script>
-            document.getElementById('imageInput').addEventListener('change', function(event) {
-                const previewArea = document.getElementById('preview-area');
-
-                const files = event.target.files;
-                Array.from(files).forEach(file => {
+            const imageInput = document.getElementById('imageInput');
+            const imageCount = document.getElementById('image-count');
+            const previewArea = document.getElementById('previewArea');
+            const MAX_IMAGES = 5;
+            
+            const existingCount = <?= count($images) ?>;
+            
+            imageInput.addEventListener('change', () => {
+                const newFiles = Array.from(imageInput.files);
+                const deleteCount = document.querySelectorAll('input[name="delete_images[]"]:checked').length;
+                const totalCount = existingCount - deleteCount + newFiles.length;
+                
+                if (totalCount > MAX_IMAGES) {
+                    alert(`最大${MAX_IMAGES}枚までです。現在 ${totalCount} 枚です。`);
+                    imageInput.value = '';
+                    previewArea.innerHTML = ''; return;
+                }
+                
+                imageCount.textContent = `${newFiles.length}枚 選択されています`;
+                previewArea.innerHTML = '';
+                
+                newFiles.forEach(file => {
                     if (!file.type.startsWith('image/')) return;
 
                     const reader = new FileReader();
