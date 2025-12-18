@@ -38,6 +38,8 @@ try {
     $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM event_participant WHERE event_id = ? AND user_id = ?");
     $stmt_check->execute([$event_id, $user_id]);
     $already_joined = $stmt_check->fetchColumn() > 0;
+    
+    
 } catch (Exception $e) {
     error_log($e->getMessage());
     echo "<p style='color:red; font-weight:bold;'>エラーが発生したためイベント情報が取得できませんでした。</p>";
@@ -138,6 +140,17 @@ try {
                 margin: 0;
             }
             
+            .event-dates p { 
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 5px 0; 
+            }
+            
+            .event-dates .event-time {
+                margin-left: 20px;
+            }
+            
             .menu-icon {
                 font-size: 24px;
                 cursor: pointer;
@@ -148,7 +161,7 @@ try {
             }
             
             .event-image {
-                margin: 20px 0;
+                margin: 20px 100px;
                 text-align: center;
                 border: 1px solid #ccc;
                 padding: 10px;
@@ -156,16 +169,15 @@ try {
                 background-color: #fff;
             }
             
-            .event-image img {
-                width: 100%;
+            .event-image img { 
+                width: 100%; 
                 height: auto;
-                display: block;
                 border-radius: 12px;
             }
             
             .event-image.no-border {
                 border: none;
-                padding: 0;
+                padding: 10px;
                 background-color: transparent;
             }
             
@@ -277,24 +289,31 @@ try {
         
         <div class="event-container">
             <div class="event-image <?= !empty($images) ? 'no-border' : '' ?>">
-                <?php if (!empty($images)):
-                    foreach ($images as $img): 
-                ?>
+                <?php if (!empty($images)): ?>
+                    <?php foreach ($images as $img): ?>
                         <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
-                    <?php 
-                        endforeach;
-                    else: 
-                    ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <p>画像は登録されていません。</p>
                 <?php endif; ?>
             </div>
             
             <div class="event-dates">
                 <?php if (!empty($event['start_date'])): ?>
-                    <p><strong>開始日：</strong><?= htmlspecialchars($event['start_date']) ?></p>
+                    <p>
+                        <strong>開始日：</strong><?= htmlspecialchars($event['start_date']) ?>
+                        <span class="event-time">
+                            <?= htmlspecialchars(date('H:i', strtotime($event['start_time']))) ?>
+                        </span>
+                    </p>
                 <?php endif; ?>
                 <?php if (!empty($event['end_date'])): ?>
-                    <p><strong>終了日：</strong><?= htmlspecialchars($event['end_date']) ?></p>
+                    <p>
+                        <strong>終了日：</strong><?= htmlspecialchars($event['end_date']) ?>
+                        <span class="event-time">
+                            <?= htmlspecialchars(date('H:i', strtotime($event['end_time']))) ?>
+                        </span>
+                    </p>
                 <?php endif; ?>
             </div>
             
@@ -325,18 +344,16 @@ try {
                 </div>
             </div>
             
-            <?php if ($_SESSION['user']['authority'] != 0): ?>
-                    <div class="participant-list">
-                        <?php if (!empty($participants)): ?>
-                            <p><strong>参加者</strong></p>
-                            <ul>
-                                <?php foreach ($participants as $p): ?>
-                                    <li><?= htmlspecialchars($p['nickname']) ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php endif; ?>
-                    </div>
-                <?php endif; ?>
+            <?php if ($_SESSION['user']['authority'] != 0 && !empty($participants)): ?>
+                <div class="participant-list">
+                    <p><strong>参加者</strong></p>
+                    <ul>
+                        <?php foreach ($participants as $p): ?>
+                            <li><?= htmlspecialchars($p['nickname']) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
         </div>
         <script>
             function toggleMenu(){

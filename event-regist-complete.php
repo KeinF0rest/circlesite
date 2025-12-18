@@ -56,7 +56,7 @@ try{
         
         $stmt_img = $pdo->prepare("INSERT INTO event_images(event_id, image_path) VALUES (?, ?)");
         
-        $upload_dir = 'uploads/';
+        $upload_dir = __DIR__ . 'uploads/';
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
@@ -67,12 +67,14 @@ try{
         
         foreach ($data['image_paths'] as $path) {
             $filename = basename($path);
-            $new_path = $upload_dir . $filename;
+            $temp_path = __DIR__ . '/' . $path;
+            $new_path = __DIR__ . '/uploads/' . $filename;
+            $web_path = 'uploads/' . $filename;
             
-             if (file_exists($path)) {
-                rename($path, $new_path);
+             if (file_exists($temp_path)) {
+                rename($temp_path, $new_path);
             }
-            $stmt_img->execute([$event_id, $filename]);
+            $stmt_img->execute([$event_id, $web_path]);
         }
     }
     unset($_SESSION['event']);
