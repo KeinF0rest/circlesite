@@ -55,6 +55,7 @@ try {
         <title>イベント情報</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
         <style>
             body {
                 font-family: sans-serif;
@@ -161,7 +162,7 @@ try {
             }
             
             .event-image {
-                margin: 20px 100px;
+                margin: 20px 200px;
                 text-align: center;
                 border: 1px solid #ccc;
                 padding: 10px;
@@ -173,6 +174,17 @@ try {
                 width: 100%; 
                 height: auto;
                 border-radius: 12px;
+            }
+            
+            .bx-wrapper { 
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            
+            .bx-viewport {
+                background: transparent !important;
+                border: none !important;
             }
             
             .event-image.no-border {
@@ -290,9 +302,13 @@ try {
         <div class="event-container">
             <div class="event-image <?= !empty($images) ? 'no-border' : '' ?>">
                 <?php if (!empty($images)): ?>
-                    <?php foreach ($images as $img): ?>
-                        <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
-                    <?php endforeach; ?>
+                    <ul class="bxslider">
+                        <?php foreach ($images as $img): ?>
+                            <li>
+                                <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
                 <?php else: ?>
                     <p>画像は登録されていません。</p>
                 <?php endif; ?>
@@ -393,6 +409,16 @@ try {
 
             document.getElementById('participate-btn').addEventListener('click', () => sendParticipation('参加'));
             document.getElementById('cancel-btn').addEventListener('click', () => sendParticipation('不参加'));
+            
+            $(document).ready(function(){ 
+                $('.bxslider').bxSlider({ 
+                    auto: false,
+                    pager: true,
+                    controls: true,
+                    mode: 'fade',
+                    speed: 600 
+                });
+            });
         </script>     
     </body>
 </html>
