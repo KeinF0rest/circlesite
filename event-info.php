@@ -113,7 +113,7 @@ try {
             .menu-popup ul {
                 list-style: none;
                 margin: 0;
-                padding: 0;
+                padding: 10px;
             }
             
             .menu-popup li {

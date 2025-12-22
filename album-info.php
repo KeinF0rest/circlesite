@@ -103,16 +103,6 @@ try {
             .menu-popup li {
                 margin: 8px 0;
             }
-            
-            .menu-popup ul {
-                list-style: none;
-                margin: 0;
-                padding: 10px;
-            }
-
-            .menu-popup li {
-                margin: 8px 0;
-            }
 
             .menu-popup a {
                 text-decoration: none;
