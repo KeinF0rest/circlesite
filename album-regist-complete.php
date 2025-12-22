@@ -81,7 +81,7 @@ try {
             }
         }
     }
-} catch　(Exception $e) {
+} catch (Exception $e) {
     error_log($e->getMessage());
     echo "<p style='color:red; font-weight:bold;'>エラーが発生したためアルバム登録できませんでした。</p>";
     echo "<p><a href='album-regist.php' style='display:inline-block; padding:10px 20px; background:#4CAF50; color:#fff; text-decoration:none; border-radius:6px;'>アルバム登録画面に戻る</a></p>";
