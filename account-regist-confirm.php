@@ -93,6 +93,7 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
             .confirm-row .value {
                 width: 100px;
                 text-align: left;
+                word-break: break-all;
             }
 
             .button-area {
