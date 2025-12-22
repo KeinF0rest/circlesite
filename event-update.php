@@ -183,7 +183,7 @@ if (!$event) {
         
         <div class="header-bar">
             <h1>イベント更新</h1>
-            <a href="event.php" class="back-button">戻る</a>
+            <a href="event-info.php?id=<?= htmlspecialchars($event['id']) ?>" class="back-button">戻る</a>
         </div>
         
         <form action="event-update-complete.php" method="post" enctype="multipart/form-data">
