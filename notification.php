@@ -11,11 +11,12 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     $stmt = $pdo->prepare("
-    SELECT n.*, e.title AS event_title, a.title AS album_title, b.title AS blog_title 
+    SELECT n.*, e.title AS event_title, a.title AS album_title, b.title AS blog_title, e2.title AS chat_event_title 
     FROM notification n
     LEFT JOIN event e ON (n.type='event' AND n.related_id=e.id)
     LEFT JOIN album a ON (n.type='album' AND n.related_id=a.id)
     LEFT JOIN blog b ON (n.type='blog' AND n.related_id=b.id)
+    LEFT JOIN event e2 ON (n.type='chat' AND n.related_id=e2.id)
     WHERE n.user_id = ? AND n.n_read = 0
     ORDER BY n.registered_time DESC
     ");
@@ -119,10 +120,16 @@ try {
         
         <div class="notification-grid">
             <?php foreach ($notifications as $n): ?>
-                <?php $msg = $n['message']; ?>
+                <?php $msg = $n['message'];
+                if ($n['type'] === 'chat') {
+                    $redirect = "chat.php?event_id=" . $n['related_id'];
+                } else {
+                    $redirect = "{$n['type']}-info.php?id={$n['related_id']}";
+                }
+                ?>
                     
                 <?php if ($n['action'] !== 'delete'): ?>
-                    <a href="read-notification.php?id=<?= $n['id'] ?>&redirect=<?= $n['type'] ?>-info.php?id=<?= $n['related_id'] ?>" class="notification-card">
+                    <a href="read-notification.php?id=<?= $n['id'] ?>&redirect=<?= $redirect ?>" class="notification-card">
                         <h2><?= htmlspecialchars($msg) ?></h2>
                         <p>日時: <?= htmlspecialchars(date('Y-m-d H:i', strtotime($n['registered_time']))) ?></p>
                     </a>

@@ -33,6 +33,30 @@ if (!empty($_FILES['image']['name'])) {
 if (!$error && (!empty($message) || !empty($image_path))) {
     $stmt = $pdo->prepare("INSERT INTO message (event_id, user_id, message, image_path) VALUES (?, ?, ?, ?)");
     $stmt->execute([$event_id, $user_id, $message, $image_path]);
+    
+    $eventStmt = $pdo->prepare("SELECT title FROM event WHERE id = ?");
+    $eventStmt->execute([$event_id]);
+    $event = $eventStmt->fetch(PDO::FETCH_ASSOC);
+    $event_title = $event['title'] ?? 'イベント';
+    
+    $notice_message = !empty($message) 
+        ? "イベント「{$event_title}」に新しいメッセージがあります。" 
+        : "イベント「{$event_title}」に画像メッセージがあります。";
+    
+    $stmt_users = $pdo->query("SELECT id FROM users");
+    $users = $stmt_users->fetchAll(PDO::FETCH_ASSOC);
+    
+    $stmt_notify = $pdo->prepare(" INSERT INTO notification (type, related_id, message, user_id, n_read) VALUES ('chat', ?, ?, ?, 0) ");
+    
+    foreach ($users as $u) {
+        if ($u['id'] == $user_id) continue;
+        
+        $stmt_notify->execute([ 
+            $event_id, 
+            $notice_message, 
+            $u['id'] 
+        ]); 
+    }
 }
 if ($error) {
     $_SESSION['error'] = $error;
