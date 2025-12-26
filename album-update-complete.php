@@ -25,7 +25,12 @@ try {
     $title = $_POST['title'] ?? '';
     
     $changes = [];
-    if ($title !== '') {
+    
+    $stmt_before = $pdo->prepare("SELECT title FROM album WHERE id = ?");
+    $stmt_before->execute([$id]);
+    $before_title = $stmt_before->fetchColumn();
+    
+    if ($title !== '' && $title !== $before_title) {
         $stmt = $pdo->prepare("UPDATE album SET title = ? WHERE id = ?");
         $stmt->execute([$title, $id]);
         $changes[] = 'タイトル';
@@ -44,9 +49,6 @@ try {
         echo "<p style='color:red;'>写真は最大10枚までです。削除と追加の枚数を調整してください。</p>";
         exit;
     }
-
-    $stmt = $pdo->prepare("UPDATE album SET title = ? WHERE id = ?");
-    $stmt->execute([$title, $id]);
 
     if (!empty($_POST['delete_images'])) {
         foreach ($_POST['delete_images'] as $img_id) {
