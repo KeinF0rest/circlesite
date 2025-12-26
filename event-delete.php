@@ -125,7 +125,27 @@ try {
                 margin-bottom: 6px;
                 font-size: 15px;
             }
-            .form-row div {
+            
+            .image-list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+            
+            .image-item {
+                display: flex;
+                flex-direction: column; 
+                align-items: flex-start;
+            }
+            
+            .image-item img {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+            
+            .form-row > div:not(.image-list) {
                 padding: 10px;
                 background-color: #fff;
                 border: 1px solid #ccc;
@@ -199,12 +219,18 @@ try {
             <div class="form-row">
                 <label>写真</label>
                 <?php
-                $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ?");
+                $stmt_img = $pdo->prepare("SELECT image_path FROM event_images WHERE event_id = ? AND delete_flag = 0");
                 $stmt_img->execute([$event['id']]);
-                $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
-                if (!empty($image['image_path'])):
+                $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
                 ?>
-                <img src="<?= htmlspecialchars($image['image_path']) ?>" alt="イベント画像">
+                <?php if (!empty($images)): ?>
+                    <div class="image-list">
+                        <?php foreach ($images as $img): ?>
+                            <div class="image-item">
+                                <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="イベント画像">
+                            </div>
+                        <?php endforeach; ?>  
+                    </div>
                 <?php else: ?>
                     <div>画像は登録されていません。</div>
                 <?php endif; ?>
