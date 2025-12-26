@@ -109,6 +109,11 @@ try {
     exit;
 }
 ?>
+<?php 
+$login_user = $_SESSION['user'];
+$is_admin = ($login_user['authority'] == 1);
+$is_self = ($login_user['id'] == $id);
+?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -159,7 +164,11 @@ try {
                 <p class="no-change">変更はありませんでした。</p>
             <?php endif; ?>
         
-            <a href="mypage.php?id=<?= htmlspecialchars($id) ?>" class="back-link">マイページへ</a>
+            <?php if ($is_admin && !$is_self): ?>
+            	<a href="mypage.php?id=<?= htmlspecialchars($id) ?>" class="back-link">アカウント情報へ</a>
+            <?php else: ?>
+            	<a href="mypage.php?id=<?= htmlspecialchars($id) ?>" class="back-link">マイページへ</a>
+            <?php endif; ?>
         </div>
     </body>
 </html>
