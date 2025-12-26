@@ -106,6 +106,10 @@ try {
                 margin-bottom: 20px;
             }
             
+            .event-time {
+                margin-left: 10px;
+            }
+                
             .form-grid {
                 margin: 20px;
             }
@@ -153,7 +157,7 @@ try {
         
         <div class="header-bar">
             <h1>イベントを削除しますか？</h1>
-            <a href="event.php" class="back-button">戻る</a>
+            <a href="event-info.php?id=<?= htmlspecialchars($event['id']) ?>" class="back-button">戻る</a>
         </div>
         
         <h2>削除すると復元することはできません。</h2>
@@ -166,10 +170,24 @@ try {
         
             <div class="event-dates">
                 <?php if (!empty($event['start_date'])): ?>
-                    <p><strong>開始日：</strong><?= htmlspecialchars($event['start_date']) ?></p>
+                    <p>
+                        <strong>開始日：</strong><?= htmlspecialchars($event['start_date']) ?>
+                        <?php if (!empty($event['start_time'])): ?>
+                            <span class="event-time">
+                                <?= htmlspecialchars(date('H:i', strtotime($event['start_time']))) ?>
+                            </span>
+                        <?php endif; ?>
+                    </p>
                 <?php endif; ?>
                 <?php if (!empty($event['end_date'])): ?>
-                    <p><strong>終了日：</strong><?= htmlspecialchars($event['end_date']) ?></p>
+                    <p>
+                        <strong>終了日：</strong><?= htmlspecialchars($event['end_date']) ?>
+                        <?php if (!empty($event['end_time'])): ?>
+                            <span class="event-time">
+                                <?= htmlspecialchars(date('H:i', strtotime($event['end_time']))) ?>
+                            </span>
+                        <?php endif; ?>
+                    </p>
                 <?php endif; ?>
             </div>
         
