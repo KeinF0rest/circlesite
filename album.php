@@ -16,7 +16,7 @@ try {
     
     $album_thumbnails = [];
     foreach ($albums as $album) {
-        $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time DESC LIMIT 1");
+        $stmt_img = $pdo->prepare("SELECT image_path FROM album_images WHERE album_id = ? AND delete_flag = 0 ORDER BY registered_time ASC LIMIT 1");
         $stmt_img->execute([$album['id']]);
         $image = $stmt_img->fetch(PDO::FETCH_ASSOC);
         $album_thumbnails[$album['id']] = $image['image_path'] ?? null;
