@@ -147,8 +147,13 @@ try {
             .form-row div {
                 flex: 1;
                 max-width: 100px;
-                white-space: nowrap; 
+                white-space: normal; 
                 text-align: left;
+            }
+            
+            .break-word {
+                white-space: normal;
+                word-break: break-all;
             }
             
             .submit-area {
@@ -203,7 +208,7 @@ try {
             
             <div class="form-row">
                 <label>メールアドレス</label>
-                <div><?= htmlspecialchars($user['mail']) ?></div>
+                <div class="break-word"><?= htmlspecialchars($user['mail']) ?></div>
             </div>
             
             <div class="form-row">
