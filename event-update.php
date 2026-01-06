@@ -19,7 +19,7 @@ $stmt = $pdo->prepare("SELECT * FROM event WHERE id = ? AND delete_flag = 0");
 $stmt->execute([$event_id]);
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmt_img = $pdo->prepare("SELECT id, image_path FROM event_images WHERE event_id = ?");
+$stmt_img = $pdo->prepare("SELECT id, image_path FROM event_images WHERE event_id = ? AND delete_flag = 0");
 $stmt_img->execute([$event['id']]);
 $images = $stmt_img->fetchAll(PDO::FETCH_ASSOC);
 
