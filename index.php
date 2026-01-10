@@ -10,6 +10,7 @@ if (!isset($_SESSION['user'])) {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>カレンダー</title>
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -80,6 +81,35 @@ if (!isset($_SESSION['user'])) {
             
             .event-date {
                 font-size: 14px;
+            }
+            
+            @media (max-width: 600px) {
+				#calendar {
+        			margin: 10px;
+    			}
+    			.header-bar {
+        			margin: 10px;
+        			flex-direction: column;
+        			align-items: flex-start;
+    			}
+    			.header-bar h1 {
+        			font-size: 20px;
+    			}
+			}
+            
+            @media (max-width: 600px) {
+                #event-info {
+                    margin: 10px;
+                }
+                #event-details a.event-card {
+                    padding: 10px;
+                } 
+                .event-title {
+                    font-size: 14px;
+                } 
+                .event-date {
+                    font-size: 12px;
+                }
             }
         </style>
     </head>
