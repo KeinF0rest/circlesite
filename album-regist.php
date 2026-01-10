@@ -17,6 +17,7 @@ if ($_SESSION['user']['authority'] == 0) {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム登録</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -133,6 +134,41 @@ if ($_SESSION['user']['authority'] == 0) {
                 color: white;
                 cursor: pointer;
             }
+            
+            @media (max-width: 600px) {
+				.header-bar {
+					margin: 10px;
+        			display: flex;
+        			justify-content: space-between;
+        			align-items: center;
+    			}
+    			.header-bar h1 {
+        			font-size: 20px;
+    			}
+    			.back-button {
+        			right: 10px;
+        			font-size: 14px;
+    			}
+    			.form-grid {
+        			margin: 10px;
+    			}
+    			#previewArea {
+        			grid-template-columns: 1fr;
+        			gap: 10px;
+    			}
+    			#previewArea img {
+        			height: 200px;
+    			}
+  				.submit-area {
+        			margin: 10px;
+                    display: flex;
+                	justify-content: flex-end;
+    			}
+    			.submit-area button {
+        			padding: 14px;
+        			font-size: 14px;
+    			}
+			}
         </style>
     </head>
     <body>
