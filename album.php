@@ -33,6 +33,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -92,6 +93,27 @@ try {
                 font-size: 20px;
                 color: #333;
                 text-decoration: none;
+            }
+            
+            @media (max-width: 600px) { 
+                .album-grid { 
+                    grid-template-columns: 1fr; 
+                    gap: 16px; 
+                    margin: 10px; 
+                } 
+                .album-card img { 
+                    height: 200px; 
+                } 
+                .header-bar { 
+                    margin: 10px; 
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-direction: row;
+                } 
+                .header-bar h1 { 
+                    font-size: 20px; 
+                } 
             }
         </style>
     </head>
