@@ -93,6 +93,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム登録完了</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -126,6 +127,22 @@ try {
                 text-decoration: none;
                 border-radius: 6px;
             }
+            
+            @media (max-width: 600px) {
+    			.header-bar {
+        			margin: 10px;
+    			}
+    			.header-bar h1 {
+        			font-size: 20px;
+        			margin: 10px 0;
+    			}
+    			.back-link {
+        			padding: 14px 20px;
+            		font-size: 14px;
+        			text-align: center;
+       				box-sizing: border-box;
+    			}
+			}
         </style>
     </head>
     <body>
