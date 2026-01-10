@@ -37,6 +37,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム情報</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -126,6 +127,40 @@ try {
                 object-fit: cover;
                 border-radius: 6px;
             }
+            
+             @media (max-width: 600px) {
+    			.header-bar {
+        			margin: 10px;
+        			display: flex;
+        			justify-content: space-between;
+        			align-items: center;
+   				}
+    			.header-bar h1 {
+            		font-size: 20px;
+    			}
+    			.back-button {
+        			font-size: 14px;
+    			}
+    			.menu-wrapper {
+        			margin-right: 10px;
+    			}
+    			.menu-icon {
+        			font-size: 22px;
+        			padding: 4px 8px;
+    			}
+    			.menu-popup {
+        			right: 0;
+        			top: 35px;
+    			}
+    			.image-grid {
+        			grid-template-columns: 1fr;
+        			gap: 12px;
+        			margin: 10px;
+   				}
+    			.image-grid img {
+       				height: 220px;
+    			}
+			}
         </style>
     </head>
     <body>
