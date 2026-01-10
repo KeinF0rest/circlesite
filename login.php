@@ -39,6 +39,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ログイン</title>
         <style>
             body {
@@ -61,7 +62,8 @@ try {
                 border: 1px solid #4CAF50;
                 border-radius: 12px;
                 box-shadow: 0 4px 12px rgba(0,255,0,0.3);
-                width: 450px;
+                width: 80%;
+                max-width: 450px;
                 text-align: center;
             }
 
@@ -106,6 +108,15 @@ try {
 
             .submit-button:hover {
                 background-color: #45a049;
+            }
+            
+            @media (max-width: 600px) {
+                .login-grid {
+                    padding: 20px;
+                }
+                .login-grid h1 {
+                    font-size: 20px;
+                }
             }
         </style>
     </head>
