@@ -119,6 +119,7 @@ $is_self = ($login_user['id'] == $id);
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント更新完了</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -151,6 +152,28 @@ $is_self = ($login_user['id'] == $id);
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    margin: 10px; 
+                    text-align: center; 
+                } 
+                .change-item { 
+                    font-size: 20px; 
+                    margin-bottom: 16px; 
+                } 
+                .no-change { 
+                    font-size: 16px; 
+                    margin-bottom: 16px; 
+                } 
+                .back-link {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                    display: inline-block; 
+                    text-align: center; 
+                } 
             }
         </style>
     </head>
