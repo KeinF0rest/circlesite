@@ -47,6 +47,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>マイページ</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -211,6 +212,66 @@ try {
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    padding: 10px; 
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                } 
+                .header-bar h1 {
+                    font-size: 20px; 
+                } 
+                .back-button { 
+                    font-size: 14px; 
+                } 
+                .menu-wrapper { 
+                    margin-right: 10px;
+                    margin-bottom: 0; 
+                } 
+                .menu-icon { 
+                    font-size: 22px;
+                    padding: 4px 8px; 
+                }
+                .menu-popup { 
+                    top: 35px; 
+                    right: 0; 
+                }
+                .profile-image-wrapper {
+                    width: 100px;
+                    height: 100px; 
+                    margin-top: 10px; 
+                } 
+                .form-grid { 
+                    padding: 10px; 
+                    margin: 10px; 
+                } 
+                .form-row { 
+                    flex-direction: column;
+                    align-items: flex-start; 
+                    gap: 4px;
+                } 
+                .form-row label { 
+                    width: 100%; 
+                    font-size: 14px; 
+                } 
+                .form-row input, 
+                .form-row select { 
+                    font-size: 14px; 
+                    padding: 10px;
+                } 
+                .submit-area {
+                    margin: 10px;
+                    display: flex; 
+                    justify-content: flex-end;
+                } 
+                .submit-button {
+                    padding: 14px;
+                    font-size: 14px; 
+                    box-sizing: border-box; 
+                } 
             }
         </style>
     </head>
