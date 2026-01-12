@@ -36,6 +36,7 @@ if (!$album) {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム更新</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -151,6 +152,63 @@ if (!$album) {
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    padding: 10px;
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                } 
+                .header-bar h1 { 
+                    font-size: 20px; 
+                } 
+                .back-button {
+                    font-size: 14px; 
+                } 
+                .form-row { 
+                    margin: 10px; 
+                    gap: 4px; 
+                } 
+                .form-row label { 
+                    font-size: 14px;
+                } 
+                .form-row input { 
+                    font-size: 14px; 
+                    padding: 10px; 
+                } 
+                .image-list {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                } 
+                .image-item img { 
+                    height: 220px;
+                } 
+                #previewArea { 
+                    grid-template-columns: 1fr;
+                    margin: 10px; 
+                    gap: 10px; 
+                }
+                #previewArea img { 
+                    height: 220px;
+                } 
+                .image-slot {
+                    height: 80px; 
+                }
+                .plus { 
+                    font-size: 20px; 
+                } 
+                .submit-area {
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: flex-end; 
+                } 
+                .submit-button { 
+                    padding: 14px;
+                    font-size: 14px;
+                    box-sizing: border-box;
+                } 
             }
         </style>
     </head>
