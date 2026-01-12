@@ -33,6 +33,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ブログ</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -140,6 +141,44 @@ try {
                 color: #666;
                 justify-self: end;
                 margin-right: 20px;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar {
+                    margin: 10px;
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                }
+                .back-button { 
+                    font-size: 14px;
+                    flex-shrink: 0;
+                }
+                .menu-wrapper { 
+                    margin-right: 10px; 
+                }
+                .menu-icon { 
+                    font-size: 22px; 
+                    padding: 4px 8px; 
+                }
+                .menu-popup { 
+                    top: 35px;
+                    right: 0; 
+                }
+                .content {
+                    margin: 10px; 
+                    padding: 14px; 
+                    font-size: 14px; 
+                    line-height: 1.7; 
+                }
+                .blog-date {
+                    font-size: 12px;
+                    margin: 10px; 
+                    text-align: right;
+                }
             }
         </style>
     </head>

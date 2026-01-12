@@ -140,6 +140,7 @@ try {
     			}
     			.back-button {
         			font-size: 14px;
+                    flex-shrink: 0;
     			}
     			.menu-wrapper {
         			margin-right: 10px;
