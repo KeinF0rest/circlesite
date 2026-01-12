@@ -19,6 +19,7 @@ $data = $_SESSION['regist'] ?? [];
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ブログ新規登録</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -90,6 +91,41 @@ $data = $_SESSION['regist'] ?? [];
                 background-color: #4CAF50;
                 color: white;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar {
+                    margin: 10px;
+                }
+                .header-bar h1 {
+                    font-size: 20px;
+                }
+                .back-button {
+                    right: 10px;
+                    font-size: 14px;
+                }
+                .form-row {
+                    margin: 10px;
+                    gap: 4px; 
+                }
+                label { 
+                    font-size: 14px;
+                }
+                input[type="text"], textarea { 
+                    font-size: 14px;
+                    padding: 10px; 
+                }
+                #char-count { 
+                    font-size: 12px; 
+                }
+                .submit-area { 
+                    margin: 10px;  
+                }
+                .submit-button { 
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
