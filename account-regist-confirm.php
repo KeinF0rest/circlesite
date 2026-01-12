@@ -42,6 +42,7 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント登録確認</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -119,6 +120,45 @@ $authority = $_SESSION['regist']['authority'] === '0' ? '一般' : '管理者';
             .submit-button {
                 background-color: #4CAF50;
                 color: white;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar { 
+                    margin: 10px 0;
+                    height: auto; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px; 
+                    position: static; 
+                    transform: none; 
+                    text-align: center; 
+                }
+                .confirm-grid { 
+                    padding: 10px;
+                    margin: 10px; 
+                    gap: 10px; 
+                }
+                .confirm-row {
+                    margin-bottom: 10px;
+                    gap: 4px; 
+                }
+                .confirm-row label {  
+                    font-size: 14px; 
+                    margin-right: 0; 
+                }
+                .confirm-row .value { 
+                    font-size: 14px; 
+                    word-break: break-all; 
+                }
+                .button-area {
+                    gap: 10px;
+                    margin: 10px;
+                }
+                .button-area button {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box; 
+                }
             }
         </style>
     </head>
