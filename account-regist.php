@@ -19,6 +19,7 @@ $data = $_SESSION['regist'] ?? [];
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント登録</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -98,6 +99,53 @@ $data = $_SESSION['regist'] ?? [];
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .header-bar h1 { 
+                  font-size: 20px;
+                }
+                .back-button {
+                    font-size: 14px; 
+                    right: 10px;
+                }
+                .form-grid {
+                    padding: 10px;
+                    margin: 10px; 
+                    gap: 14px; 
+                }
+                .form-row { 
+                    gap: 6px; 
+                }
+                .form-row label { 
+                    width: auto; 
+                    font-size: 14px;
+                }
+                .form-row input, .form-row select {
+                    width: 100%; 
+                    font-size: 14px; 
+                    padding: 10px; 
+                    box-sizing: border-box;
+                }
+                .form-row input[type="radio"] {
+                    margin-left: 0; 
+                }
+                .form-row:last-child {
+                    width: 100%;
+                    display: flex; 
+                    justify-content: flex-end; 
+                }
+                .form-row button {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box; 
+                } 
             }
         </style>
     </head>
