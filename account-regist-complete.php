@@ -59,6 +59,7 @@ unset($_SESSION['regist']);
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント登録完了</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -90,6 +91,22 @@ unset($_SESSION['regist']);
                 border-radius: 6px;
                 font-size: 16px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 10px;
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                    margin-bottom: 14px; 
+                }
+                .back-link { 
+                    padding: 14px;
+                    font-size: 14px;
+                    box-sizing: border-box; 
+                    text-align: center; 
+                }
             }
         </style>
     </head>
