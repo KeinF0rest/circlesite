@@ -25,6 +25,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF=8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ブログ一覧</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -102,6 +103,36 @@ try {
                 font-size: 14px;
                 color: #666;
                 justify-self: end;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                }
+                .header-bar h1 {
+                    font-size: 20px;
+                }
+                .regist-button { 
+                    font-size: 20px; 
+                    padding: 4px 10px; 
+                }
+                .blog-grid { 
+                    padding: 10px; 
+                    gap: 12px; 
+                } 
+                .blog-card { 
+                    padding: 14px; 
+                } 
+                .blog-title {
+                    font-size: 16px;
+                    margin-bottom: 6px; 
+                } 
+                .blog-date { 
+                    font-size: 12px; 
+                } 
             }
         </style>
     </head>
