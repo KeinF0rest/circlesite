@@ -52,10 +52,13 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント情報</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
         <style>
             body {
                 font-family: sans-serif;
@@ -276,6 +279,88 @@ try {
                 list-style: none;
                 padding: 0;
                 margin: 0;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    margin: 10px;
+                    display: flex;
+                    justify-content: space-between; 
+                    align-items: center;
+                }
+                .header-bar h1 {
+                    font-size: 20px; 
+                }
+                .back-button { 
+                    font-size: 14px; 
+                    flex-shrink: 0; 
+                }
+                .menu-wrapper { 
+                    margin-right: 10px;
+                }
+                .menu-icon { 
+                    font-size: 22px;
+                    padding: 4px 8px; 
+                }
+                .menu-popup {
+                    top: 35px;
+                    right: 0; 
+                } 
+                .title-bar { 
+                    margin: 10px; 
+                    flex-direction: column; 
+                    align-items: flex-start; 
+                    gap: 6px; 
+                }
+                .event-title { 
+                    font-size: 20px; 
+                }
+                .event-dates p { 
+                    align-items: flex-start;
+                    gap: 4px; 
+                    font-size: 14px; 
+                }
+                .event-dates .event-time {
+                    margin-left: 0; 
+                } 
+                .event-container {
+                    margin: 10px; 
+                } 
+                .event-image {
+                    margin: 10px auto; 
+                    padding: 10px;
+                }
+                .event-image img { 
+                    border-radius: 10px; 
+                }
+                .event-image p { 
+                    font-size: 14px; 
+                }
+                .event-content {  
+                    padding: 10px;
+                    font-size: 14px;
+                }
+                .event-actions { 
+                    align-items: flex-start;
+                    gap: 10px;
+                    margin-top: 10px; 
+                }
+                .event-actions button {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box; 
+                }
+                .event-footer { 
+                    gap: 10px; 
+                    margin: 10px;
+                }
+                .participant-list {
+                    margin: 10px; 
+                    font-size: 14px;
+                }
+                .participant-list ul { 
+                    gap: 6px; 
+                }
             }
         </style>
     </head>
