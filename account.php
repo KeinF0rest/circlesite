@@ -33,6 +33,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント一覧</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -124,6 +125,46 @@ try {
                 box-shadow: 0 0 10px rgba(0,0,0,0.2);
                 transform: scale(1.02);
                 transition: 0.2s ease;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar { 
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: space-between;
+                    align-items: center; 
+                }
+                .header-bar h1 {
+                    font-size: 20px;
+                } 
+                .regist-button {
+                    font-size: 20px; 
+                    padding: 4px 10px; 
+                } 
+                .account-grid { 
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                    margin: 10px; 
+                } 
+                .account-card { 
+                    padding: 14px; 
+                    margin: 0; 
+                } 
+                .profile-image-wrapper {
+                    width: 80px; 
+                    height: 80px; 
+                }
+                .account-card-link {
+                    min-height: auto;
+                }
+                .account-card img {
+                    width: 80px; 
+                    height: 80px;
+                } 
+                .account-card p { 
+                    font-size: 14px; 
+                    margin-top: 8px;
+                }
             }
         </style>
     </head>
