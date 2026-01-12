@@ -27,6 +27,7 @@ $_SESSION['regist'] = [
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>ブログ新規登録確認</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -97,6 +98,39 @@ $_SESSION['regist'] = [
             .submit-button {
                 background-color: #4CAF50;
                 color: white;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 10px; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px; 
+                }
+                .confirm-row {
+                    margin: 10px;
+                }
+                .confirm-row .value {
+                    font-size: 16px; 
+                    word-break: break-all; 
+                }
+                .confirm-row-content { 
+                    margin: 10px; 
+                }
+                .confirm-row-content .value { 
+                    padding: 12px; 
+                    font-size: 14px; 
+                    line-height: 1.6; 
+                }
+                .submit-area { 
+                    margin: 10px; 
+                    gap: 10px;
+                }
+                .submit-area button {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
