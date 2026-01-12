@@ -110,6 +110,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム更新完了</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -138,6 +139,24 @@ try {
                 text-decoration: none;
                 border-radius: 6px;
                 transition: background-color 0.3s ease;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 10px; 
+                    text-align: center;
+                } 
+                .header-bar h1 {
+                    font-size: 20px; 
+                    margin-bottom: 16px;
+                } 
+                .back-link {
+                    padding: 14px; 
+                    font-size: 14px;
+                    box-sizing: border-box; 
+                    display: inline-block; 
+                    text-align: center; 
+                } 
             }
         </style>
     </head>
