@@ -53,6 +53,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アカウント削除</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -171,6 +172,55 @@ try {
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar { 
+                    padding: 10px; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                    text-align: center;
+                }
+                .back-button {
+                    right: 10px; 
+                    font-size: 14px;
+                }
+                h2 { 
+                    font-size: 16px; 
+                    margin: 10px; 
+                }
+                .profile-image-wrapper { 
+                    width: 100px; 
+                    height: 100px; 
+                    margin: 10px auto; 
+                }
+                .form-grid {
+                    padding: 10px; 
+                    margin: 10px; 
+                    gap: 10px; 
+                }
+                .form-row {
+                    gap: 4px;
+                    margin-bottom: 10px; 
+                }
+                .form-row label { 
+                    width: auto; 
+                    font-size: 14px; 
+                }
+                .form-row div { 
+                    max-width: 100%;
+                    font-size: 14px; 
+                    word-break: break-all; 
+                }
+                .submit-area { 
+                    margin: 10px;  
+                }
+                .submit-button { 
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
