@@ -75,6 +75,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>アルバム削除</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -136,6 +137,41 @@ try {
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar { 
+                    padding: 10px;
+                } 
+                .header-bar h1 { 
+                    font-size: 20px; 
+                } 
+                .back-button {
+                    right: 10px; 
+                    font-size: 14px; 
+                }
+                h2 { 
+                    font-size: 16px; 
+                    margin: 10px; 
+                } 
+                .form-grid {
+                    margin: 10px;
+                    padding: 10px; 
+                    font-size: 14px;
+                } 
+                .form-grid label { 
+                    margin: 6px 0; 
+                } 
+                .submit-area { 
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: flex-end;
+                } 
+                .submit-button { 
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box; 
+                } 
             }
         </style>
     </head>
