@@ -25,6 +25,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -69,7 +70,10 @@ try {
                 display: none !important;
             }
             
-            .fc-daygrid-event:hover { background-color: #4CAF50 !important; /* 常に緑 */ color: #fff !important; }
+            .fc-daygrid-event:hover {
+                background-color: #4CAF50 !important;
+                color: #fff !important; 
+            }
             
             .event-card {
                 background-color: #f9f9f9;
@@ -102,6 +106,36 @@ try {
                 font-size: 14px;
                 color: #666;
                 justify-self: end;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 10px; 
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                }
+                .regist-button { 
+                    font-size: 20px; 
+                    padding: 4px 10px;
+                }
+                .event-grid {
+                    padding: 10px; 
+                    gap: 12px;
+                }
+                .event-card { 
+                    padding: 14px;
+                }
+                .event-title { 
+                    font-size: 16px; 
+                    margin-bottom: 6px; 
+                }
+                .event-date { 
+                    font-size: 12px;
+                }
             }
         </style>
     </head>
