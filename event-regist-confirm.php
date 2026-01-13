@@ -54,6 +54,7 @@ $_SESSION['regist'] = [
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント登録確認</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -158,6 +159,59 @@ $_SESSION['regist'] = [
             .submit-button {
                 background-color: #4CAF50;
                 color: white;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar { 
+                    margin: 10px; 
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                }
+                .confirm-grid { 
+                    margin: 10px; 
+                    gap: 14px; 
+                }
+                .confirm-row { 
+                    flex-direction: column;
+                    gap: 4px;
+                }
+                .confirm-row label {
+                    width: auto; 
+                    font-size: 14px; 
+                }
+                .confirm-row .value { 
+                    font-size: 14px; 
+                    word-break: break-all;
+                }
+                .confirm-row-inline {
+                    gap: 4px; 
+                }
+                .confirm-row.content { 
+                    padding: 12px; 
+                }
+                .confirm-row.content .value { 
+                    font-size: 14px;
+                    line-height: 1.6; 
+                }
+                .confirm-row.image {
+                    padding: 12px; 
+                }
+                .confirm-row.image img { 
+                    width: 100%; 
+                    height: auto; 
+                    max-height: 200px; 
+                    object-fit: cover; 
+                }
+                .submit-area {
+                    margin: 10px; 
+                    gap: 10px; 
+                }
+                .submit-area button { 
+                    padding: 14px; 
+                    font-size: 14px;
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
