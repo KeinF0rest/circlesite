@@ -19,6 +19,7 @@ $data = $_SESSION['regist'] ?? [];
 <html lang="ja">
     <head>
         <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント登録</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -152,6 +153,63 @@ $data = $_SESSION['regist'] ?? [];
                 background-color: #4CAF50;
                 color: white;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 10px;
+                }
+                .header-bar h1 { 
+                    font-size: 20px; 
+                }
+                .back-button { 
+                    right: 10px; 
+                    font-size: 14px;
+                }
+                .form-row {
+                    margin: 10px;
+                    gap: 4px;
+                }
+                .form-row label { 
+                    font-size: 14px;
+                }
+                .form-row-inline {
+                    gap: 6px; 
+                }
+                .form-row-inline input[type="date"], .form-row-inline input[type="time"] {
+                    width: 100%; 
+                }
+                input[type="text"], textarea { 
+                    width: 100% !important;
+                    padding: 10px; 
+                    font-size: 14px;
+                    box-sizing: border-box;
+                }
+                #char-count {
+                    font-size: 12px;
+                }
+                .image-slot { 
+                    height: 80px; 
+                }
+                .plus { 
+                    font-size: 20px; 
+                }
+                #previewArea { 
+                    margin: 10px;
+                    gap: 10px; 
+                }
+                #previewArea img { 
+                    width: 200px;
+                    height: 200px; 
+                } 
+                .submit-area { 
+                    margin: 10px; 
+                }
+                .submit-area button {
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
