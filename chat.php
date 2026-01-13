@@ -43,6 +43,7 @@ foreach ($messages as $msg) {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>チャット</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -198,6 +199,69 @@ foreach ($messages as $msg) {
                 border-radius: 50%;
                 cursor: pointer;
                 transition: background 0.2s;
+            }
+            
+            @media (max-width: 600px) { 
+                .header-bar {
+                    margin: 10px; 
+                }
+                .header-bar h1 { 
+                    font-size: 18px; 
+                }
+                .back-button { 
+                    right: 10px; 
+                    font-size: 14px; 
+                }
+                .chat-thread { 
+                    padding: 10px; 
+                    padding-bottom: 120px;
+                }
+                .bubble { 
+                    max-width: 80%;
+                    font-size: 14px;
+                    padding: 10px; 
+                    box-sizing: border-box;
+                } 
+                .icon, .default-icon { 
+                    width: 32px; 
+                    height: 32px; 
+                }
+                .nickname { 
+                    font-size: 12px;
+                }
+                .date { 
+                    font-size: 10px;
+                }
+                .chat-image img {
+                    max-width: 70vw; 
+                    height: auto; 
+                }
+                .form-grid {
+                    padding: 10px; 
+                }
+                .form-grid form { 
+                    gap: 6px; 
+                }
+                .form-grid textarea { 
+                    height: 50px; 
+                    font-size: 14px; 
+                    padding: 10px; 
+                    box-sizing: border-box; 
+                }
+                .plus-button { 
+                    width: 28px;
+                    height: 28px; 
+                    font-size: 20px; 
+                }
+                .form-grid button {
+                    height: 40px;
+                    padding: 0 14px; 
+                    font-size: 14px; 
+                } 
+                #preview {
+                    max-width: 80px; 
+                    margin-left: 10px;
+                }
             }
         </style>
     </head>
