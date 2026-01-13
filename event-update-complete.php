@@ -135,6 +135,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント更新完了</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -168,6 +169,27 @@ try {
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    margin: 20px 10px; 
+                }
+                .change-item {
+                    font-size: 18px;
+                    margin-bottom: 14px; 
+                    word-break: break-all;
+                }
+                .no-change { 
+                    font-size: 16px;
+                    margin-bottom: 14px;
+                }
+                .back-link {
+                    padding: 14px; 
+                    font-size: 14px;
+                    box-sizing: border-box;  
+                    text-align: center;
+                }
             }
         </style>
     </head>
