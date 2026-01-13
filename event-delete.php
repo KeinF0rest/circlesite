@@ -71,6 +71,7 @@ try {
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>イベント削除</title>
         <link rel="stylesheet" href="style.css">
         <script src="menu.js" defer></script>
@@ -169,6 +170,62 @@ try {
                 border: none;
                 border-radius: 6px;
                 cursor: pointer;
+            }
+            
+            @media (max-width: 600px) {
+                .header-bar {
+                    padding: 10px;
+                }
+                .header-bar h1 { 
+                    font-size: 20px;
+                }
+                .back-button { 
+                    right: 10px; 
+                    font-size: 14px;
+                }
+                h2 {
+                    font-size: 16px; 
+                    margin: 10px;
+                }
+                .form-grid { 
+                    margin: 10px; 
+                }
+                .form-row { 
+                    margin-bottom: 14px;
+                }
+                .form-row label {
+                    font-size: 14px;
+                }
+                .form-row > div:not(.image-list) { 
+                    font-size: 14px; 
+                    padding: 10px; 
+                    line-height: 1.6; 
+                    word-break: break-all; 
+                }
+                .event-dates p { 
+                    font-size: 14px;
+                    margin: 6px 0; 
+                    display: flex;
+                    gap: 4px; 
+                }
+                .event-time { 
+                    margin-left: 0; 
+                }
+                .image-list { 
+                    grid-template-columns: 1fr;
+                    gap: 10px;
+                }
+                .image-item img { 
+                    height: 200px;
+                }
+                .submit-area { 
+                    margin: 10px; 
+                }
+                .submit-button { 
+                    padding: 14px; 
+                    font-size: 14px; 
+                    box-sizing: border-box;
+                }
             }
         </style>
     </head>
